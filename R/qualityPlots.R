@@ -178,10 +178,10 @@ qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ...)
       if(!is(mdata, "marrayNorm"))
         tmpNorm <- as(mdata, "marrayNorm")
       tmpNorm@maM <- as.matrix(rank(as.numeric(eval(call(xvar, mdata)))))
-      tmp <- image(tmpNorm, xvar="maM", main=main, bar=FALSE, overlay=overlay, ...)
+      tmp <- image(tmpNorm, xvar="maM", main=main, bar=FALSE, overlay=overlay, colorinfo = TRUE, ...)
     }
   else
-    tmp <- image(mdata, xvar=xvar, main=main, bar=FALSE, zlim=c(0,16), overlay=overlay, ...)
+    tmp <- image(mdata, xvar=xvar, main=main, bar=FALSE, zlim=c(0,16), overlay=overlay, colorinfo=TRUE, ...)
   par(mar=c(2,1, 5,4))
   maColorBar(tmp$x.bar, horizontal = FALSE, col = tmp$x.col,  main = "")
   par(mar=c(5,4,4,2) + 0.1) ## set back to default
@@ -332,8 +332,13 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       ## 1) Split MA-plot (Before Normalization)
       if(DEBUG) print("start 1")
       qpMAPlots(nbgraw, addp=TRUE, main="MA-Plot :: raw", ...)
-      addLines(nbgraw)
-
+      if(!is.null(opt$norm))
+        {
+          if(opt$norm == "p")
+            addLines(nbgraw)
+        }
+      else
+        addLines(nbgraw)
 
       ## 2) HEXbin MA-plot (After Normalization)
       if(DEBUG) print("start 2")
