@@ -23,7 +23,7 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
       path <- "."
  
     if (missing(fnames) | is.null(fnames)) 
-      fnames <- dir(path, pattern = "*\\.txt$")
+      fnames <- dir(path, pattern = ".*\\.txt$")
     fullfnames <- file.path(path, fnames)
     f <- fullfnames[1]
     opt <- list(...)
@@ -169,7 +169,7 @@ agQuality <- function(fnames = NULL, path = ".",
     if (missing(path) | is.null(path))  path <- "."
     
     if (missing(fnames) | is.null(fnames))
-      fnames <- dir(path, pattern = "*\\.txt$")
+      fnames <- dir(path, pattern = ".*\\.txt$")
 
     organism <- organism[1]
     controlId <- controlId[1]

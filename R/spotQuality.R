@@ -26,7 +26,7 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
       galf <- file.path(path, galfile)
     else
       {
-        galf <- dir(pattern = "*\\.gal$")[1]
+        galf <- dir(pattern = ".*\\.gal$")[1]
         if(is.na(galf))
           stop("Missing galfile information.")
         else
@@ -45,7 +45,7 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
     #galdata <- read.Galfile(galf)
 
     if (missing(fnames) | is.null(fnames)) 
-      fnames <- dir(path, pattern = "*\\.spot$")
+      fnames <- dir(path, pattern = ".*\\.spot$")
     fullfnames <- file.path(path, fnames)
     f <- fullfnames[1]
     opt <- list(...)
@@ -183,7 +183,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
     if (missing(path) | is.null(path))  path <- "."
     
     if (missing(fnames) | is.null(fnames))
-      fnames <- dir(path, pattern = "*\\.spot$")
+      fnames <- dir(path, pattern = ".*\\.spot$")
 
     organism <- organism[1]
     controlId <- controlId[1]
@@ -233,7 +233,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
           galf <- galfile
         else
           {
-            galf <- dir(path=path, pattern = "*\\.gal$")[1]
+            galf <- dir(path=path, pattern = ".*\\.gal$")[1]
             if(is.na(galf))
               stop("Missing galfile information.")
             else
@@ -368,7 +368,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
         galf <- galfile
       else
         {
-          galf <- dir(path=path, pattern = "*\\.gal$")[1]
+          galf <- dir(path=path, pattern = ".*\\.gal$")[1]
           if(is.na(galf))
             stop("Missing galfile information.")
           else

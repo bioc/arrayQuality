@@ -507,9 +507,9 @@ globalQuality <- function(fnames = NULL, path = ".",
     
     if (missing(fnames) | is.null(fnames))
       {
-        if(inputsource == "readGPR") fnames <- dir(path, pattern = "*\\.gpr$")
-        if(inputsource == "readAgilent") fnames <- dir(path, pattern = "*\\.txt$")
-        if(inputsource == "readSpot") fnames <- dir(path, pattern = "*\\.spot$")
+        if(inputsource == "readGPR") fnames <- dir(path, pattern = ".*\\.gpr$")
+        if(inputsource == "readAgilent") fnames <- dir(path, pattern = ".*\\.txt$")
+        if(inputsource == "readSpot") fnames <- dir(path, pattern = ".*\\.spot$")
       }
     
     organism <- organism[1]

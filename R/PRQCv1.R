@@ -33,8 +33,8 @@ PRv9mers<-  function(fnames,
   if (DEBUG) print("Getting File Names")
   ## Getting File names
   if (missing(fnames))
-#    fnames <- file.path(path, dir(path, pattern = "*\\.gpr$"))
-    fnames <- dir(path, pattern = "*\\.gpr$")
+#    fnames <- file.path(path, dir(path, pattern = ".*\\.gpr$"))
+    fnames <- dir(path, pattern = ".*\\.gpr$")
   
 
   if (is.null(path)) {

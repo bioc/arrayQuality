@@ -31,7 +31,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
       path <- "."
  
     if (missing(fnames) | is.null(fnames)) 
-      fnames <- dir(path, pattern = "*\\.gpr$")
+      fnames <- dir(path, pattern = ".*\\.gpr$")
     fullfnames <- file.path(path, fnames)
     f <- fullfnames[1]
     opt <- list(...)
@@ -162,7 +162,7 @@ gpQuality <- function(fnames = NULL, path = ".",
       path <- "."
     
     if (missing(fnames) | is.null(fnames))
-      fnames <- dir(path, pattern = "*\\.gpr$")
+      fnames <- dir(path, pattern = ".*\\.gpr$")
 
     organism <- organism[1]
     controlId <- controlId[1]
