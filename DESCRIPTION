@@ -1,5 +1,5 @@
 Package: arrayQuality
-Version: 1.0.0
+Version: 0.1.1
 Date: 2004-04-90
 Title: Assessing array quality on spotted arrays
 Depends:  R (>= 1.4.0), marray, mclust 
