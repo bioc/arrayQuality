@@ -50,7 +50,10 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
     newdata <- eval(call(xvar, mdata))
     xlim <- range(newdata, na.rm=TRUE)
     Cindex <- maControls(mdata) != "probes"
-    Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))  ## combined control status and name
+    #Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))
+    ## combined control status and name
+
+    Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
 
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
@@ -81,14 +84,15 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
         lab <- paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep="")
         axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.6) 
         box()
-      }
-     else
-       {
+
+
+      } else
+    {
          ## There are NO control spots
-         plot(1, 1, axes=FALSE, xlab="", ylab="", type="n")
-         text(1, 1, "No Control Genes")
-         box()
-       }
+      plot(1, 1, axes=FALSE, xlab="", ylab="", type="n")
+      text(1, 1, "No Control Genes")
+      box()
+    }
     return()
   }
 
@@ -266,7 +270,6 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       fstart <- paste(tmp2[-length(tmp2)], collapse=".")
       if (DEBUG) print(fstart)
       
-      ## subnames <-paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain)
       
   ###################
   ## Setting up output device
@@ -283,7 +286,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
         print("Format error, format will be set to PNG")
       
-      fname <- paste("QCPlot", fstart,  plotdef$suffix, sep=".")
+      fname <- paste("diagPlot", fstart,  plotdef$suffix, sep=".")
       if (DEBUG) print(fname)
       plotdef <- c(plotdef, list(main=paste(fname, ": Qualitative Diagnostic Plots")))
       
@@ -315,7 +318,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       ## 5 & 6) maM (After Normalization)
       if(DEBUG) print("start 5 & 6")
       ov.sub <- as.vector(maW(mnorm)) < 0
-      qpImage(mnorm, xvar="maM", main="Spatial: M-Norm", overlay=ov.sub)
+      qpImage(mnorm, xvar="maM", main="Spatial: Rank(M-Norm)", overlay=ov.sub)
       
       ## 7 & 8) maA 
       if(DEBUG) print("start 7 & 8")
@@ -329,14 +332,15 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       ## 11 maM Dot plot
       if(DEBUG) print("start 11")
       if(length(maControls(mnorm))!=0)
-        qpDotPlots(mnorm, xvar="maM", col=colcode )
-      title(main= "Controls normalized M")
+        qpDotPlots(mnorm, xvar="maM", col=colcode,
+                   main="Control normalized M", cex.main=0.8)
+#      title(main= "Controls normalized M")
       
       ## 12 maM Dot plot
       if(DEBUG) print("start 12")
       if(length(maControls(mraw))!=0)
-        qpDotPlots(mraw, xvar="maA", col=colcode)
-       title(main= "Controls A")
+        qpDotPlots(mraw, xvar="maA", col=colcode, main="Control A", cex.main=0.8)
+       #title(main= "Controls A")
      
       if(DEBUG) print("start 13")
       ## 13

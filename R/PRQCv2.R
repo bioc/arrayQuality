@@ -142,7 +142,7 @@ PRvQCHyb<-  function(fnames,
       ## 2) Boxplot split by Print-tip
       if(DEBUG) print("start 2")
       par(mar=c(5,5,5,3))
-      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot:M by print-tip groups")
+      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot: Raw M by print-tip groups")
 
       ## 3 & 4) maM (No Normalization)
       if(DEBUG) print("start 3 & 4")
@@ -180,11 +180,8 @@ PRvQCHyb<-  function(fnames,
       ## 10 Dot Plot
       if(DEBUG) print("start 10")
       if(length(maControls(mraw))!=0)
-        {
-          qpDotPlots(mraw, x="maA",  col=colcode)
-          title( main="Dot plot: Controls A", cex=0.7)
-        }
-      
+        qpDotPlots(mraw, x="maA",  col=colcode)
+         
       
       ## 11 Title
       if(DEBUG) print("start 11")
