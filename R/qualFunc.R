@@ -129,7 +129,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ## Argument: result of readGPR
 ## Returns: matrix of numbers
 
-slideQuality <- function(gprData=NULL,output = TRUE, DEBUG=TRUE,...)
+slideQuality <- function(gprData=NULL,output = TRUE, DEBUG=FALSE,...)
   {
     if (DEBUG) print("SlideQuality starting")
     
@@ -391,12 +391,13 @@ slideQuality <- function(gprData=NULL,output = TRUE, DEBUG=TRUE,...)
 
 gpQuality <- function(fnames = NULL, path = ".",
                           organism=c("Mm", "Hs"),
-                          output=TRUE,# plot=TRUE,
+                          output=FALSE,
                           resdir=".",
                           dev="png", #set default to be png 
                           DEBUG = FALSE,...)
   {
 
+    print(output)
     
     # Check input arguments
     if (DEBUG) print("Starting global quality")
@@ -488,7 +489,8 @@ gpQuality <- function(fnames = NULL, path = ".",
         dev.off()
         setwd(curdir)
 
-        nb <- c(nb, nbtmp)
+        #nb = matrix ncol=2, nrow=length(fnames)
+        nb <- rbind(nb, nbtmp)
         QCp <- c(QCp, plotname)
         if (DEBUG) print("End of plot")
         if (DEBUG) print(paste("save as ",plotname))
@@ -505,7 +507,9 @@ gpQuality <- function(fnames = NULL, path = ".",
                 maW=weight, maGnames=tmp)
     #maQualityPlots
     setwd(resdir)
-    maQualityPlots(mraw)
+    print("maQualityPlots")
+    print(output)
+    maQualityPlots(mraw, output=output, DEBUG=DEBUG)
 
     #get diagnostic plots names
     tmp <- sub(".gpr", "",colnames(mraw@maGf))
@@ -645,7 +649,7 @@ arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
 # same number of qualPlot and QCplot
 # based on alphabetical order
 
-# nbBelow is a vector: for each slide, number of measure below range of good slides
+# nbBelow is a matrix: for each slide: number of measure below range of good slides and total number of measures
 
 quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resdir=".", nbBelow=NULL)
   {
@@ -681,7 +685,7 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
           {
             td2 <- HTwrap(HTimg(fullDiagp[i]), tag="TD")
             td1 <- HTwrap(HTimg(fullQCp[i]), tag="TD")
-            td3 <- HTwrap(HTscore(fnames[i],paste(nbBelow[i,1], nbBelow[i,2], "/")), tag="TD",
+            td3 <- HTwrap(HTscore(fnames[i],paste(nbBelow[i,1], nbBelow[i,2], sep="/")), tag="TD",
                           option="align", value="left") 
             
             tr <- HTwrap(paste(td1, td2, td3, sep="\n"), tag="TR")
@@ -709,7 +713,7 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
       fullBoxp <- DiagPlot
     }
 
-    output <- file(file.path(resdir,"qualityReport.html"),"w") 
+    outputfile <- file(file.path(resdir,"qualityReport.html"),"w") 
     datadir <- system.file("data", package="arrayQuality")
     html <- paste(readLines(file.path(datadir, "index.html")), "\n", collapse="")
 
@@ -717,8 +721,8 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
 
     tab <- tableTag(fnames,fullQCp, fullBoxp)
     
-    cat(split[1], tab,split[2], file=output)     
-    close(output)
+    cat(split[1], tab,split[2], file=outputfile)     
+    close(outputfile)
   }
 
 #slidequality is the result of slideQuality for ONE slide
@@ -742,7 +746,6 @@ qualityScore <- function(slidequality, organism=c("Mm", "Hs"))
         vect <- reference[i,]
         score[i] <- (length(vect[vect < slidequality[i]])/length(vect))*100
       }
-    print(score)
     return(score)
 
   }
@@ -811,6 +814,7 @@ qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),..
     # Reference = output of globalQuality for ref slides
     # if NULL, reads in matrix store as RData
     organism<-organism[1]
+    
     score <- qualityScore(arrayQuality)
     if(is.null(reference))
       {
@@ -858,9 +862,7 @@ qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),..
                  as.character(tmp), cex=0.7, col="blue")
           }
 
-        print(goodLim)
         
-
         #Line for tested arrays
         #Number of measure below criteria
         nc <- ncol(scalarray)

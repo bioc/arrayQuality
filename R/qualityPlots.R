@@ -226,7 +226,8 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE, 
                             dev = "png",  #set default to be png
                             col, badspotfunction,
-                            DEBUG=TRUE, ...)
+                            output=FALSE,
+                            DEBUG=FALSE, ...)
 {
   require(hexbin)
   if (DEBUG) print("function starting")
@@ -260,6 +261,12 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
         nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
       norm.defs <- maDotsDefaults(opt, list(norm="p"))
       mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
+
+      if (output)
+        {
+          print(length(colnames(maRf(mraw))))
+          write.marray(mnorm, "maNormalizedResults.xls")
+        }
       
       ## Set up output name
       if (DEBUG) print("Name the output file")
