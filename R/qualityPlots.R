@@ -262,6 +262,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       if (DEBUG) print("Name the output file")
       tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
       fstart <- paste(tmp[-length(tmp)], collapse=".")
+      if (DEBUG) print(fstart)
       
       ## subnames <-paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain)
       
@@ -281,6 +282,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
         print("Format error, format will be set to PNG")
       
       fname <- paste("QCPlot", fstart,  plotdef$suffix, sep=".")
+      if (DEBUG) print(fname)
       plotdef <- c(plotdef, list(main=paste(fname, ": Qualitative Diagnostic Plots")))
       
       ###################
@@ -325,7 +327,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       ## 11 maM Dot plot
       if(DEBUG) print("start 11")
       if(length(maControls(mnorm))!=0)
-        qpDotPlots(mnorm, xvar="maM", col=colcode, )
+        qpDotPlots(mnorm, xvar="maM", col=colcode )
       title(main= "Controls normalized M")
       
       ## 12 maM Dot plot

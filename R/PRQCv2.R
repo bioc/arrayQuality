@@ -136,11 +136,11 @@ PRvQCHyb<-  function(fnames,
       ## 2) Boxplot split by Print-tip
       if(DEBUG) print("start 2")
       par(mar=c(5,5,5,3))
-      boxplot(mraw, yvar="maM", ylab="Log Ratio")
+      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot by print-tip")
 
       ## 3 & 4) maM (No Normalization)
       if(DEBUG) print("start 3 & 4")
-      qpImage(mraw, xvar="maM", main="Spatial: Rank(M-Norm)")
+      qpImage(mraw, xvar="maM", main="Spatial: Rank(M-raw)")
 
       ## 5 & 6) maA 
       if(DEBUG) print("start 5 & 6")
