@@ -49,8 +49,8 @@ output = FALSE, resdir = ".", DEBUG = FALSE,...)
 }
 
 \examples{
-datadir <- system.file("data", package="arrayQuality")
-reference <- globalQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
+##datadir <- system.file("data", package="arrayQuality")
+##reference <- globalQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
 }
 
 \keyword{programming}

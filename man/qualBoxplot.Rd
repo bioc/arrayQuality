@@ -52,10 +52,10 @@ organism = c("Mm", "Hs"), ...)
 \seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}}, \code{\link{qualRefTable}}}
 
 \examples{
-datadir <- system.file("data", package="arrayQuality")
-gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
-arrayQuality <- slideQuality(gprData, organism="Mm")
-qualBoxplot(arrayQuality)
+#datadir <- system.file("data", package="arrayQuality")
+#gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
+#arrayQuality <- slideQuality(gprData, organism="Mm")
+#qualBoxplot(arrayQuality)
 }
 
 \keyword{hplot}

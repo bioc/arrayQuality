@@ -77,8 +77,8 @@ HTML report. For more details about the QC measures and the plots, please refer 
 \seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}}, \code{\link{qualRefTable}}}
 
 \examples{
-datadir <- system.file("data", package="arrayQuality")
-results <- gpQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
+##datadir <- system.file("data", package="arrayQuality")
+##results <- gpQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
 }
 
 \keyword{hplot}

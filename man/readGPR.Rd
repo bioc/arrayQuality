@@ -41,8 +41,8 @@ quote="", ...)
 }
 
 \examples{
-datadir <- system.file("data", package="arrayQuality")
-gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
+#datadir <- system.file("data", package="arrayQuality")
+#gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
 }
 
 \keyword{programming}

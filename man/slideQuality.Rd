@@ -29,9 +29,9 @@ slideQuality(gprData = NULL, DEBUG = FALSE,...)
 }
 
 \examples{
-datadir <- system.file("data", package="arrayQuality")
-gprdata <- readGPR(fnames="9Mm137.gpr", path=datadir)
-results <- slideQuality(gprdata)
+#datadir <- system.file("data", package="arrayQuality")
+#gprdata <- readGPR(fnames="9Mm137.gpr", path=datadir)
+#results <- slideQuality(gprdata)
 }
 
 \keyword{programming}
