@@ -19,11 +19,11 @@
 ## One slide only!!!
 
 ## returns a list of vector containing infor from grp file column
-readGPR <- function (fnames = NULL, path= ".", DEBUG=TRUE, skip = 0,
+readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
                      sep ="\t", quote= "",...)
   {
     print("Starting readGPR")
-    print(path)
+    if (DEBUG) print(path)
     # Test if input data is OK
     if (is.null(path))
       path <- "."
@@ -37,7 +37,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=TRUE, skip = 0,
     # Search in the gpr file where are the colums starting
     y <- readLines(fullfnames[1], n = 100)
     skip <- grep("F635 Median", y)[1] - 1
-    print(skip)
+    if (DEBUG) print(skip)
   
     # Read data in       
     name <- id <- NULL
@@ -73,7 +73,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=TRUE, skip = 0,
                                   split = "=")[[1]][2])
     normCoef <- gsub("\t", ",", normCoef1)
 
-    print(paste("Reading", f))
+    if (DEBUG) print(paste("Reading", f))
     h <- strsplit(readLines(f, n = skip + 1), split = sep)
     h <- as.list(unlist(h[[length(h)]]))
     names(h) <- gsub("\"", "", unlist(h))
@@ -394,7 +394,7 @@ gpQuality <- function(fnames = NULL, path = ".",
                           output=TRUE,# plot=TRUE,
                           resdir=".",
                           dev="png", #set default to be png 
-                          DEBUG = TRUE,...)
+                          DEBUG = FALSE,...)
   {
 
     
@@ -411,9 +411,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     organism <- organism[1]
     opt <- list(...)
 
-    #Move to result directory
     
-
  ###################
  ## Setting up output device
  ###################
@@ -440,9 +438,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     curdir <- getwd()
     if (!file.exists(resdir))
       dir.create(resdir)
-#    setwd(resdir)
     if (DEBUG) print(getwd())
-
 
     #Allocation of matrix for marrayraw object
 
@@ -463,6 +459,7 @@ gpQuality <- function(fnames = NULL, path = ".",
 
     Rf <- Gf <- Rb <- Gb <- weight <- matrix(0,nrow=nrow, ncol=ncol)
     filenames <- c()
+    nb <- c()
     
     # Call to slideQuality for each gpr file
 
@@ -471,9 +468,9 @@ gpQuality <- function(fnames = NULL, path = ".",
         if (DEBUG) print("In the loop ")
         f <- fnames[i]
         gp <- readGPR(fnames = f, path=path)
-        restmp <- slideQuality(gp)
+        restmp <- slideQuality(gp, DEBUG=DEBUG)
         scal <- arrayScal(restmp, organism=organism)
-        score[i,] <- c(qualityScore(restmp[,1]), min(scal, na.rm=TRUE))
+        score[i,] <- c(mean(qualityScore(restmp[,1]), na.rm=TRUE), min(scal, na.rm=TRUE))
         
         ###start plot
         Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 
@@ -486,22 +483,23 @@ gpQuality <- function(fnames = NULL, path = ".",
         plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
         plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
         do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
-        par(mar=c(10,5,2,5))
-        qualBoxplot(restmp)
+        par(mar=c(3,10,2,8))
+        nbtmp <- qualBoxplot(restmp)
         dev.off()
         setwd(curdir)
-        
+
+        nb <- c(nb, nbtmp)
         QCp <- c(QCp, plotname)
-        if(DEBUG) print("End of plot")
-        if(DEBUG) print(paste("save as ",plotname))
-        if(DEBUG) print("Binding results")
+        if (DEBUG) print("End of plot")
+        if (DEBUG) print(paste("save as ",plotname))
+        if (DEBUG) print("Binding results")
         quality <- cbind(quality, restmp[,1])
         meas <- rownames(restmp)
       }
 
     #Create marrayRaw
     colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- filenames
-    print("building mraw")
+    if (DEBUG) print("building mraw")
     mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
                 maGb=Gb, maNotes="", maLayout=mlayout,
                 maW=weight, maGnames=tmp)
@@ -518,9 +516,9 @@ gpQuality <- function(fnames = NULL, path = ".",
     for(i in 1:length(pn))
       Dp <- c(Dp, dirfiles[grep(pn[i], dirfiles)[1]])
     
-    if(DEBUG) print("After for loop")
-    #print(score)
-    quality2HTML(fnames=fnames,path=resdir, QCplot=QCp, DiagPlot=Dp,score=score)
+    if (DEBUG) print("After for loop")
+    if (DEBUG) print(nb)
+    quality2HTML(fnames=fnames,path=resdir, QCplot=QCp, DiagPlot=Dp,nbBelow=nb)
     setwd(curdir)
 
     colnames(quality) <- fnames
@@ -530,7 +528,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     if (output)
       write.table(quality, "quality.txt",sep="\t", col.names=NA)
 
-    return(list(mraw=mraw,score=score, quality=quality))
+    return(list(mraw=mraw, score=score, quality=quality))
   }
 
 
@@ -640,101 +638,6 @@ arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
 # 2. SuperImpose value for slides of interest (1 or more)
 #arrayQuality and reference are results from globalQuality
 
-qualBoxplot <- function(arrayQuality,reference=NULL, organism=c("Mm", "Hs"),...)
-  {
-    print("starting plot")
-    # Reference = output of globalQuality for ref slides
-    # if NULL, reads in matrix store as RData
-    organism=organism[1]
-    if(is.null(reference))
-      {
-        if(organism == "Mm")
-          {
-            if (!("MmReferenceDB" %in% ls(1)))
-              data(MmReferenceDB)
-            reference <- MmReferenceDB
-          }
-        
-        else
-          reference <- data(HsReferenceDB)
-      }
-    
-    scalref <- arrayScal(reference)
-    #print(paste("length scalref= ", dim(scalref), sep=" "))
-    scalarray <- arrayScal(arrayQuality)
-    #print(paste("dim scalarray= ", dim(scalarray), sep=" "))
-    
-    if(is.null(dim(scalref))|nrow(arrayQuality)!=nrow(reference))
-      stop("Input must be a matrix resulting from slideQuality.R")
-    else
-      {
-        print("Boxplot")
-        #Boxplot of reference arrays quality measure
-        nr <- nrow(scalref)
-        lim <- range(as.numeric(scalarray),as.numeric(scalref),na.rm=TRUE)
-        plot(0:(nr+1),0:(nr+1),ylim=lim,type="n", axes=FALSE,ylab="",xlab="")
-        axis(1,1:nr,labels=rownames(reference),las=2, cex.axis=0.8)
-        axis(2)
-
-        for(i in 1:nr)
-          {
-            boxplot(as.numeric(scalref[i,]), at=i, add=TRUE)
-            tmp <- round(quantile(as.numeric(reference[i,]),
-                                  probs=c(0.75, 0.25), na.rm=TRUE),1)
-            text(rep((i-0.3),2), quantile(as.numeric(scalref[i,]),
-                                          probs=c(0.8, 0.2), na.rm=TRUE),
-                 as.character(tmp), cex=0.7, col="blue")
-          }
-
-        #Line for tested arrays
-        
-        nc <- ncol(scalarray)
-        col <- rainbow(nc)
-        print("lines")
-        for(i in 1:nc)
-          {
-            lines(1:nr, scalarray[,i],col=col[i])
-            text(1:nr, scalarray[,i], as.character(round(arrayQuality[,i],1)), col=col[i])
-          }
-        #legend
-        leg.txt <- colnames(arrayQuality)
-        print(leg.txt)
-        
-        legend(1,lim[2],leg.txt,lty=1,col=col)
-      }
-  }
-
-#mat = matrix with columns from gpr file
-#mat = (grow, gcol, srow, nscol) or
-#mat = (block srow, scol)
-
-     
-maCompLayout <- function(mat, ncolumns=4)
-  {
-    if (dim(mat)[2]==3)
-      {
-        Blocks <- mat[,1]
-        #gr <- mat[,1] / ncolumns
-        newmat <- cbind(gr=((mat[,1] - 1) %/% ncolumns) +1, gc=((mat[,1] -1) %%
-                                                           4) + 1,
-                        sr=mat[,2], sc=mat[,3])
-      }  else
-    newmat <- mat
-    
-    ngr <- max(newmat[,1]);  ngc <- max(newmat[,2])
-    nsr <- max(newmat[,3]);  nsc <- max(newmat[,4])
-    nspots <- as.integer(ngr) * as.integer(ngc) * as.integer(nsr) *
-as.integer(nsc)
-    
-    mlayout <- new("marrayLayout", maNgr = as.integer(ngr),
-                   maNgc = as.integer(ngc),
-                   maNsr = as.integer(nsr),
-                   maNsc = as.integer(nsc),
-                   maNspots = nspots)
-    maSub(mlayout) <- maCoord2Ind(newmat, mlayout)
-    return(mlayout)
-  }
- 
 
 
 # Read in names of plots
@@ -742,9 +645,9 @@ as.integer(nsc)
 # same number of qualPlot and QCplot
 # based on alphabetical order
 
-#score is a matrix with scores from gpQuality
+# nbBelow is a vector: for each slide, number of measure below range of good slides
 
-quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resdir=".", score=NULL)
+quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resdir=".", nbBelow=NULL)
   {
 
     HTwrap <- function(x, tag = "TD", option="align", value="center") {
@@ -764,9 +667,7 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
 
     HTscore <- function(filename,src){
       paste(filename, "<br>",
-            "Quality score = ", round(src[1],3),
-            "<br>",
-            "Min criteria = ", round(src[2],3), sep="")
+            "Measures below range: ", src)
     }
 
     
@@ -780,7 +681,7 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
           {
             td2 <- HTwrap(HTimg(fullDiagp[i]), tag="TD")
             td1 <- HTwrap(HTimg(fullQCp[i]), tag="TD")
-            td3 <- HTwrap(HTscore(fnames[i],score[i,]), tag="TD",
+            td3 <- HTwrap(HTscore(fnames[i],paste(nbBelow[i,1], nbBelow[i,2], "/")), tag="TD",
                           option="align", value="left") 
             
             tr <- HTwrap(paste(td1, td2, td3, sep="\n"), tag="TR")
@@ -808,9 +709,6 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
       fullBoxp <- DiagPlot
     }
 
-     print(QCplot)
-    print(DiagPlot)
-
     output <- file(file.path(resdir,"qualityReport.html"),"w") 
     datadir <- system.file("data", package="arrayQuality")
     html <- paste(readLines(file.path(datadir, "index.html")), "\n", collapse="")
@@ -826,7 +724,7 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
 #slidequality is the result of slideQuality for ONE slide
 qualityScore <- function(slidequality, organism=c("Mm", "Hs"))
   {
-    organism=organism[1]
+    organism <- organism[1]
     slidequality <- as.vector(slidequality)
     if(organism == "Mm")
       {
@@ -844,7 +742,8 @@ qualityScore <- function(slidequality, organism=c("Mm", "Hs"))
         vect <- reference[i,]
         score[i] <- (length(vect[vect < slidequality[i]])/length(vect))*100
       }
-    return(mean(score, na.rm=TRUE))
+    print(score)
+    return(score)
 
   }
 
@@ -896,3 +795,100 @@ globalQuality <- function(fnames = NULL, path = ".",
 ## MmScalingTable: mean and var from good Mm slide, for each measure
 #MmScalingTable <- qualRefTable(path="C:/MyDoc/Projects/quality/TestFiles/Good")
 #save(MmScalingTable, file="MmScalingTable.RData")
+
+#################################
+## Plot function
+
+# 1. Plot the boxplot
+# 2. SuperImpose value for slides of interest (1 or more)
+# arrayQuality and reference are results from
+# slideQuality and globalQuality respectively
+
+
+qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),...)
+  {
+    print("starting plot")
+    # Reference = output of globalQuality for ref slides
+    # if NULL, reads in matrix store as RData
+    organism<-organism[1]
+    score <- qualityScore(arrayQuality)
+    if(is.null(reference))
+      {
+        if(organism == "Mm")
+          {
+            if (!("MmReferenceDB" %in% ls(1)))
+              data(MmReferenceDB)
+            reference <- MmReferenceDB
+          }
+        
+        else
+          reference <- data(HsReferenceDB)
+      }
+    
+    scalref <- arrayScal(reference)
+    scalarray <- arrayScal(arrayQuality)
+    
+    if(is.null(dim(scalref))|nrow(arrayQuality)!=nrow(reference))
+      stop("Input must be a matrix resulting from slideQuality.R")
+    else
+      {
+        print("Boxplot")
+        #Boxplot of reference arrays quality measure
+        nr <- nrow(scalref)
+
+        goodLim <- matrix(0,nrow=nr,ncol=1)
+
+        lim <- range(as.numeric(scalarray),as.numeric(scalref),na.rm=TRUE)
+        plot(0:(nr+1),0:(nr+1),xlim=lim,type="n", axes=FALSE,ylab="",xlab="", xaxt="n",
+             main="Array Quality Control Comparison")
+
+        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.8, las=2)
+        tmp <- c(paste(as.character(round(score)), "(", as.character(round(arrayQuality,1)), ")"), "% (value)")
+        axis(4, at=1:(nr+1), labels=, tmp, cex.axis=0.8, las=2)
+        axis(1, at=c(lim[1]+0.5, lim[2]-0.5), labels= c("Problematic", "Good"))
+
+        for(i in 1:nr)
+          {
+            bp <- boxplot(as.numeric(scalref[i,]), at=i, add=TRUE, horizontal=TRUE, axes=FALSE)
+            goodLim[i,1] <- bp$stats[1]
+            
+            tmp <- round(quantile(as.numeric(reference[i,]),
+                                  probs=c(0.75, 0.25), na.rm=TRUE),1)
+            text(quantile(as.numeric(scalref[i,]), probs=c(0.8, 0.2), na.rm=TRUE),rep((i+0.3),2),
+                 as.character(tmp), cex=0.7, col="blue")
+          }
+
+        print(goodLim)
+        
+
+        #Line for tested arrays
+        #Number of measure below criteria
+        nc <- ncol(scalarray)
+        col <- rainbow(nc)
+
+        isBelowLim <- matrix(FALSE, ncol=nc, nrow=nr)
+        
+        print("lines")
+        for(i in 1:nc)
+          {
+            lines(scalarray[,i], 1:nr, col=col[i], lty=2)
+            points( scalarray[,i],1:nr, col=col[i], pch=15, cex=1.5)
+##            text( scalarray[,i],1:nr, as.character(round(arrayQuality[,i],1)), cex=0.8)
+            for(j in 1:nr)
+              {
+                if(scalarray[j,i] < goodLim[j,1])
+                  isBelowLim[j,i] <- TRUE
+              }
+          }
+        box()
+        #legend
+        leg.txt <- colnames(arrayQuality)
+        legend(lim[1],nr+1,leg.txt,lty=1,col=col, cex=0.7)
+
+        res <- c()
+        for(i in 1:nc)
+          res <- c(res, length(isBelowLim[isBelowLim[,i],i]))
+        return(cbind(res, nr))
+      }
+  }
+

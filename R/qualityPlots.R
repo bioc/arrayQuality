@@ -68,7 +68,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
         ylim <- c(1, sum(unlist(lapply(exty, length))))
         
         par(mar=c(4,7,3,2), cex=1)  ## A wide left side to allow for gene names
-        plot(1,1, type="n", xlim=xlim, ylim=ylim, axes=FALSE, xlab=xvar, ylab="", ...)
+        plot(1,1, type="n", xlim=xlim, ylim=ylim, axes=FALSE, xlab=xvar, ylab="",...)
         ii <- 1
         for(i in 1:length(exty))
           for(j in 1:length(exty[[i]]))
@@ -205,7 +205,7 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
       else
         S2N <- as.vector(log(maGf(mdata),2))}
     
-    lab <- paste("mean:", round(mean(rm.na(S2N)), 2)," : ", "var:", round(var(rm.na(S2N)), 2))
+    lab <- paste("S2N : ","mean:", round(mean(rm.na(S2N)), 2)," : ", "var:", round(var(rm.na(S2N)), 2))
     hist(rm.na(S2N), main=lab, col=channel, nclass=50, freq=FALSE, ylim=c(0,1.1));
     
     if(length(maControls(mdata))!=0)
@@ -328,14 +328,15 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       ## 11 maM Dot plot
       if(DEBUG) print("start 11")
       if(length(maControls(mnorm))!=0)
-        qpDotPlots(mnorm, xvar="maM", col=colcode)
-      title(main= "Normalized M")
+        qpDotPlots(mnorm, xvar="maM", col=colcode, )
+      title(main= "Controls normalized M")
       
       ## 12 maM Dot plot
       if(DEBUG) print("start 12")
       if(length(maControls(mraw))!=0)
         qpDotPlots(mraw, xvar="maA", col=colcode)
-      
+       title(main= "Controls A")
+     
       if(DEBUG) print("start 13")
       ## 13
       layout(1)
