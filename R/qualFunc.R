@@ -428,6 +428,8 @@ gpQuality <- function(fnames = NULL, path = ".",
     # Prepares results
     quality <- NULL
     tmp <- NULL
+    QCp <- c()
+    Dp <- c()
     score <- matrix(0, nrow=length(fnames), ncol=2)
     colnames(score) <- c("Mean score", "Min val")
 
@@ -436,8 +438,26 @@ gpQuality <- function(fnames = NULL, path = ".",
       dir.create(resdir)
     setwd(resdir)
     if (DEBUG) print(getwd())
+
+
+    #Allocation of matrix for marrayraw object
+
+    f <- fnames[1]
+    gp <- readGPR(fnames=f, path=path)
+    nrow <- length(gp[["RfMedian"]])
+    ncol <- length(fnames)
     
-   # Call to slideQuality for each gpr file
+    mlayout <- maCompLayout(as.matrix(cbind(gp[["Block"]],
+                                            gp[["Row"]], gp[["Column"]])))
+    tmp <- new("marrayInfo", maInfo=data.frame(gp[["Name"]], gp[["ID"]]))
+    mlayout@maControls <- as.factor(maGenControls(tmp))
+    
+    rm(f, gp)
+
+    Rf <- Gf <- Rb <- Gb <- weight <- matrix(0,nrow=nrow, ncol=ncol)
+    filenames <- c()
+    
+    # Call to slideQuality for each gpr file
 
     for (i in 1:length(fnames))
       {
@@ -448,23 +468,23 @@ gpQuality <- function(fnames = NULL, path = ".",
         score[i,] <- c(mean(restmp[,1], na.rm=TRUE), min(restmp[,1], na.rm=TRUE))
         
         ###start plot
+        Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 
+        Rf[,i] <- gp[["RfMedian"]]; Rb[,i] <- gp[["RbMedian"]]
+        weight[,i] <- gp[["Flags"]]
+        filenames <- c(filenames, gp[["File"]])
         
         #Create marrayRaw for maQualityPlots
-        Gf <- gp[["GfMedian"]]; Gb <- gp[["GbMedian"]]
-        Rf <- gp[["RfMedian"]]; Rb <- gp[["RbMedian"]]
-        colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- gp[["File"]]
+        #Gf <- gp[["GfMedian"]]; Gb <- gp[["GbMedian"]]
+        #Rf <- gp[["RfMedian"]]; Rb <- gp[["RbMedian"]]
+        #colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- gp[["File"]]
         
-        weight <- gp[["Flags"]]
-        mlayout <- maCompLayout(as.matrix(cbind(gp[["Block"]],
-                                                gp[["Row"]], gp[["Column"]])))
-        tmp <- new("marrayInfo", maInfo=data.frame(gp[["Name"]], gp[["ID"]]))
-        mlayout@maControls <- as.factor(maGenControls(tmp))
-        mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
-                    maGb=Gb, maNotes="", maLayout=mlayout,
-                    maW=weight, maGnames=tmp)
+        #weight <- gp[["Flags"]]
+        #mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
+                    #maGb=Gb, maNotes="", maLayout=mlayout,
+                    #maW=weight, maGnames=tmp)
         
         #maQualityPlots
-        maQualityPlots(mraw)
+        #maQualityPlots(mraw)
 
         #qualBoxplot
         plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
@@ -472,16 +492,36 @@ gpQuality <- function(fnames = NULL, path = ".",
         do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)) ) 
            qualBoxplot(restmp)
         dev.off()
+        QCp <- c(QCp, plotname)
         if(DEBUG) print("End of plot")
         if(DEBUG) print(paste("save as ",plotname))
         if(DEBUG) print("Binding results")
         quality <- cbind(quality, restmp[,1])
         meas <- rownames(restmp)
       }
+
+    #Create marrayRaw
+    colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- filenames
+    print("building mraw")
+    mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
+                maGb=Gb, maNotes="", maLayout=mlayout,
+                maW=weight, maGnames=tmp)
+    #maQualityPlots
+    maQualityPlots(mraw)
+    
+
+    #get diagnostic plots names
+    tmp <- sub(".gpr", "",colnames(mraw@maGf))
+    pn <- paste("QCPlot", tmp, sep=".")
+
+    dirfiles <- dir(".")
+    
+    for(i in 1:length(pn))
+      Dp <- c(Dp, dirfiles[grep(pn[i], dirfiles)[1]])
     
     if(DEBUG) print("After for loop")
-    print(score)
-    quality2HTML(score=score)
+    #print(score)
+    quality2HTML(QCplot=QCp, DiagPlot=Dp,score=score)
     setwd(curdir)
 
     colnames(quality) <- fnames
@@ -491,7 +531,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     if (output)
       write.table(quality, "quality.txt",sep="\t", col.names=NA)
 
-    return(list(score=score, quality=quality))
+    return(list(mraw=mraw,score=score, quality=quality))
   }
 
 
@@ -703,8 +743,10 @@ as.integer(nsc)
 
 #score is a matrix with scores from gpQuality
 
-quality2HTML <- function(path=".", resdir=".", score=NULL)
+quality2HTML <- function(path=".", QCplot=NULL, DiagPlot=NULL,resdir=".", score=NULL)
   {
+    print(QCplot)
+    print(DiagPlot)
 
     HTwrap <- function(x, tag = "TD", option="align", value="center") {
       if (option == "")
@@ -728,26 +770,19 @@ quality2HTML <- function(path=".", resdir=".", score=NULL)
     }
 
     
-    tableTag <- function(fnames,path=".")
+    tableTag <- function(fullQCp, fullBoxp)
       {
-        #list all QC plot
-        QCp <- dir(path, pattern="QCPlot*")
-        boxp <- dir(path, pattern="qualPlot*")
-
-        fullQCp <- file.path(path, QCp)
-        fullBoxp <- file.path(path,boxp)
-        
         
         tab <- ""
         tr <- ""
-
+        
         for(i in 1:min(length(fullQCp), length(fullBoxp)))
           {
             td1 <- HTwrap(HTimg(fullQCp[i]), tag="TD")
             td2 <- HTwrap(HTimg(fullBoxp[i]), tag="TD")
             td3 <- HTwrap(HTscore(score[i,]), tag="TD",
                           option="align", value="left") 
-       
+            
             tr <- HTwrap(paste(td1, td2, td3, sep="\n"), tag="TR")
             tab <- paste(tab,tr,sep="")
           }
@@ -755,6 +790,25 @@ quality2HTML <- function(path=".", resdir=".", score=NULL)
         
       }
 
+    if(missing(QCplot) || is.null(QCplot))
+      {
+        QCp <- dir(path, pattern="QCPlot*")
+        fullQCp <- file.path(path, QCp)
+      }
+    else {
+      fullQCp <- QCplot
+    }
+    
+    if(missing(DiagPlot) || is.null(DiagPlot))
+      {
+        boxp <- dir(path, pattern="qualPlot*")
+        fullBoxp <- file.path(path,boxp)
+      }
+    else {
+      fullBoxp <- DiagPlot
+    }
+    
+    
     output <- file(file.path(resdir,"qualityReport.html"),"w") 
 
     datadir <- system.file("data", package="arrayQuality")
@@ -762,7 +816,7 @@ quality2HTML <- function(path=".", resdir=".", score=NULL)
 
     split <- unlist(strsplit(html, split="<a name=\"table\"></a>"))
 
-    tab <- tableTag(path=path)
+    tab <- tableTag(fullQCp, fullBoxp)
     
     cat(split[1], tab,split[2], file=output)     
     close(output)

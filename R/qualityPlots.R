@@ -223,7 +223,7 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 
 ## mraw == marrayRaw object
 ## mrawheader == Heading information
-maQualityPlots <-  function(mraw, headerInfo="", save = TRUE, 
+maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE, 
                             dev = "png",  #set default to be png
                             col, badspotfunction,
                             DEBUG=TRUE, ...)
@@ -231,123 +231,125 @@ maQualityPlots <-  function(mraw, headerInfo="", save = TRUE,
   require(hexbin)
   if (DEBUG) print("function starting")
 
-  for(i in 1:dim(mraw)[2])
+  if(DEBUG) print(dim(mrawObj))
+  for(i in 1:dim(mrawObj)[2])
     {
-  mraw <- mraw[,i]
-  opt <- list(...)
-
-  ## re-evaluate W
-  if (DEBUG) print("Re-evaluate Weigth")
-  if(missing(badspotfunction))
-    {
-      tmp <- do.call("gpFlagWt", list(mraw@maW))
-      mraw@maW <- tmp
-    }
-  else
-    if(!is.null(badspotfunction))
-      mraw@maW <- do.call(badspotfunction, list(mraw@maW))
-
-  ## setting controls cols
-  ifelse(missing(col), colcode<- setCtlCol(mraw) , colcode <- col)
-  if(DEBUG) cat("check Control color code", colcode, "\n")
-
-  ## Set up no backgroud data and normalization
-  if (DEBUG) print("Set up data and normalization")
-  nbgraw <- mraw;
-  if(length(mraw@maGb) != 0)
-    nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
-  norm.defs <- maDotsDefaults(opt, list(norm="p"))
-  mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
-
-  ## Set up output name
-  if (DEBUG) print("Name the output file")
-  tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
-  fstart <- paste(tmp[-length(tmp)], collapse=".")
-  
-  ## subnames <-paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain)
-  
+      print(i)
+      mraw <- mrawObj[,i]
+      opt <- list(...)
+      
+      ## re-evaluate W
+      if (DEBUG) print("Re-evaluate Weigth")
+      if(missing(badspotfunction))
+        {
+          tmp <- do.call("gpFlagWt", list(mraw@maW))
+          mraw@maW <- tmp
+        }
+      else
+        if(!is.null(badspotfunction))
+          mraw@maW <- do.call(badspotfunction, list(mraw@maW))
+      
+      ## setting controls cols
+      ifelse(missing(col), colcode<- setCtlCol(mraw) , colcode <- col)
+      if(DEBUG) cat("check Control color code", colcode, "\n")
+      
+      ## Set up no backgroud data and normalization
+      if (DEBUG) print("Set up data and normalization")
+      nbgraw <- mraw;
+      if(length(mraw@maGb) != 0)
+        nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
+      norm.defs <- maDotsDefaults(opt, list(norm="p"))
+      mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
+      
+      ## Set up output name
+      if (DEBUG) print("Name the output file")
+      tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
+      fstart <- paste(tmp[-length(tmp)], collapse=".")
+      
+      ## subnames <-paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain)
+      
   ###################
   ## Setting up output device
   ###################
-  if (DEBUG) print("Name of output device")
-  plotdef <- switch(dev,
-                    "bmp" = list(dev=list(width=1600, height=1200, bg="white"), suffix="bmp"),
-                    "jpeg" = list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
-                    "jpg" =  list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
-                    "postscript" = list(dev=list(paper="special", width=16, height=12, bg="white"), suffix="ps"),
-                    "png" =  list(dev=list(width=1600, height=1200, bg="white"), suffix="png"),
-                    list(dev=list(width=1600, height=1200,bg="white"), suffix="png"),
-                    )
-  if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
-    print("Format error, format will be set to PNG")
-  
-  fname <- paste("QCPlot", fstart,  plotdef$suffix, sep=".")
-  plotdef <- c(plotdef, list(main=paste(fname, ": Qualitative Diagnostic Plots")))
-
-  ###################
-  ## Plot
-  ###################
-  ## Match args and calls function
-  ## Start device and layout
-  if(DEBUG) print("start layout")
-  if(save)  do.call(dev, maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)) ) 
-  layout.show(  layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
-                                14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
-                     height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7)))
-
-  ## 1) Split MA-plot (Before Normalization)
-  if(DEBUG) print("start 1")
-  qpMAPlots(nbgraw, addp=TRUE, main="MA-Plot :: raw", ...)
-  addLines(nbgraw)
-
-  
-  ## 2) HEXbin MA-plot (After Normalization)
-  if(DEBUG) print("start 2")
-  qpHexbin(mnorm, main="MA-Plot :: Norm")
-
-  ## 3 & 4) maM (Before
-  if(DEBUG) print("start 3, 4")
-  qpImage(nbgraw, xvar="maM", main="Spatial: Rank(M-Raw)")
-
-  ## 5 & 6) maM (After Normalization)
-  if(DEBUG) print("start 5 & 6")
-  ov.sub <- as.vector(maW(mnorm)) < 0
-  qpImage(mnorm, xvar="maM", main="Spatial: M-Norm", overlay=ov.sub)
-
-  ## 7 & 8) maA 
-  if(DEBUG) print("start 7 & 8")
-  qpImage(nbgraw, xvar="maA", main="Spatial: A")
-
-  ## 9 & 10  Red and Green Signal to Noise (background corrected)
-  if(DEBUG) print("start 9 & 10")
-  qpS2N(mraw, channel="red", colcode=colcode)
-  qpS2N(mraw, channel="green", colcode=colcode)
-
-  ## 11 maM Dot plot
-  if(DEBUG) print("start 11")
-  if(length(maControls(mnorm))!=0)
-    qpDotPlots(mnorm, xvar="maM", col=colcode)
-  title(main= "Normalized M")
-  
-  ## 12 maM Dot plot
-  if(DEBUG) print("start 12")
-  if(length(maControls(mraw))!=0)
-    qpDotPlots(mraw, xvar="maA", col=colcode)
-
-  if(DEBUG) print("start 13")
-  ## 13
-  layout(1)
-  par(mar=c(2,2,4,2))
-  mtext(plotdef$main, line=3)
-  mtext(headerInfo, line=2, cex = 0.7)
-  mtext(paste("Call:", maNormCall(mnorm)[3]), line=1, cex = 0.7)
-
-  ## Finishing
-  if(DEBUG) cat("Done...")
-  if (save == TRUE) {
-    cat(paste("save as", fname, "\n"))
-    dev.off()
-  }
-}
+      if (DEBUG) print("Name of output device")
+      plotdef <- switch(dev,
+                        "bmp" = list(dev=list(width=1600, height=1200, bg="white"), suffix="bmp"),
+                        "jpeg" = list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
+                        "jpg" =  list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
+                        "postscript" = list(dev=list(paper="special", width=16, height=12, bg="white"), suffix="ps"),
+                        "png" =  list(dev=list(width=1600, height=1200, bg="white"), suffix="png"),
+                        list(dev=list(width=1600, height=1200,bg="white"), suffix="png"),
+                        )
+      if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
+        print("Format error, format will be set to PNG")
+      
+      fname <- paste("QCPlot", fstart,  plotdef$suffix, sep=".")
+      plotdef <- c(plotdef, list(main=paste(fname, ": Qualitative Diagnostic Plots")))
+      
+      ###################
+      ## Plot
+      ###################
+      ## Match args and calls function
+      ## Start device and layout
+      if(DEBUG) print("start layout")
+      if(save)  do.call(dev, maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)) ) 
+      layout.show(  layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
+                                    14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
+                           height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7)))
+      
+      ## 1) Split MA-plot (Before Normalization)
+      if(DEBUG) print("start 1")
+      qpMAPlots(nbgraw, addp=TRUE, main="MA-Plot :: raw", ...)
+      addLines(nbgraw)
+      
+      
+      ## 2) HEXbin MA-plot (After Normalization)
+      if(DEBUG) print("start 2")
+      qpHexbin(mnorm, main="MA-Plot :: Norm")
+      
+      ## 3 & 4) maM (Before
+      if(DEBUG) print("start 3, 4")
+      qpImage(nbgraw, xvar="maM", main="Spatial: Rank(M-Raw)")
+      
+      ## 5 & 6) maM (After Normalization)
+      if(DEBUG) print("start 5 & 6")
+      ov.sub <- as.vector(maW(mnorm)) < 0
+      qpImage(mnorm, xvar="maM", main="Spatial: M-Norm", overlay=ov.sub)
+      
+      ## 7 & 8) maA 
+      if(DEBUG) print("start 7 & 8")
+      qpImage(nbgraw, xvar="maA", main="Spatial: A")
+      
+      ## 9 & 10  Red and Green Signal to Noise (background corrected)
+      if(DEBUG) print("start 9 & 10")
+      qpS2N(mraw, channel="red", colcode=colcode)
+      qpS2N(mraw, channel="green", colcode=colcode)
+      
+      ## 11 maM Dot plot
+      if(DEBUG) print("start 11")
+      if(length(maControls(mnorm))!=0)
+        qpDotPlots(mnorm, xvar="maM", col=colcode)
+      title(main= "Normalized M")
+      
+      ## 12 maM Dot plot
+      if(DEBUG) print("start 12")
+      if(length(maControls(mraw))!=0)
+        qpDotPlots(mraw, xvar="maA", col=colcode)
+      
+      if(DEBUG) print("start 13")
+      ## 13
+      layout(1)
+      par(mar=c(2,2,4,2))
+      mtext(plotdef$main, line=3)
+      mtext(headerInfo, line=2, cex = 0.7)
+      mtext(paste("Call:", maNormCall(mnorm)[3]), line=1, cex = 0.7)
+      
+      ## Finishing
+      if(DEBUG) cat("Done...")
+      if (save == TRUE) {
+        cat(paste("save as", fname, "\n"))
+        dev.off()
+      }
+    }
 }
 
