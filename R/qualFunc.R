@@ -267,7 +267,7 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
     # Controls
     Control <- arrayControls(gprData)
     numE <- numNeg <- numPos <- numProb <- 0
-    emp <- neg <- pos <- 0
+    emp <- neg <- pos <- NA
 
     for(i in 1:length(Control))
       {
@@ -288,9 +288,9 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
           }
       }
 
-    EmptyMed <- median(emp, na.rm=TRUE)
-    NegativeMed <- median(neg, na.rm=TRUE)
-    PositiveMed <- median(pos, na.rm=TRUE)
+    EmptyMed <- median(as.numeric(emp), na.rm=TRUE)
+    NegativeMed <- median(as.numeric(neg), na.rm=TRUE)
+    PositiveMed <- median(as.numeric(pos), na.rm=TRUE)
 
     difEmptyNegative <- EmptyMed - NegativeMed
     difPositiveNegative <- PositiveMed - NegativeMed
@@ -331,7 +331,7 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
                         "- Median A for empty ctrl",
                         "- Median A for neg ctrl",
                         "Median A for positive ctrl",
-                        "Pos. ctrl median A - Neg. ctrl median A",
+                        "Pos ctl median A - Neg ctl median A",
                         "- Var replicated spots A values",
                         "- Mvalues MSE by print-tip",
                         "- MSE lowess",
@@ -489,7 +489,7 @@ gpQuality <- function(fnames = NULL, path = ".",
             plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
             plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
             do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
-            par(mar=c(3,10,2,8))
+            par(mar=c(3,14,2,6))
             nbtmp <- qualBoxplot(restmp, reference=reference, scalingTable=scalingTable)
             dev.off()
             setwd(curdir)
@@ -883,6 +883,7 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
     else
       {
         #Boxplot of reference arrays quality measure
+
         nr <- nrow(scalref)
 
         goodLim <- matrix(0,nrow=nr,ncol=1)
@@ -891,7 +892,7 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
         plot(0:(nr+1),0:(nr+1),xlim=lim,type="n", axes=FALSE,ylab="",xlab="", xaxt="n",
              main="Array Quality Control Comparison")
 
-        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.8, las=2)
+        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.7, las=2)
         tmp <- c(paste(as.character(round(score)), "(", as.character(round(arrayQuality,1)), ")"), "% (value)")
         axis(4, at=1:(nr+1), labels=, tmp, cex.axis=0.8, las=2)
         axis(1, at=c(lim[1]+0.5, lim[2]-0.5), labels= c("Problematic", "Good"))
@@ -918,11 +919,20 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
         for(i in 1:nc)
           {
             lines(scalarray[,i], 1:nr, col=col[i], lty=2)
-            points( scalarray[,i],1:nr, col=col[i], pch=15, cex=1.5)
-
+            points(scalarray[,i],1:nr, col=col[i], pch=15, cex=1.5)
+            missingdata <- as.vector(is.na(scalarray[,i]))
+            if(length(missingdata[missingdata]) > 0)
+              {
+                text(rep(lim[1]+ 1,length(missingdata[missingdata])),
+                     c(1:nr)[missingdata],
+                     rep("NA", length(missingdata[missingdata])),
+                     col="green", cex=0.8)
+              }
+            
             for(j in 1:nr)
               {
-                if(scalarray[j,i] < goodLim[j,1])
+                if(as.numeric(scalarray[j,i]) < goodLim[j,1] ||
+                   is.na(scalarray[j,i]))
                   isBelowLim[j,i] <- TRUE
               }
           }

@@ -53,7 +53,7 @@ in the list in the pop-up window, and click on &#8220;<span
 <h3><a name="_Toc72663191">Using arrayQuality functions PRv9mers,
 PRvQCHyb and
 gpQuality</a><o:p>&nbsp;</o:p></h3>
-<p class="MsoNormal">These section provides a quick starting guide to
+<p class="MsoNormal">This section provides a quick starting guide to
 use the
 package. There are three main functions provided to automatically read
 in data,
@@ -169,9 +169,8 @@ upstream problems.</p>
 </div>
 <p class="MsoNormal" style="text-align: left;"><br>
 </p>
-<div style="text-align: center;"><img
- src="images/lifecycle.png" title=""
- alt="microarray experiment lifecycle" align="top"
+<div style="text-align: center;"><img src="images/lifecycle.png"
+ title="" alt="microarray experiment lifecycle" align="top"
  style="border: 0px solid ; width: 470px; height: 322px;">&nbsp;</div>
 <p class="MsoCaption" align="center" style="text-align: center;">Figure
 1: Microarray
@@ -386,7 +385,7 @@ hybridization. This image is divided in 5 plots. </p>
 <ol style="margin-top: 0in;" start="1" type="1">
   <li class="MsoNormal" style="">The first column (left) represents
 boxplots of log intensity, by plates (top) and by print-tip group
-(bottom).&nbsp; In this example, you can notice on the boxplot by
+(bottom).&nbsp; In this example, you will notice on the boxplot by
 plates
 (top left corner) that plates 44 and 48 have lower intensity and wider
 range
@@ -640,7 +639,7 @@ QCHyb.<br>
   <li class="MsoNormal" style="">MA-plot of raw M values. No
 background subtraction is performed. The colored lines represent the
 loess curves for each print-tip group. The red dots highlight&nbsp; any
-spot with corresponding weigthed value&nbsp; less than 0. Users can
+spot with corresponding weighted value&nbsp; less than 0. Users can
 create their own weigthing scheme or function. Things to look for in a
 MA-plot are saturation of spots and the trend of loess curves, which is
 an indicator of the amount of normalization to be performed.<br>
@@ -852,8 +851,7 @@ the quality.txt file.<br>
 <br>
 </p>
 <span class="codeChar" style="font-family: courier new;"></span>
-<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;">
-</p>
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;"></p>
 <p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
 <p class="MsoNormal"><o:p></o:p></p>
 <p class="MsoNormal">You can also specify your own collection of good
@@ -960,7 +958,7 @@ diagnostic plot. </p>
   <li class="MsoNormal" style="">MA-plot of raw M. No
 background subtraction is performed. The colored lines represent the
 loess curves for each print-tip group. The red dots highlight&nbsp; any
-spot with corresponding weigthed value&nbsp; less than 0. Users can
+spot with corresponding weighted value&nbsp; less than 0. Users can
 create their own weigthing scheme or function. Things to look for in a
 MA-plot are saturation of spots and the trend of loess curves, which is
 an indicator of the amount of normalization to be performed.</li>
@@ -1086,8 +1084,8 @@ measure,
 we have
 printed 2 values. The first one is the percentage of reference slides
 measures
-under your slide&#8217;s result. The second one your slide value for this
-measure, before
+under your slide&#8217;s result. The second one is your slide value for this
+measure before
 scaling.<br>
 </p>
 &nbsp;&nbsp;&nbsp; &nbsp; -&nbsp;&nbsp;&nbsp; We have scaled all the
@@ -1419,9 +1417,8 @@ organism = &#8221;Mm&#8221;, output = TRUE, resdir = "Results")<o:p></o:p></span
 <p class="MsoNormal"><o:p></o:p></p>
 <p class="MsoNormal"><o:p><br>
 </o:p></p>
-<div style="text-align: center;"><img
- src="images/genHybDiagPlot.png" title=""
- alt="Example of general hybridization diagnostic plot"
+<div style="text-align: center;"><img src="images/genHybDiagPlot.png"
+ title="" alt="Example of general hybridization diagnostic plot"
  style="width: 576px; height: 432px;"><o:p><br>
 &nbsp;<br>
 </o:p>Figure 6: General hybridization quality diagnostic plot<br>
@@ -1441,11 +1438,111 @@ Comparative boxplot </p>
 <br>
 <br>
 <br>
-The comparative boxplot is created using reference slides from the
-Functional Genomics Core Facility in UCSF, and references are provided
-for Human and Mouse genomes only.&nbsp; If you would like to use your
+<br>
+<h3>Customizing arrayQuality</h3>
+<br>
+<span style="font-family: courier new,courier,monospace;">arrayQuality </span>is
+currently using look-up tables adapted to hybridizations performed in
+the Functional Genomics Core Facility in UCSF.&nbsp; Depending on your
+data, you may find that the probes defined as controls in <span
+ style="font-family: courier new,courier,monospace;">arrayQuality </span>are
+not present on your array, leading to NAs in the comparative boxplot,
+or you may be working with a genome for which we are not providing
+references. <span style="font-family: courier new,courier,monospace;">arrayQuality
+</span>can easily be adapted to your own data. <br>
+<br>
+<span style="font-weight: bold;">To use your own set of controls:</span><br
+ style="font-weight: bold;">
+<br>
+The controls used in arrayQuality are defined in a 2 column matrix
+called controlCode. <br>
+<br>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 300px; margin-left: auto; margin-right: auto;">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Pattern<br>
+      </td>
+      <td style="vertical-align: top;">Name<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Buffer<br>
+      </td>
+      <td style="vertical-align: top;">Buffer<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Empty<br>
+      </td>
+      <td style="vertical-align: top;">Empty<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">EMPTY<br>
+      </td>
+      <td style="vertical-align: top;">Empty<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">AT<br>
+      </td>
+      <td style="vertical-align: top;">Negative<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">M200009348<br>
+      </td>
+      <td style="vertical-align: top;">Positive<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">M200003425<br>
+      </td>
+      <td style="vertical-align: top;">Positive<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">NLG<br>
+      </td>
+      <td style="vertical-align: top;">con<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div style="text-align: center;">Table2: Examples of controls used in
+arrayQuality<br>
+</div>
+<br>
+You will need to create another <span
+ style="font-family: courier new,courier,monospace;">controlCode </span>table
+containing two columns as well, and then overwrite the default <span
+ style="font-family: courier new,courier,monospace;">controlCode </span>loaded
+with <span style="font-family: courier new,courier,monospace;">arrayQuality</span>.<br>
+&nbsp;&nbsp;&nbsp; - A column named "Pattern" containing your control
+IDs<br>
+&nbsp;&nbsp;&nbsp; - A column named "Name", describing what king of
+control is each probe (in particular what are Positive, Negative, Empty
+controls)<br>
+<br>
+You can do it by creating a tab delimited text file and read it in R
+after loading <span style="font-family: courier new,courier,monospace;">arrayQuality</span>:<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">&gt;
+library(arrayQuality)<br>
+&gt; controlCode &lt;- as.matrix(read.table("mycontrolCode.txt",
+sep="\t",</span><br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+header=TRUE, quote="\"", fill=TRUE)))</span><br
+ style="font-family: courier new,courier,monospace;">
+<br>
+<br>
+<span style="font-weight: bold;">To use your own reference slides:</span><br>
+<br>
+&nbsp;If you would like to use your
 own set of reference slides, you will need to follow a few steps to
-create the necessary look-up tables. This feature can be use for
+create the necessary look-up tables. This feature can be used for
 example if you want to study hybridization quality for other genomes,
 or if you would like to compare slide quality within a a large dataset.
 To generate your own references:<br>
