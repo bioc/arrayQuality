@@ -326,36 +326,36 @@ slideQuality <- function(gprData=NULL,output = TRUE, DEBUG=TRUE,...)
     sortedMeasures <- c(#"File", "Date",
                         "range RF", "range GF",
                         #"range RB", "range GB",
-                        "Median empty ctrl", "Median negative ctrl",
+                        "- Median empty ctrl", "- Median neg ctrl",
                         "Median positive ctrl",
                         "- MSE by print-tip",
                         "- MSE lowess",
                         #"Spot radius",
                         #"Percentage of flagged spots",
-                        "- % of flagged spots",
+                        "- % flagged spots",
                         #"RB variance","GB variance",
-                        "RB mad", "GB mad",
+                        "- RB mad", "- GB mad",
                         #"RB IQR", "GB IQR",
-                        "- RS2N", "- GS2N",
-                        "- MMRmad","- % spots MMRmad > 0.5",
+                        "Median RS2N", "Median GS2N",
+                        "- MMRmad","- % spots MMRmad>0.5",
                         #"Percentage of spots MMRmad > 0.5",
                         #"MMR IQR",
                         #"Difference empty/negative",
-                        "Difference positive/negative",
-                        "- Variance of replicated spots")
+                        "Positive - Negative",
+                        "- Var replicated spots")
         
 
     sortedRes <- c(#gprData[["File"]], gprData[["Date"]],
                    rangeRf, rangeGf,
                    #rangeRb, rangeGb,
-                   EmptyMed, NegativeMed, PositiveMed,
+                   -EmptyMed, -NegativeMed, PositiveMed,
                    -msePtip, -mseFit,
                    #spotRadius,
                    -percentFlag,
                    #RBvar, GBvar,
-                   RbMad, GbMad,
+                   -RbMad, -GbMad,
                    #RbIqr, GbIqr,
-                   -RS2Nmedian, -GS2Nmedian,
+                   RS2Nmedian, GS2Nmedian,
                    -MMRmad, -percentSpotOverMmrLim,
                    #mmrIqr,
                    #difEmptyNegative,
@@ -397,10 +397,13 @@ gpQuality <- function(fnames = NULL, path = ".",
                           DEBUG = TRUE,...)
   {
 
+    
     # Check input arguments
-    if (DEBUG) print("Starting global qality")
+    if (DEBUG) print("Starting global quality")
     if (missing(path) | is.null(path))
-      path <- "."
+      path <- getwd()
+    
+      #path <- "."
 
     if (missing(fnames) | is.null(fnames))
       fnames <- dir(path, pattern = "*\\.gpr$")
@@ -409,6 +412,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     opt <- list(...)
 
     #Move to result directory
+    
 
  ###################
  ## Setting up output device
@@ -436,12 +440,15 @@ gpQuality <- function(fnames = NULL, path = ".",
     curdir <- getwd()
     if (!file.exists(resdir))
       dir.create(resdir)
-    setwd(resdir)
+#    setwd(resdir)
     if (DEBUG) print(getwd())
 
 
     #Allocation of matrix for marrayraw object
 
+    if(DEBUG) print("Starting reading gpr")
+    if(DEBUG) print(path)
+    if(DEBUG) print(resdir)
     f <- fnames[1]
     gp <- readGPR(fnames=f, path=path)
     nrow <- length(gp[["RfMedian"]])
@@ -465,7 +472,8 @@ gpQuality <- function(fnames = NULL, path = ".",
         f <- fnames[i]
         gp <- readGPR(fnames = f, path=path)
         restmp <- slideQuality(gp)
-        score[i,] <- c(mean(restmp[,1], na.rm=TRUE), min(restmp[,1], na.rm=TRUE))
+        scal <- arrayScal(restmp, organism=organism)
+        score[i,] <- c(qualityScore(restmp[,1]), min(scal, na.rm=TRUE))
         
         ###start plot
         Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 
@@ -473,25 +481,16 @@ gpQuality <- function(fnames = NULL, path = ".",
         weight[,i] <- gp[["Flags"]]
         filenames <- c(filenames, gp[["File"]])
         
-        #Create marrayRaw for maQualityPlots
-        #Gf <- gp[["GfMedian"]]; Gb <- gp[["GbMedian"]]
-        #Rf <- gp[["RfMedian"]]; Rb <- gp[["RbMedian"]]
-        #colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- gp[["File"]]
-        
-        #weight <- gp[["Flags"]]
-        #mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
-                    #maGb=Gb, maNotes="", maLayout=mlayout,
-                    #maW=weight, maGnames=tmp)
-        
-        #maQualityPlots
-        #maQualityPlots(mraw)
-
         #qualBoxplot
+        setwd(resdir)
         plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
         plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
-        do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)) ) 
-           qualBoxplot(restmp)
+        do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
+        par(mar=c(10,5,2,5))
+        qualBoxplot(restmp)
         dev.off()
+        setwd(curdir)
+        
         QCp <- c(QCp, plotname)
         if(DEBUG) print("End of plot")
         if(DEBUG) print(paste("save as ",plotname))
@@ -507,8 +506,8 @@ gpQuality <- function(fnames = NULL, path = ".",
                 maGb=Gb, maNotes="", maLayout=mlayout,
                 maW=weight, maGnames=tmp)
     #maQualityPlots
+    setwd(resdir)
     maQualityPlots(mraw)
-    
 
     #get diagnostic plots names
     tmp <- sub(".gpr", "",colnames(mraw@maGf))
@@ -521,7 +520,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     
     if(DEBUG) print("After for loop")
     #print(score)
-    quality2HTML(QCplot=QCp, DiagPlot=Dp,score=score)
+    quality2HTML(fnames=fnames,path=resdir, QCplot=QCp, DiagPlot=Dp,score=score)
     setwd(curdir)
 
     colnames(quality) <- fnames
@@ -684,7 +683,7 @@ qualBoxplot <- function(arrayQuality,reference=NULL, organism=c("Mm", "Hs"),...)
                                   probs=c(0.75, 0.25), na.rm=TRUE),1)
             text(rep((i-0.3),2), quantile(as.numeric(scalref[i,]),
                                           probs=c(0.8, 0.2), na.rm=TRUE),
-                 as.character(tmp), cex=0.7)
+                 as.character(tmp), cex=0.7, col="blue")
           }
 
         #Line for tested arrays
@@ -693,8 +692,10 @@ qualBoxplot <- function(arrayQuality,reference=NULL, organism=c("Mm", "Hs"),...)
         col <- rainbow(nc)
         print("lines")
         for(i in 1:nc)
-          lines(1:nr, scalarray[,i],col=col[i])
-
+          {
+            lines(1:nr, scalarray[,i],col=col[i])
+            text(1:nr, scalarray[,i], as.character(round(arrayQuality[,i],1)), col=col[i])
+          }
         #legend
         leg.txt <- colnames(arrayQuality)
         print(leg.txt)
@@ -743,10 +744,8 @@ as.integer(nsc)
 
 #score is a matrix with scores from gpQuality
 
-quality2HTML <- function(path=".", QCplot=NULL, DiagPlot=NULL,resdir=".", score=NULL)
+quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resdir=".", score=NULL)
   {
-    print(QCplot)
-    print(DiagPlot)
 
     HTwrap <- function(x, tag = "TD", option="align", value="center") {
       if (option == "")
@@ -763,14 +762,15 @@ quality2HTML <- function(path=".", QCplot=NULL, DiagPlot=NULL,resdir=".", score=
             src, " \"/></a>", sep="")
     }
 
-    HTscore <- function(src){
-      paste("Quality score = ", round(src[1],3),
+    HTscore <- function(filename,src){
+      paste(filename, "<br>",
+            "Quality score = ", round(src[1],3),
             "<br>",
             "Min criteria = ", round(src[2],3), sep="")
     }
 
     
-    tableTag <- function(fullQCp, fullBoxp)
+    tableTag <- function(fnames,fullDiagp,fullQCp) 
       {
         
         tab <- ""
@@ -778,9 +778,9 @@ quality2HTML <- function(path=".", QCplot=NULL, DiagPlot=NULL,resdir=".", score=
         
         for(i in 1:min(length(fullQCp), length(fullBoxp)))
           {
+            td2 <- HTwrap(HTimg(fullDiagp[i]), tag="TD")
             td1 <- HTwrap(HTimg(fullQCp[i]), tag="TD")
-            td2 <- HTwrap(HTimg(fullBoxp[i]), tag="TD")
-            td3 <- HTwrap(HTscore(score[i,]), tag="TD",
+            td3 <- HTwrap(HTscore(fnames[i],score[i,]), tag="TD",
                           option="align", value="left") 
             
             tr <- HTwrap(paste(td1, td2, td3, sep="\n"), tag="TR")
@@ -798,7 +798,7 @@ quality2HTML <- function(path=".", QCplot=NULL, DiagPlot=NULL,resdir=".", score=
     else {
       fullQCp <- QCplot
     }
-    
+
     if(missing(DiagPlot) || is.null(DiagPlot))
       {
         boxp <- dir(path, pattern="qualPlot*")
@@ -807,22 +807,88 @@ quality2HTML <- function(path=".", QCplot=NULL, DiagPlot=NULL,resdir=".", score=
     else {
       fullBoxp <- DiagPlot
     }
-    
-    
-    output <- file(file.path(resdir,"qualityReport.html"),"w") 
 
+     print(QCplot)
+    print(DiagPlot)
+
+    output <- file(file.path(resdir,"qualityReport.html"),"w") 
     datadir <- system.file("data", package="arrayQuality")
     html <- paste(readLines(file.path(datadir, "index.html")), "\n", collapse="")
 
     split <- unlist(strsplit(html, split="<a name=\"table\"></a>"))
 
-    tab <- tableTag(fullQCp, fullBoxp)
+    tab <- tableTag(fnames,fullQCp, fullBoxp)
     
     cat(split[1], tab,split[2], file=output)     
     close(output)
   }
 
+#slidequality is the result of slideQuality for ONE slide
+qualityScore <- function(slidequality, organism=c("Mm", "Hs"))
+  {
+    organism=organism[1]
+    slidequality <- as.vector(slidequality)
+    if(organism == "Mm")
+      {
+        if (!("MmReferenceDB" %in% ls(1)))
+          data(MmReferenceDB)
+        reference <- MmReferenceDB
+      }
+    else
+      reference <- data(HsReferenceDB)
 
+    score <- matrix(0,nrow=length(slidequality), ncol=1)
+
+    for(i in 1:length(slidequality))
+      {
+        vect <- reference[i,]
+        score[i] <- (length(vect[vect < slidequality[i]])/length(vect))*100
+      }
+    return(mean(score, na.rm=TRUE))
+
+  }
+
+
+globalQuality <- function(fnames = NULL, path = ".",
+                          organism=c("Mm", "Hs"),
+                          output=TRUE,# plot=TRUE,
+                          resdir=".",
+                          dev="png", #set default to be png 
+                          DEBUG = TRUE,...)
+  {
+    # Check input arguments
+    if (DEBUG) print("Starting globalQuality")
+    
+    if (missing(fnames) | is.null(fnames))
+      fnames <- dir(path, pattern = "*\\.gpr$")
+    
+    organism <- organism[1]
+        
+    # Prepares results
+    quality <- NULL
+    
+    # Call to slideQuality for each gpr file
+
+    for (i in 1:length(fnames))
+      {
+        if (DEBUG) print("In the loop ")
+        f <- fnames[i]
+        gp <- readGPR(fnames = f, path=path)
+        restmp <- slideQuality(gp)
+        quality <- cbind(quality, restmp[,1])
+        meas <- rownames(restmp)
+      }
+    
+    colnames(quality) <- fnames
+    rownames(quality) <- meas
+       
+    # Results
+    if (output)
+      write.table(quality, "quality.txt",sep="\t", col.names=NA)
+    
+    return(quality)
+  }
+  
 ## MmReferenceDB: globalQuality from good Mm slides
 #MmReferenceDB <- globalQuality(path="C:/MyDoc/Projects/quality/TestFiles/Good")
 #save(MmReferenceDB, file="MmReferenceDB.RData")
