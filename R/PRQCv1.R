@@ -161,7 +161,7 @@ PRv9mers<-  function(fnames,
       layout(1)
       par(mar=c(2,2,4,2))
       mtext(plotdef$main, line=3)
-      mrawheader <- readGPRHeaders(file.path(path,f))
+      mrawheader <- readGPRHeader(file.path(path,f))
       mtext(paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain), line=2, cex=0.8)
     
       

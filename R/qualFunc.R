@@ -129,7 +129,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ## Argument: result of readGPR
 ## Returns: matrix of numbers
 
-slideQuality <- function(gprData=NULL, controlId = c("ID", "Name"), DEBUG=FALSE,...)
+slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = c("ID", "Name"), DEBUG=FALSE,...)
   {
     if (DEBUG) print("SlideQuality starting")
     
@@ -267,7 +267,7 @@ slideQuality <- function(gprData=NULL, controlId = c("ID", "Name"), DEBUG=FALSE,
     if (DEBUG) print("SlideQuality 8")
 
     # Controls
-    Control <- arrayControls(gprData, id = controlId)
+    Control <- arrayControls(gprData, SFGHControlcode = controlMatrix, id = controlId)
     numE <- numNeg <- numPos <- numProb <- 0
     emp <- neg <- pos <- NA
 
@@ -330,11 +330,9 @@ slideQuality <- function(gprData=NULL, controlId = c("ID", "Name"), DEBUG=FALSE,
     # We want a list of all numbers, returned as a matrix
     # Easier to compare later
 
-    sortedMeasures <- c(#"File", "Date",
-                        "range RF", "range GF",
+    sortedMeasures <- c("range RF", "range GF",
                         "- RB mad", "- GB mad",
                         "Median RS2N", "Median GS2N",
-                        #"range RB", "range GB",
                         "- Median A for empty ctrl",
                         "- Median A for neg ctrl",
                         "Median A for positive ctrl",
@@ -342,39 +340,23 @@ slideQuality <- function(gprData=NULL, controlId = c("ID", "Name"), DEBUG=FALSE,
                         "- Var replicated spots A values",
                         "- Mvalues MSE by print-tip",
                         "- MSE lowess",
-                        #"Spot radius",
-                        #"Percentage of flagged spots",
                         "- % flagged spots",
-                        #"RB variance","GB variance",
-                        #"RB IQR", "GB IQR",
                         "- Mvalues MMRmad",
                         "- % spots with Mvalues MMRmad>0.5",
-                        #"Percentage of spots MMRmad > 0.5",
-                        #"MMR IQR",
-                        #"Difference empty/negative"
                         )
         
 
-    sortedRes <- c(#gprData[["File"]], gprData[["Date"]],
-                   rangeRf, rangeGf,
+    sortedRes <- c(rangeRf, rangeGf,
                    -RbMad, -GbMad,
                    RS2Nmedian, GS2Nmedian,
-                   #rangeRb, rangeGb,
                    -EmptyMed, -NegativeMed, PositiveMed,
                    difPositiveNegative,
                    -varRepA,
                    -msePtip, -mseFit,
-                   #spotRadius,
                    -percentFlag,                                      
                    -MMRmad, -percentSpotOverMmrLim,
-                   #RBvar, GBvar,
-                   #RbIqr, GbIqr,
-                   #mmrIqr,
-                   #difEmptyNegative,
-                   
                    )
     
-    #numResult <- cbind(sortedMeasures, sortedRes)
     numResult <- as.matrix(sortedRes)
     rownames(numResult) <- sortedMeasures
     colnames(numResult) <- gprData[["File"]]
@@ -407,6 +389,7 @@ gpQuality <- function(fnames = NULL, path = ".",
                       compBoxplot = TRUE,
                       reference=NULL,
                       scalingTable=NULL,
+                      controlMatrix = controlCode,
                       controlId = c("ID", "Name"),
                       output=FALSE,
                       resdir=".",
@@ -426,6 +409,9 @@ gpQuality <- function(fnames = NULL, path = ".",
     organism <- organism[1]
     controlId <- controlId[1]
     if (DEBUG) print(controlId)
+
+    if (DEBUG) print(controlMatrix)
+    
     opt <- list(...)
     
  ###################
@@ -467,11 +453,12 @@ gpQuality <- function(fnames = NULL, path = ".",
         gp <- readGPR(fnames=f, path=path)
         nrow <- length(gp[["RfMedian"]])
         ncol <- length(fnames)
-        
+        if(DEBUG) print("creating layout")
         mlayout <- maCompLayout(as.matrix(cbind(gp[["Block"]],
                                                 gp[["Row"]], gp[["Column"]])))
         tmp <- new("marrayInfo", maInfo=data.frame(gp[["Name"]],gp[["ID"]]))
-        mlayout@maControls <- as.factor(maGenControls(tmp, id=controlId)) ## id=controlId
+        mlayout@maControls <- as.factor(maGenControls(tmp, controlcode = controlMatrix,
+                                                      id=controlId)) 
         rm(f, gp)
         
         Rf <- Gf <- Rb <- Gb <- weight <- matrix(0,nrow=nrow, ncol=ncol)
@@ -485,7 +472,8 @@ gpQuality <- function(fnames = NULL, path = ".",
             if (DEBUG) print("In the loop ")
             f <- fnames[i]
             gp <- readGPR(fnames = f, path=path)
-            restmp <- slideQuality(gp, controlId = controlId, DEBUG=DEBUG)
+            restmp <- slideQuality(gp, controlMatrix = controlMatrix,
+                                   controlId = controlId, DEBUG=DEBUG)
             scal <- arrayScal(restmp, organism=organism, scalingData=scalingTable)
             
             ###start plot
@@ -571,7 +559,7 @@ gpQuality <- function(fnames = NULL, path = ".",
      colnames(maGf(mraw)) <- fnames
      print("Starting maQualityPlots")
      setwd(resdir)
-     maQualityPlots(mraw, DEBUG=DEBUG)
+     maQualityPlots(mraw, controlId=controlId, DEBUG=DEBUG)
 
      if (output)
        {
@@ -963,3 +951,14 @@ outputNormData <- function(mraw)
     mnorm <- maNorm(mraw)
     write.marray(mnorm, "NormalizedData.xls")
   }
+
+readcontrolCode <- function(file = "SpotTypes.txt", path = NULL, sep = "\t", check.names = FALSE, controlId=c("ID", "Name"), ...) 
+  {
+    require(limma)
+    controlId <- controlId[1]
+    spotTypes <- readSpotTypes(file=file, path=path, sep=sep, check.names=check.names, ...)
+    controlCode <- spotTypes[, c(grep(controlId, colnames(spotTypes)), 1)]
+    colnames(controlCode) <- c("Pattern", "Name")
+    return(controlCode)
+  }
+

@@ -236,6 +236,15 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
   require(hexbin)
   if (DEBUG) print("function starting")
 
+  #Convert RGList to mraw if needed
+
+  if (setequal(class(mrawObj), "RGList"))
+      {
+        mrawTmp <- as(mrawObj, "marrayRaw")
+        mrawObj <- mrawTmp
+        rm(mrawTmp)
+      }
+
   if(DEBUG) print(dim(mrawObj))
   for(i in 1:dim(mrawObj)[2])
     {
@@ -269,7 +278,12 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       if (DEBUG) print("Name the output file")
       tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
       tmp2 <-  sub("/", "", tmp)
-      fstart <- paste(tmp2[-length(tmp2)], collapse=".")
+
+      if(length(tmp2) > 1)
+        fstart <- paste(tmp2[-length(tmp2)], collapse=".")
+      else
+        fstart <- tmp2
+      
       if (DEBUG) print(fstart)
       
       

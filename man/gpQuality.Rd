@@ -12,8 +12,9 @@
 \usage{
 
 gpQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
-compBoxplot = TRUE, reference = NULL, scalingTable = NULL, controlId =
-c("ID", "Name"), output = FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
+compBoxplot = TRUE, reference = NULL, scalingTable = NULL, controlMatrix
+= controlCode, controlId = c("ID", "Name"), output = FALSE, resdir =
+".", dev= "png", DEBUG = FALSE,...)
 }
 
 \arguments{
@@ -40,6 +41,8 @@ c("ID", "Name"), output = FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
     scale quality measures before plotting them. If 'NULL',the default table
     corresponding to organism will be used. See details for more
     information.}
+
+  \item{controlMatrix}{A matrix defining control status information.}
 
   \item{controlId}{Character string. Name of the column of the gpr
     file used to define controls.}
