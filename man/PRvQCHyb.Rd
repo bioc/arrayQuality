@@ -47,6 +47,6 @@ PRvQCHyb(fnames, path=".", dev = "png", DEBUG=FALSE, prargs=NULL, samepr=TRUE, p
 \seealso{ ~~objects to See Also as \code{\link{~~fun~~}}, ~~~ }
 \examples{
    datadir <- system.file("data", package="arrayQuality")
-   PRvQCHyb(path=datadir, prname="12Mm")
+   PRvQCHyb(fnames="9Mm137.gpr", path=datadir, prname="9Mm")
 }
-\keyword{plot}% at least one, from doc/KEYWORDS
+\keyword{hplot}% at least one, from doc/KEYWORDS

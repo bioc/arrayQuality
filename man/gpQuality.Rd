@@ -60,4 +60,4 @@ output=TRUE, plot=TRUE,resdir=".", dev="png", DEBUG = TRUE,...)
 
 \author{Agnes Paquet}
 
-\keyword{plot}
+\keyword{hplot}

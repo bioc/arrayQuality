@@ -48,7 +48,7 @@ PRv9mers(fnames, path = ".", dev = "png", DEBUG = FALSE, prargs = NULL, samepr =
 \seealso{ ~~objects to See Also as \code{\link{~~fun~~}}, ~~~ }
 \examples{
    datadir <- system.file("data", package="arrayQuality")
-   PRv9mers(path=datadir, prname="12Mm")
+   PRv9mers(fnames="12Mm250.gpr", path=datadir, prname="12Mm")
 }
-\keyword{plot}% at least one, from doc/KEYWORDS
+\keyword{hplot}% at least one, from doc/KEYWORDS
 
