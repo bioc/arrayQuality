@@ -7,7 +7,7 @@
   
   ## Check if required BioConductor packages are installed
 
-  requiredPacks <- c("marray", "limma", "hexbin", "convert")
+  requiredPacks <- c("marray", "limma","convert")# "hexbin", "convert")
   missingPacks <- requiredPacks[!requiredPacks %in% packlist[,"Package"]]
 
   if(length(missingPacks) > 0)
@@ -19,7 +19,7 @@
           source("http://www.bioconductor.org/getBioC.R")
           getBioC(libName="reposTools", bundle=FALSE, getAllDeps=TRUE)
           install.packages2(pkgs=missingPacks, getAllDeps=TRUE)
-        }  
+        }      
       else{
         require(reposTools)
         install.packages2(pkgs=missingPacks, getAllDeps=TRUE)
@@ -32,13 +32,13 @@
       print("Downloading missing packages from CRAN")
       install.packages("mclust")
     }
-  
+
   rm(packlist, requiredPacks, missingPacks); gc(TRUE)
   print("Loading required packages")
   require("marray", quietly=TRUE)
   require("limma", quietly=TRUE)
   require("mclust", quietly=TRUE)
-  require("hexbin", quietly=TRUE)
+  #require("hexbin", quietly=TRUE)
   require("convert", quietly=TRUE)
 }
 

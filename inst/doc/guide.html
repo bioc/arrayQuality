@@ -1,505 +1,558 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
   <meta content="text/html; charset=iso-8859-1">
-  <meta content="text/html; charset=iso-8859-1">
-  <meta content="text/html; charset=iso-8859-1">
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
-  <title>userguide</title>
+  <title>arrayQuality User Manual</title>
 </head>
 <body>
-<h1 style="text-align: center;"><a name="_Toc72663188">Quality Control
-for
-spotted arrays</a></h1>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal" align="center" style="text-align: center;">June 3,
-2004</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal" align="center" style="text-align: center;">Agnes
-Paquet<sup>2</sup>, Andrea Barczak<sup>2</sup>, (Jean) Yee Hwa
-Yang<sup>1,2</sup></p>
-<p class="MsoNormal" align="center" style="text-align: center;"><o:p></o:p></p>
-<p class="MsoNormal" align="center" style="text-align: center;">1.
-Department
-of Medicine, <st1:placetype w:st="on">University</st1:placetype>of
-<st1:placename w:st="on">California</st1:placename>, <st1:place
- w:st="on"><st1:city w:st="on">San Francisco</st1:city></st1:place><br>
-<a href="http://www.biostat.ucsf.edu/jean">http://www.biostat.ucsf.edu/jean</a></p>
-<p class="MsoNormal" align="center" style="text-align: center;">2.
-Functional
-Genomics Core Facility, <st1:placetype w:st="on">University</st1:placetype>of
-<st1:placename w:st="on">California</st1:placename>, <st1:place
- w:st="on"><st1:city w:st="on">San Francisco</st1:city></st1:place></p>
-<p class="MsoNormal" align="center" style="text-align: center;">apaquet@medsfgh.ucsf.edu<br>
-</p>
-<div style="text-align: left;">
+<h1 align="center">Quality Control for spotted arrays</h1>
+<p align="center"> October 17, 2004<br>
+Agnes Paquet<sup>1</sup>, Andrea Barczak<sup>1</sup>, (Jean) Yee Hwa
+Yang<sup>1,2</sup> <br>
 <br>
-<br>
-<br>
-<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663189">1.
-Quick starting guide to arrayQuality</a><o:p></o:p></h1>
-<h1 style="margin-left: 0in; text-indent: 0in;"><o:p>&nbsp;</o:p></h1>
-<h3><a name="_Toc72663190">Installing arrayQuality</a><o:p>&nbsp;</o:p></h3>
-<p class="MsoNormal">To install the <span style="font-family: Courier;">arrayQuality
-</span>package for Windows
-operating systems, first start R and make sure you are connected to the
-Internet. Then, select &#8220;<span style="font-family: Courier;">Packages</span>&#8221;
-from the menu, and
-click on &#8220;<span style="font-family: Courier;">Install package(s) from
-Bioconductor&#8230;</span>&#8221;. Select <span style="font-family: Courier;">arrayQuality</span>
-in the list in the pop-up
-window, and click on &#8220;<span style="font-family: Courier;">OK</span>&#8221;.<br>
+1. Department of Medicine, Functional Genomics Core Facility,
+University of California, San Francisco<br>
+apaquet@medsfgh.ucsf.edu<br>
+2. Department of Medicine, University of California, San Francisco<br>
+<a href="http://arrays.ucsf.edu/analysis/arrayquality.html">http://arrays.ucsf.edu/analysis/arrayquality.html</a><br>
 <br>
 </p>
-<p class="MsoNormal"><o:p></o:p></p>
-<h3><a name="_Toc72663191">Using arrayQuality functions PRv9mers,
-PRvQCHyb
-and gpQuality</a><o:p>&nbsp;</o:p></h3>
-<p class="MsoNormal">This section provides a quick starting guide to
-use the
-package. There are three main functions provided to automatically read
-in
-data, generate some diagnostic plots, and save them as images in png
-format.
-To use them, follow the steps below:<br>
-<o:p>&nbsp;</o:p></p>
-<ol style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">Create a directory and move the image
-processing output files (e.g. .gpr files) of the slides of interest to
-this directory. Make sure that <b style="">all files</b> in the
-directory come from the <b style="">SAME print-run</b> (same GAL file).</li>
+<h1>1. Introduction to arrayQuality</h1>
+<p align="justify">
+ArrayQuality is a R package, available as part of Bioconductor,
+designed to help assessing quality of spotted array experiments at
+several stages of the microarray lifecycle. It provides reports
+containing several plots and statistical measures that can help you
+determine if your hybridizations and slides are of good quality. More
+information about Bioconductor is available at <a
+ href="http://www.bioconductor.org">http://www.bioconductor.org</a>. </p>
+<p>This guide provides an introduction to microarray quality and a
+description of the main functionnalities of the package. A full
+description of the package is given by the individual function help
+documents available from the R online help system. To access the online
+help, type <font face="courier">help(package=limma)</font> at the R
+prompt or else start the html help system using <font face="courier">help.start()</font>
+or the Windows drop-down help menu.</p>
+<h1>2. Installing arrayQuality</h1>
+<h2>Requirements</h2>
+<p>
+ArrayQuality is a library for the R project, part of Bioconductor. You
+will need to have R installed on your computer before installing
+arrayQuality. For more information about R, see the R project at <a
+ href="http://www.r-project.org">http://www.r-project.org</a>.
+ArrayQuality can work on different files at the same time, <b>ONLY</b>
+if they are from the <b>SAME print-run</b> (same GAL file). If you
+want to generate quality reports of slides from different print-runs,
+you need to place them in different folders, one for each print-run.<br>
+</p>
+<p><span style="text-decoration: underline; font-weight: bold;">Note</span>:
+[October 29 2004]<br>
+The functions maQualityPlots, gpQuality, spotQuality, agQuality require
+an older version of the hexbin package. You can install it either from
+Bioconductor release 1.4 or from <a
+ href="http://arrays.ucsf.edu/software/">http://arrays.ucsf.edu/software/</a>.<br>
+</p>
+<h2>Installing arrayQuality</h2>
+<p>ArrayQuality can be installed either from Bioconductor or from
+the functional Genomics Core Facility web site at
+http://arrays.ucsf.edu/software. The version from Bioconductor is
+updated every 6 months. If
+you would like to use a more recent version, you can obtain the latest
+one from&nbsp; http://arrays.ucsf.edu/software or from the
+developmental version of
+Bioconductor.
+</p>
+<ul>
+  <li><b>Automatic installation from Bioconductor</b><br>
+Start R on your computer and make sure you are connected to the
+internet. At the R prompt, type:<br>
+    <font face="courier">library(reposTools)<br>
+install.packages2("arrayQuality")</font> <br>
+    <br>
+If you are using RGUI (Windows):<br>
+In the R menu, click on "Packages". In the drop-down menu, select
+"Install package(s) from Bioconductor". Then, select arrayQuality in
+the list and click "OK".<br>
+    <br>
+  </li>
+  <br>
+  <li><b>Automatic installation from the Core Facility web site</b><br>
+Start R on your computer and make sure you are connected to the
+internet.<br>
+    <br>
+You can&nbsp; install the latest version directly from the Functional
+Genomics Core Facility web site. At the R prompt, type:<br>
+    <font face="courier">install.packages("arrayQuality",
+contriburl="http://arrays.ucsf.edu/software")</font> <br>
+    <br>
+If you do not have privileges on your computer to write to the R
+library directory, for example if you are using a shared unix machine
+and you are not superuser, you may need to type instead<br>
+    <font face="courier">install.packages("arrayQuality",
+contriburl="http://arrays.ucsf.edu/software" lib="myRlibdir")</font> <br>
+    <br>
+  </li>
+  <li><b>To load arrayQuality:</b><br>
+Type at the R prompt:<br>
+    <font face="courier">library(arrayQuality)</font> <br>
+    <br>
+  </li>
+  <li><b>Manual installation</b><br>
+Download arrayQuality as a .zip file (Windows users) from Bioconductor
+or our web site. Start R on your computer and make sure you are
+connected to the internet.<br>
+In the R console, click on "Packages".<br>
+In the drop-down menu, select "Install package(s) from local zip
+file..."<br>
+Browse to the zip file you would like to install, and click "Open". </li>
+</ul>
+<br>
+<br>
+<h1>3. Quick starting guide to arrayQuality</h1>
+<h2>General hybridization quality</h2>
+<p>
+This component of the package is aimed at verifying the performance of
+your hybridization, given the good quality of the slide, before any
+preprocessing steps or further quality assessment on individual spots.
+Our package provides two kinds of quality control plots:<br>
+</p>
+<ul>
+  <li> A qualitative quality control measurement as a diagnostic plot.
+It is a quick visual way to determine hybridization quality gathering
+information from several statistical tools. </li>
+  <br>
+  <br>
+  <li>A more quantitative comparison of slide quality as a comparative
+boxplot. We extract some statistical measures from the test slide and
+we compare them against results of &#8220;good quality&#8221; slides to assess the
+quality of the hybridization. </li>
+</ul>
+Diagnostic plots can be generated directly for output of the GenePix
+(.gpr files), Spot (.spot files)and Agilent image processing software
+packages.
+Most arguments can be customized to match your own data: which probes
+are used as controls, which columns of the image processing output file
+are used to define your spot types... You can also specify your own
+collection of good quality slides. For more details, please refer to
+other sections of this manual.
+<br>
+<br>
+<h3>To generate quality plots from image processing output files</h3>
+We provide 3 main functions to generate quality plots:
+<b><font face="courier">gpQuality(), spotQuality() and agQuality()</font></b>.
+We will use gpQuality as an example, but the following can be directly
+applied to spotQuality or agQuality.<br>
+<br>
+<ol>
+  <li>Create a directory and move the image processing output files
+(e.g. .gpr files) of the slides of interest to this directory. Make
+sure that all files in the directory come from the SAME print-run (same
+GAL file). </li>
+  <br>
+  <br>
+  <li>Start R, and change R working directory to the one you have just
+created. In the R menu, select File, then click on &#8220;Change dir&#8230;&#8221;.
+Browse to your directory from the pop-up window, or enter it manually,
+and click OK. To double check that you are in the correct directory: in
+the File menu, click on &#8220;Display file(s)&#8230;&#8221;. </li>
+  <br>
+  <br>
+  <li>To load the package in your R session: type<br>
+    <font face="courier">library(arrayQuality)</font><br>
+    <br>
+If needed, you may have to install other required packages like marray,
+limma, convert and hexbin. </li>
+  <br>
+  <br>
+  <li>To generate both <b>diagnostic plots and comparative boxplots</b>
+on all files in the directory, type:<br>
+    <font face="courier">result &lt;- gpQuality(organism=&#8221;Mm&#8221;)</font> </li>
+  <br>
+  <br>
+  <li>To generate <b>diagnostic plots</b> only, run:<br>
+    <font face="courier">result &lt;- gpQuality(organism="Mm",
+compBoxplot="FALSE")</font><br>
+In this case, quantitative quality measures will not be calculated and
+the HTML report will not be generated. </li>
+  <br>
+  <br>
+  <li>To write down your quantitative quality measures and your
+normalized data to a file: set output = TRUE when calling gpQuality:<br>
+    <font face="courier">result &lt;- gpQuality(organism="Mm",
+output=TRUE)</font> </li>
+  <br>
+  <br>
+  <li>By default, arrayQuality uses print-tip loess normalization. If
+you prefer to use another method, you can specify it in the norm
+argument:<br>
+    <font face="courier">result &lt;- gpQuality(norm="none")</font><br>
+For more details about normalization methods, please refer to marray
+package help. </li>
+  <br>
+  <br>
 </ol>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
-<ol start="2" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">Start R, and change R working
-directory to the one you have created. In the R menu, select <span
- style="font-family: Courier;">File</span>, then click on &#8220;<span
- style="font-family: Courier;">Change dir&#8230;</span>&#8221;. Browse to your
-directory from the pop-up window, or enter it manually, and click <span
- style="font-family: Courier;">OK</span>. To double check that you are
-in the correct directory: in the File menu, click on &#8220;<span
- style="font-family: Courier;">Display file(s)&#8230;</span>&#8221;.</li>
-</ol>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal" style="text-indent: 0.25in;">To load the package
-in your
-R session: type</p>
-<p class="MsoNormal" style="text-indent: 0.5in;">&gt; <span
- style="font-family: Courier;">library(arrayQuality)<o:p></o:p></span></p>
-<p class="MsoNormal" style="text-indent: 0.5in;"><o:p></o:p></p>
-<p class="MsoNormal" style="text-indent: 0.25in;">It will also
-automatically
-load <span class="codeChar">marray</span> and <span class="codeChar">limma</span>
-packages.<br>
-</p>
-<p class="MsoNormal" style="margin-left: 0.75in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.75in;"><o:p></o:p></p>
-<ol start="3" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">For 9-mers analysis, run the following
-command in R:</li>
-</ol>
-<p class="code" style="text-indent: 0.5in; font-family: courier new;">&gt;
-PRv9mers(prname=&#8221;12Mm&#8221;)</p>
-<p class="code" style="text-indent: 0.5in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.25in;">where <b style=""><span
- style="font-family: Courier;">prname</span></b> is the name of the
-print-run.</p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p>&nbsp;</o:p></p>
-<ol start="4" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">For QCHyb analysis, run the following
-command in R:</li>
-</ol>
-<p class="code"
- style="margin-left: 0.25in; text-indent: 0.25in; font-family: courier new;">&gt;
-PRvQCHyb(prname=&#8221;9Mm&#8221;)</p>
-<p class="code" style="margin-left: 0.25in; text-indent: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.25in;">where <b style=""><span
- style="font-family: Courier;">prname</span></b><span
- style="font-family: Courier;"> </span>is the name<span
- style="font-family: Courier;"> </span>of the print-run.</p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.25in;">This function
-supports
-Mouse (Mm) genome only at the moment.</p>
-<p class="MsoNormal" style="margin-left: 0.5in;"><o:p>&nbsp;</o:p></p>
-<ol start="5" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">For general hybridization quality of
-GenePix format files (.gpr files), run the following command in R:</li>
-</ol>
-<p class="code" style="text-indent: 0.5in; font-family: courier new;">&gt;
-results &lt;- gpQuality(organism="Mm")</p>
-<p class="MsoNormal" style="text-indent: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal" style="text-indent: 0.25in;">This function
-supports
-Mouse (Mm) and Human (Hs) genomes only.</p>
-<p class="MsoNormal" style="text-indent: 0.25in;"><o:p>&nbsp;</o:p></p>
-<p class="MsoNormal">6.<span style="">&nbsp;&nbsp; </span>Each
-function will
-generate specific plots and files. For more details about each
-function&#8217;s arguments and results, please refer to the corresponding
-section of this document and to the online help.</p>
-<p class="MsoNormal">Most users will not be required to use <span
- style="font-family: courier new;">PRv9mers</span> and <span
- style="font-family: courier new;">PRvQCHyb</span>. The key function
-for
-quality control is <span
- style="font-family: courier new; text-decoration: underline;">gpQuality</span>.<o:p><br>
-<br>
-&nbsp; <br>
-</o:p></p>
-<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663192">2.
-Introduction to microarray quality</a></h1>
-<br>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal">A microarray experiment is composed of several
-steps,
-including experimental design, sample preparation, and various
-statistical
-analyses (figure 1). They are represented in the microarray lifecycle
-below.
-As microarray technology is complex and sensitive, it is important to
-assess
-the performance of each step before going to the next one. In addition,
-this
-is also a good way to trace back the cycle to understand potential
-causes for
-upstream problems.</p>
-</div>
-<p class="MsoNormal" style="text-align: left;"><br>
-</p>
-<div style="text-align: center;">
-<img src="images/lifecycle.png" title=""
- alt="microarray experiment lifecycle" align="top"
- style="border: 0px solid ; width: 470px; height: 322px;">&nbsp;</div>
-<p class="MsoCaption" align="center" style="text-align: center;">Figure
-1:
-Microarray experiment lifecycle<br>
-</p>
-<div style="text-align: left;">
-<br>
-<p class="MsoNormal">For spotted array experiments, quality controls
-can be
-summarized into 4 steps:</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<ol style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">Print quality</li>
-</ol>
-<p class="MsoNormal" style="margin-left: 1in; text-indent: -0.25in;"><span
- style=""><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>9mers hybridization</p>
-<p class="MsoNormal" style="margin-left: 1in; text-indent: -0.25in;"><span
- style=""><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Quality Control hybridization</p>
-<ol start="2" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">mRNA quality</li>
-  <li class="MsoNormal" style="">Array hybridization quality</li>
-  <li class="MsoNormal" style="">Spot quality</li>
-</ol>
-<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class="MsoNormal">Each step must be performed in a sequential order,
-as
-represented in Figure 2.<br>
-</p>
-<p class="MsoNormal"><br>
-</p>
-<p class="MsoNormal" style="text-align: center;"><o:p>&nbsp;</o:p><img
- src="images/qualityDiagram.png" title=""
- alt="Quality control steps for microarray experiment"
- style="width: 576px; height: 336px;"><o:p></o:p></p>
-<p class="MsoCaption" align="center" style="text-align: center;">Figure
-2:
-Quality Control for spotted arrays experiment</p>
-<br>
-<p class="MsoNormal">Our package provides graphical tools to look at
-two of
-these components: print-run quality and array hybridization quality.<br>
+<h3>To generate quality plots from marrayRaw or RGList objects</h3>
+You can use the function <b><font face="courier">maQualityPlots()</font></b>
+to generate diagnostic plots directly from your R object.
+<ul>
+  <li>To generate diagnostic plots: if rawdata is a marrayRaw or RGList
+object, type in R:<br>
+    <font face="courier">maQualityPlots(rawdata)</font> </li>
+  <br>
+  <br>
+</ul>
+<h3>Results</h3>
+gpQuality, spotQuality and agQuality output:<br>
+<ul>
+  <li>In the working directory:
+- two plots for each test slide (a diagnostic plot and a comparative
+boxplot)
+- a HTML quality report </li>
+  <br>
+  <br>
+  <li>In the R global environment, the function returns a list of two
+objects:
+- A marrayRaw object describing all tested slides - A quality measures
+matrix: this matrix contains all comparison measures values extracted
+for each test slide. Each column of the matrix represents a different
+slide. </li>
+</ul>
+<h2>Print-run quality control</h2>
+<p>
+This component of arrayQuality provides diagnostic plots for 9-mers
+hybridization and Quality Control hybridization.<br>
 <br>
 </p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
- style=""><span style="">A)<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;
-</span></span></span>Print quality:</p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.25in;">This component is
-highly
-tailored to the Shared Genomics Core Facility at UCSF, but the
-framework can
-be adapted to other Core facilities or laboratories printing their
-arrays. It
-is an essential component of a printed array experiment, as any print
-pin,
-probe or slide surface defect will affect the quality of hybridization
-to the
-slide, and this can&#8217;t be fixed by statistics. Only prints that did
-pass the quality control check will be used for actual hybridization. </p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
- style=""><span style="">B)<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;
-</span></span></span>Hybridization quality.</p>
-<p class="MsoNormal" style="margin-left: 0.25in;">This is a global
-assessment
-of the hybridization performance. It helps determine for example any
-problem
-with the dyes, or uneven hybridization. Then, once you have determined
-that
-your hybridization is good, you can look at each individual spot
-quality,
-remove bad spots, and perform statistical analysis.</p>
-<p class="MsoNormal"><o:p>&nbsp;<br>
-<br>
-</o:p></p>
-<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663193">3.
-Print-run quality control</a></h1>
-<p class="MsoNormal">When a print-run is completed, it is necessary to
-verify
-the quality of the resulting arrays. This can be done by using two
-kinds of
-hybridization to the new slides. The first type of hybridization, which
-we
-term &#8220;9mers hyb&#8221;, uses small oligonucleotides (random 9-mers),
-which will hybridize to each probe. This hybridization will help to
-determine
-the quality of spot morphology as well as the presence or absence of
-spotted
-oligonucleotides. The resulting data will be used to create a list of
-all
-missing spots.</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal">The second type of hybridization, which we will
-term
-Quality Control Hybridization (QCHyb), uses mRNA from predefined cell
-lines
-(e.g. liver vs. pool, K562 vs. Human Universal Reference pool from
-Stratagene). These hybridizations can be use as a more quantitative
-description of the slides. The same comparison hybridizations are done
-for
-different print-run, assessing their reproducibility. QCHybs are also
-used to
-verify accuracy of GAL files, number of missing spots, binding
-capacity,
-background signal intensity&#8230;</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal">The arrayQuality package provides specific tools
-to help
-assess quality of slides for both 9-mers and QC hybridization.</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal"><o:p>&nbsp;<br>
-<br>
-</o:p></p>
-<h2><a name="_Toc72663194">3.1 9-mers hybridizations</a></h2>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal"><br>
+<h3>9-mers analysis: PRv9mers()</h3>
+This type of hybridization, which we term &#8220;9mers hyb&#8221;, uses small
+oligonucleotides (random 9-mers) which will hybridize to each probe on
+the arrays. This will help to determine the quality of spot morphology
+as well as the presence or absence of spotted oligonucleotides. The
+resulting data will be used to create a list of all missing spots.<br>
 In the package, the graphical function to assess 9mers hybridization
-quality
-is <span class="codeChar">PRv9mers()</span>. It runs using one single
-command
-line script. To use it:</p>
-<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
- style=""><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Copy all 9-mers hybridizations gpr files from the <b
- style="">SAME print-run</b> (same GAL file) to a directory.</p>
-<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
- style=""><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Change R working directory to the one containing
-your
-gpr files as described in section 1.</p>
-<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
- style=""><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Type:</p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>&gt; <span style="font-family: Courier;">PRv9mers(prname=&#8221;12Mm&#8221;)</span>.</p>
-<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
-<p class="MsoNormal">The <span style="font-family: Courier;">prname</span>
-argument represents the name of your print-run. For more details about
-other
-arguments, please refer to the online manual.<br>
+quality is PRv9mers(). It runs using one single command line script. <br>
+<br>
+<h4>To generate diagnostic plots</h4>
+<ol>
+  <li>Copy all 9-mers hybridizations gpr files from the SAME print-run
+(same GAL file) to a directory. </li>
+  <br>
+  <br>
+  <li>Start R and change R working directory to the one containing your
+gpr files (see above for more details). </li>
+  <br>
+  <br>
+  <li>Load the package in your R session:<br>
+    <font face="courier">library(arrayQuality)</font><br>
+    <br>
+If needed, you may have to install other required packages like marray,
+limma, convert and hexbin. </li>
+  <br>
+  <br>
+  <li>To generate diagnostic plots, type:<br>
+    <font face="courier">PRv9mers(prname=&#8221;12Mm&#8221;)</font><br>
+The prname argument represents the name of your print-run. For more
+details about other arguments, please refer to the online manual. </li>
+</ol>
+<br>
+<br>
+<h4>Results</h4>
+PRv9mers()provides the following results:
+<ol>
+  <li>Diagnostic plots as image in .png format for each tested slide </li>
+  <li>An Excel file (typically named 9Mm9mer.xls, where 9Mm is the name
+of your print-run, as passed to prname) containing for each spot on the
+slide:
+    <ul>
+      <li>Name and ID of the spot </li>
+      <li>The probability of being present or absent (p from EM
+algorithm). If several files are tested together, you will have a
+probability of being present/absent for each file. A spot is considered
+absent if p &lt; 0.5. </li>
+      <li>The average probability of being present or absent. </li>
+      <li>The raw signal intensity (Signal column) or average raw
+signal intensity if several files are tested together for each spot. </li>
+    </ul>
+  </li>
+  <li>An Excel file (typically named 9MmMissing.xls, where 9Mm is the
+name of
+your print-run, as passed to prname) containing information on missing
+probes only:
+    <ul>
+      <li> Name and ID of the spot </li>
+      <li> The probability of being present or absent (p from EM
+algorithm). If several files are tested together, you will have a
+probability of being present/absent for each file. A spot is considered
+absent if p &lt; 0.5. </li>
+      <li>The average probability of being present or absent. </li>
+      <li>The raw signal intensity (Signal column) or average raw
+signal intensity if several files are tested together for each spot. </li>
+    </ul>
+  </li>
+  <li>A text file (typically named 9MmQuickList.txt, where 9Mm is the
+name of your print-run, as passed to prname) containing the missing
+probes ids, each on a separate line. This file can be opened in any
+word processing programd as well as being a "quick list" in Acuity
+software (http://www.axon.com/gn_Acuity.html). </li>
+</ol>
+<br>
+<br>
+<h3>Quality Control hybridization: PRvQCHyb()</h3>
+9-mers hybridizations help verify that oligonucleotides have been
+spotted properly on the slides. The next print-run quality control step
+will be:<br>
+<ol>
+  <li>Detect any difference in overall signal intensity compared to
+other print-runs
+    <ul>
+      <li>70-mers oligonucleotides hybridizations</li>
+      <li>Selection of several test slides to ensure that the same
+quantity of material was spotted across the platter, as a print-run
+will generate 255 slides using the same well for one probe. QCHybs are
+performed using one slide from the beginning of the print, one from the
+middle, one from the end (e.g. numbers 20,100 and 255 in the Functional
+Genomics Core Facility). </li>
+    </ul>
+  </li>
+  <li>Check if the GAL file was generated properly, i.e. check that no
+error
+was made with ordering or orientation of the plates during the print. </li>
+  <li>Reproducibility:<br>
+A good way to verify the quality of a new print is to hybridize known
+samples to new slides. Then, we can compare signal intensity from the
+new slides to existing data, and check that there is no loss in signal.
+Log ratios (M) for known samples should be similar across print-runs.
+Example of samples used for QCHybs includes Human Reference pool, Mouse
+liver, Mouse lung, with dye swaps. </li>
+</ol>
+<h4>To generate diagnostic plots</h4>
+<ol>
+  <li>Create a directory and move the image processing output files
+(.gpr files only) of the slides of interest to this directory. Make
+sure that all files in the directory come from the SAME print-run (same
+GAL file).</li>
+  <br>
+  <br>
+  <li>Start R, and change R working directory to the one you have
+created (see general hybridization paragraph above for more details)</li>
+  <br>
+  <br>
+  <li>Load the package in your R session:<br>
+    <font face="courier">library(arrayQuality)</font><br>
+    <br>
+If needed, you may have to install other required packages like marray,
+limma, convert and hexbin. </li>
+  <br>
+  <br>
+  <li>For QCHyb analysis, run the following command:<br>
+    <br>
+    <font face="courier">PRvQCHyb()</font><br>
+    <br>
+  </li>
+</ol>
+<h4>Results</h4>
+PRvQCHyb() returns a diagnostic plot as an image in .png format for
+each tested slide.
+<h2>Introduction to microarray quality</h2>
+<p>
+A microarray experiment is composed of several steps, including
+experimental design, sample preparation, and various statistical
+analyses (figure 1). They are represented in the microarray lifecycle
+below. As microarray technology is complex and sensitive, it is
+important to assess the performance of each step before going to the
+next one. In addition, this is also a good way to trace back the cycle
+to understand potential causes for upstream problems.
+<br>
+<br>
 </p>
-<p class="MsoNormal"><br>
+<div align="center"><img src="images/lifecycle.png"
+ alt="microarray experiment lifecycle" align="middle">
+<br>
+Figure 1: Microarray experiment lifecycle
+<br>
+<br>
+</div>
+For spotted array experiments, quality controls can be summarized into
+4 steps:<br>
+<ol>
+  <li>Print quality<br>
+    <ul>
+      <li>9mers hybridization</li>
+      <li>Quality Control hybridization</li>
+    </ul>
+  </li>
+  <li>mRNA quality</li>
+  <li>Array hybridization quality</li>
+  <li>Spot quality</li>
+</ol>
+Each step must be performed in a sequential order, as represented in
+Figure 2.<br>
+<br>
+<div align="center">
+<img src="images/qualityDiagram.png"
+ alt="Quality control steps for microarray experiment" align="middle">
+<p align="center">Figure 2: Quality Control for spotted arrays
+experiment</p>
+</div>
+Our package provides graphical tools to look at two of these
+components: print-run quality and array hybridization quality.<br>
+<ol type="A">
+  <li>Print quality:<br>
+    <br>
+This component is highly tailored to the Shared Genomics Core Facility
+at UCSF, but the framework can be adapted to other Core facilities or
+laboratories printing their arrays. It is an essential component of a
+printed array experiment, as any print pin, probe or slide surface
+defect will affect the quality of hybridization to the slide, and this
+can&#8217;t be fixed by statistics. Only prints that did pass the quality
+control check will be used for actual hybridization. </li>
+  <br>
+  <br>
+  <li>Hybridization quality:<br>
+    <br>
+This is a global assessment of the hybridization performance. It helps
+determine for example any problem with the dyes, or uneven
+hybridization. Then, once you have determined that your hybridization
+is good, you can look at each individual spot quality, remove bad
+spots, and perform statistical analysis. </li>
+  <br>
+  <br>
+</ol>
+<h2>3. Print-run quality control</h2>
+<p>
+When a print-run is completed, it is necessary to verify the quality of
+the resulting arrays. This can be done by using two kinds of
+hybridization to the new slides. The first type of hybridization, which
+we term &#8220;9mers hyb&#8221;, uses small oligonucleotides (random 9-mers), which
+will hybridize to each probe. This hybridization will help to determine
+the quality of spot morphology as well as the presence or absence of
+spotted oligonucleotides. The resulting data will be used to create a
+list of all missing spots.<br>
+<br>
+The second type of hybridization, which we will term Quality Control
+Hybridization (QCHyb), uses mRNA from predefined cell lines (e.g. liver
+vs. pool, K562 vs. Human Universal Reference pool from Stratagene).
+These hybridizations can be use as a more quantitative description of
+the slides. The same comparison hybridizations are done for different
+print-run, assessing their reproducibility. QCHybs are also used to
+verify accuracy of GAL files, number of missing spots, binding
+capacity, background signal intensity&#8230;<br>
+<br>
+The arrayQuality package provides specific tools to help assess quality
+of slides for both 9-mers and QC hybridization.<br>
+<br>
 </p>
-<h3><a name="_Toc72663195">Results</a><o:p>&nbsp;</o:p></h3>
-<p class="MsoNormal"><span style="font-family: courier new;">PRv9mers()</span>provides
-the following
-results:</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span
- style=""><span style="">1.<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Diagnostic plots as image in .png format for each
-tested
-slide</p>
-<p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 0.5in;">2. An Excel file
-(typically
-named 9Mm9mer.xls, where 9Mm is the name of your print-run, as passed
-to
-<span class="codeChar">prname</span>) containing for each spot on the
-slide:</p>
-<p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
-<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
- style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Name and ID of the spot</p>
-<p class="MsoNormal" style="margin-left: 1in;"><span
- style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>The probability of being present or absent (p from
-EM
+<h3>3.1 9-mers hybridizations</h3>
+In the package, the graphical function to assess 9mers hybridization
+quality is PRv9mers(). It runs using one single command line script. To
+use it:<br>
+<ul>
+  <li>Copy all 9-mers hybridizations gpr files from the SAME print-run
+(same GAL file) to a directory. </li>
+  <li>Change R working directory to the one containing your gpr files
+as described in section 1. </li>
+  <li>Type:<br>
+    <font face="courier">PRv9mers(prname=&#8221;12Mm&#8221;).</font> </li>
+</ul>
+The prname argument represents the name of your print-run. For more
+details about other arguments, please refer to the online manual.<br>
+<br>
+<h4>Results</h4>
+<font face="courier">PRv9mers()</font> provides the following results:<br>
+<ol>
+  <li>Diagnostic plots as image in .png format for each tested slide </li>
+  <br>
+  <br>
+  <li>An Excel file (typically named 9Mm9mer.xls, where 9Mm is the name
+of your print-run, as passed to prname) containing for each spot on the
+slide:<br>
+    <ul>
+      <li>Name and ID of the spot</li>
+      <li>The probability of being present or absent (p from EM
 algorithm). If several files are tested together, you will have a
 probability of being present/absent for each file.<br>
-&nbsp;&nbsp;&nbsp; &nbsp; A spot is considered
-absent if
-p &lt; 0.5.</p>
-<p class="MsoNormal" style="margin-left: 1in;">-&nbsp;&nbsp; &nbsp; The
-average probability of being present or absent.<br>
-</p>
-<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
- style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>The raw signal intensity (Signal column) or
-average raw
-signal intensity if several files are tested together for each spot.</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<div style="margin-left: 40px;">
-&nbsp;&nbsp; 3. An Excel file (typically
-named 9MmMissing.xls, where 9Mm is the name of your print-run, as
-passed
-to
-<span class="codeChar">prname</span>) containing information on missing
-probes only:<span style="font-family: &quot;Times New Roman&quot;;"><span style=""><br>
-<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>Name and ID of the spot
-<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
--&nbsp;&nbsp;&nbsp; The probability of being present or absent (p from
-EM
+A spot is considered absent if p &lt; 0.5.</li>
+      <li>The average probability of being present or absent.</li>
+      <li>The raw signal intensity (Signal column) or average raw
+signal intensity if several files are tested together for each spot.</li>
+    </ul>
+  </li>
+  <li>An Excel file (typically named 9MmMissing.xls, where 9Mm is the
+name of your print-run, as passed to prname) containing information on
+missing probes only:<br>
+    <br>
+    <ul>
+      <li>Name and ID of the spot</li>
+      <li>The probability of being present or absent (p from EM
 algorithm). If several files are tested together, you will have a
 probability of being present/absent for each file.<br>
-&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp; &nbsp; A spot is considered
-absent if
-p &lt; 0.5.&nbsp; <br>
+A spot is considered absent if p &lt; 0.5.</li>
+      <li>The average probability of being present or absent.</li>
+      <li>The raw signal intensity (Signal column) or average raw
+signal intensity if several files are tested together for each spot.</li>
+    </ul>
+  </li>
+  <br>
+  <br>
+  <li>A text file (typically named 9MmQuickList.txt, where 9Mm is the
+name of your print-run, as passed to prname) containing the missing
+probes ids, each on a separate line. This file can be opened in any
+word processing program. </li>
+</ol>
+<h4>Description of the diagnostic plots</h4>
+Figure 3 shows an example from a typical 9-mers hybridization. This
+image is divided in 5 plots.<br>
 <br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
--&nbsp;&nbsp; The average probability of being present or absent.<br>
-<span style="font-family: &quot;Times New Roman&quot;;"><span style=""><br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; -<span
- style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span>The raw signal intensity (Signal column) or
-average raw
-signal intensity if several files are tested together for each spot.
-<p class="MsoNormal"><o:p></o:p></p>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <br>
-&nbsp;&nbsp; 4. A text file (typically named 9MmQuickList.txt, where
-9Mm is the name of your print-run, as passed
-to
-<span class="codeChar">prname) </span>containing the missing probes
-ids, each on a separate line. This file can be opened in any word
-processing programd as well as being a "quick list" in Acuity software
-(http://www.axon.com/gn_Acuity.html).<o:p><br>
-&nbsp;&nbsp;&nbsp; <br>
-</o:p></div>
-<p class="MsoNormal"><o:p></o:p></p>
-<h3><a name="_Toc72663196">Description of the diagnostic plots</a></h3>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal">Figure 3 shows an example from a typical 9-mers
-hybridization. This image is divided in 5 plots.</p>
-<p class="MsoNormal"><o:p></o:p></p>
-<ol style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">The first column (left) represents
-boxplots of log intensity, by plates (top) and by print-tip group
-(bottom).&nbsp; In this example, you will notice on the boxplot by
-plates (top left corner) that plates 44 and 48 have lower intensity and
-wider range than the others. Both plates contain mostly empty controls,
-as designed by Operon.</li>
+<ol>
+  <li>The first column (left) represents boxplots of log intensity, by
+plates (top) and by print-tip group (bottom). In this example, you will
+notice on the boxplot by plates (top left corner) that plates 44 and 48
+have lower intensity and wider range than the others. Both plates
+contain mostly empty controls, as designed by Operon. </li>
+  <li>Central plot: spatial plot of intensity. This helps to locate
+missing spots. The color scale reflects the signal intensity, the
+darker the color of the plot, the stronger the signal. Missing spots
+are represented in white. In Figure 3 spatial plot, top right corner
+white spots come from the empty spots. </li>
+  <li>Right column: Density plot of the foreground and background log
+intensity.
+    <ol type="a">
+      <li>Foreground density plot: it should be composed of 2 peaks. A
+smaller peak in the low intensity region containing missing spots and
+negative control spots, and a higher one representing the rest of the
+spots (probes). The number of present and absent spots, excluding empty
+controls, estimated by EM algorithm is indicated on the graph. </li>
+      <li>Background density plot: one peak in the low intensity
+region. If a slide is of good quality, the background peak should not
+overlap too much with the foreground peak corresponding to the bulk of
+the data.</li>
+    </ol>
+  </li>
 </ol>
-<ol style="margin-top: 0in;" type="1">
-</ol>
-<p class="MsoNormal"><o:p></o:p></p>
-<ol start="2" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">Central plot: spatial plot of
-intensity. This helps to locate missing spots. The color scale reflects
-the signal intensity, the darker the color of the plot, the stronger
-the signal. Missing spots are represented in white. In Figure 3 spatial
-plot, top right corner white spots come from the empty spots.</li>
-</ol>
-<p class="MsoNormal"><o:p></o:p></p>
-<ol start="3" style="margin-top: 0in;" type="1">
-  <li class="MsoNormal" style="">Right column: Density plot of the
-foreground and background log intensity.</li>
-</ol>
-<p class="MsoNormal"><o:p></o:p></p>
-<ol start="3" style="margin-top: 0in;" type="1">
-  <ol style="margin-top: 0in;" type="a">
-    <li class="MsoNormal" style="">Foreground density plot: it should
-be composed of 2 peaks. A smaller peak in the low intensity region
-containing missing spots and negative control spots, and a higher one
-representing the rest of the spots (probes). The number of present and
-absent spots, excluding empty controls, estimated by EM algorithm is
-indicated on the graph.</li>
-  </ol>
-</ol>
-<p class="MsoNormal" style="margin-left: 0.75in;"><o:p></o:p></p>
-<ol start="3" style="margin-top: 0in;" type="1">
-  <ol start="2" style="margin-top: 0in;" type="a">
-    <li class="MsoNormal" style="">Background density plot: one peak in
-the low intensity region. If a slide is of good quality, the background
-peak should not overlap too much with the foreground peak corresponding
-to the bulk of the data.</li>
-  </ol>
-</ol>
-<p class="MsoNormal"><o:p>&nbsp;&nbsp;&nbsp; </o:p>Density plots are
-used to
-compare foreground and background peaks, using the X-axis scale. They
-should
-be clearly separated. The number of missing spots should be low.<o:p>&nbsp;
-</o:p>Missing spots ids may be incorporated in the analysis later, e.g.
-by
-down weighting them in linear models.</p>
-<p class="MsoNormal"><o:p><br>
-</o:p></p>
-<p class="MsoNormal"><o:p></o:p></p>
-<h3><a name="_Toc72663197">Example</a></h3>
-<p class="MsoNormal"><o:p></o:p></p>
-<p class="MsoNormal">This example uses 9-mer hybridization data
-performed in
-the Functional Genomics Core Facility in UCSF. This print-run was
-created
-using Operon Version 2 Mouse oligonucleotides.</p>
-<p class="code"><o:p></o:p></p>
-<p class="code"><o:p></o:p></p>
-<p class="code" style="font-family: courier new;">&gt;
-library(arrayQuality)</p>
-<p class="code" style="font-family: courier new;">&gt; datadir &lt;-
-system.file("data", package="arrayQuality")</p>
-<p class="code" style="font-family: courier new;">&gt;PRv9mers(fnames="12Mm250.gpr",path=datadir,
-prname="12Mm")<br>
-</p>
-<p class="code" style="font-family: courier new;"><br>
+Density plots are used to compare foreground and background peaks,
+using the X-axis scale. They should be clearly separated. The number of
+missing spots should be low. Missing spots ids may be incorporated in
+the analysis later, e.g. by down weighting them in linear models.
+<h4>Examples</h4>
+This example uses 9-mer hybridization data performed in the Functional
+Genomics Core Facility in UCSF. This print-run was created using Operon
+Version 2 Mouse oligonucleotides.<br>
 <br>
-</p>
-<p class="MsoNormal" style="text-align: center;"><o:p>&nbsp;</o:p><img
- src="images/9mersDiagnosticPlot.png" title=""
- alt="Example of 9-mers hybridization diagnostic plot"
- style="width: 600px; height: 500px;"><o:p></o:p></p>
-<p class="MsoCaption" align="center" style="text-align: center;">Figure
-3:
-Example of diagnostic plot for 9-mers hybridization</p>
-<p class="MsoNormal"><o:p><br>
-</o:p></p>
-<p class="MsoNormal"><o:p></o:p></p>
+<font face="courier">
+&gt; library(arrayQuality)<br>
+&gt; datadir &lt;- system.file("data", package="arrayQuality")<br>
+&gt; PRv9mers(fnames="12Mm250.gpr",path=datadir, prname="12Mm")<br>
+</font>
+<br>
+<br>
+<div align="center">
+<img src="images/9mersDiagnosticPlot.png"
+ alt="Example of 9-mers hybridization diagnostic plot" align="middle">
+<p align="center">Figure 3: Example of diagnostic plot for 9-mers
+hybridization</p>
+</div>
 <h2><a name="_Toc72663199">3.2 Quality Control
 hybridizations</a><o:p>&nbsp;</o:p></h2>
 <p class="MsoNormal"><br>
@@ -607,8 +660,9 @@ described in Table 1 to highlight control spots.</p>
 </div>
 <br>
 <br>
-<table cellpadding="2" cellspacing="2" border="1"
- style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
+<table
+ style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;"
+ border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr align="left">
       <td style="vertical-align: top;">Positive controls<br>
@@ -641,7 +695,7 @@ described in Table 1 to highlight control spots.</p>
     </tr>
   </tbody>
 </table>
-<p class="MsoCaption" align="center" style="text-align: center;"><o:p></o:p><span
+<p class="MsoCaption" style="text-align: center;" align="center"><o:p></o:p><span
  style="">Table 1: Color code
 used in arrayQuality<o:p></o:p></span></p>
 <h3><br>
@@ -752,10 +806,9 @@ PRvQCHyb(fnames=&#8221;9Mm137.png&#8221;, path=datadir, prname="9Mm")</p>
  alt="Example of QCHyb diagnostic plot"
  style="width: 800px; height: 500px;"><o:p><br>
 </o:p></div>
-<p class="MsoCaption" align="center" style="text-align: center;">Figure
+<p class="MsoCaption" style="text-align: center;" align="center">Figure
 4:
 Diagnostic plot for print-run Quality Control hybridization</p>
-<p class="MsoNormal"></p>
 <o:p></o:p>
 <p class="MsoNormal"><o:p></o:p><span style="font-weight: bold;"><br>
 <br>
@@ -802,12 +855,14 @@ screen shot of a typical HTML report. Users can click on each image to
 obtain
 a higher resolution plot.<br>
 </p>
-<p class="MsoNormal">Diagnostic plots can be generated&nbsp; from
-GenePix format files (.gpr files) or from <span
+<p class="MsoNormal">Diagnostic plots can be generated&nbsp; for
+different image processing software format: GenePix format files (.gpr
+files), Spot format files (.spot) and Agilent format files, or from <span
  style="font-family: courier new,courier,monospace;">marrayRaw</span>
 or <span style="font-family: courier new,courier,monospace;">RGList</span>
 objects. Most arguments can also be customized to match your own data:
-which probes are used as controls, which column of the gpr file is used
+which probes are used as controls, which column of the image processing
+output file is used
 to define your spot types... You can also specify your own collection
 of good quality
 slides using the functions <span class="codeChar"
@@ -822,9 +877,13 @@ of this Section.<o:p><br
 </o:p></p>
 <h3><br>
 </h3>
-<h3>To generate quality plots from gpr files: <span
+<h3>To generate quality plots: gpr files: <span
  style="font-family: courier new,courier,monospace;">gpQuality()</span></h3>
-<span style="font-family: courier new,courier,monospace;">gpQuality()</span>will
+We provide 3 main functions to generate quality plots:
+<b><font face="courier">gpQuality(), spotQuality() and agQuality()</font></b>.
+We will use gpQuality as an example, but the following can be directly
+applied to spotQuality or agQuality.<span
+ style="font-family: courier new,courier,monospace;"> gpQuality()</span>will
 generate both diagnostic plots and comparative boxplots. It uses by
 default spot types from the Functional Genomics Core Facility in UCSF.
 To use your own spot types, please refer to the end of this Section.<br>
@@ -1202,7 +1261,7 @@ background)]</p>
 <p class="MsoNormal" style="margin-left: 40px;"><o:p></o:p></p>
 <div style="margin-left: 40px;">
 </div>
-<p class="MsoNormal" style="margin-left: 40px;"><span lang="DA" style="">4.&nbsp;
+<p class="MsoNormal" style="margin-left: 40px;"><span style="" lang="DA">4.&nbsp;
 -<b>GbMad: </b></span>Cy3 background MAD<b><br>
 </b></p>
 <div style="margin-left: 40px;">
@@ -1332,7 +1391,7 @@ file<br>
 </div>
 <p class="MsoNormal" style="margin-left: 40px;"><o:p><br>
 </o:p></p>
-<p class="MsoNormal" style="margin-left: 40px;">10. <b></b><span
+<p class="MsoNormal" style="margin-left: 40px;">10. <span
  style="font-weight: bold;">Difference between A values for Positive
 controls
 and&nbsp; A values for Negative controls</span></p>
@@ -1447,7 +1506,7 @@ taken into account.<br>
 <div style="margin-left: 40px;">
 </div>
 <p class="MsoNormal" style="margin-left: 40px;"><o:p>&nbsp;</o:p><span
- lang="DA" style=""><o:p></o:p></span><br>
+ style="" lang="DA"><o:p></o:p></span><br>
 15. <b>-M values MMRmad<br>
 </b></p>
 <p class="MsoNormal" style="margin-left: 40px;">MMR = Mmean &#8211;
@@ -1534,8 +1593,8 @@ measure and normalized data to a file in a directory named "Results":</p>
 library(arrayQuality)</p>
 <p class="code" style="font-family: courier new;">&gt; datadir &lt;-
 system.file("data", package="arrayQuality")</p>
-<p class="code" align="left"
- style="text-align: left; font-family: courier new;">&gt; result &lt;-
+<p class="code" style="text-align: left; font-family: courier new;"
+ align="left">&gt; result &lt;-
 gpQuality(<span style="color: black;">fnames = "9Mm137.gpr", path =
 datadir,<o:p></o:p>organism = &#8221;Mm&#8221;, output = TRUE, resdir =
 "Results")<o:p></o:p></span></p>
@@ -1558,7 +1617,7 @@ datadir,<o:p></o:p>organism = &#8221;Mm&#8221;, output = TRUE, resdir =
 </div>
 </div>
 </div>
-<p class="MsoCaption" align="center" style="text-align: center;">Figure
+<p class="MsoCaption" style="text-align: center;" align="center">Figure
 7:
 Comparative boxplot</p>
 <p class="MsoNormal"><o:p></o:p></p>
@@ -1589,7 +1648,7 @@ gpQuality arguments are listed below:</span></span><br>
 <span style="font-family: courier new,courier,monospace;"><br>
 gpQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),<br>
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; compBoxplot = TRUE,
-reference = NULL, scalingTable = NULL, <br>
+reference = NULL, <br>
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; controlMatrix =
 controlCode, controlId = c("ID", "Name"), <br>
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output = FALSE,
@@ -1601,9 +1660,8 @@ change <span style="font-family: courier new,courier,monospace;">controlMatrix</
 and/or <span style="font-family: courier new,courier,monospace;">controlId</span>.<br>
 <br>
 To use your own collection of good slides: you will need to modify <span
- style="font-family: courier new,courier,monospace;">reference</span>
-and <span style="font-family: courier new,courier,monospace;">scalingTable</span>.<br>
-</span></span><span style="font-family: courier new,courier,monospace;"><br>
+ style="font-family: courier new,courier,monospace;">reference</span>.</span></span><span
+ style="font-family: courier new,courier,monospace;"><br>
 </span><br>
 <span style="font-weight: bold;">To use your own set of spot types:</span><br
  style="font-weight: bold;">
@@ -1612,8 +1670,9 @@ The spot types used in arrayQuality are defined in a 2 column matrix
 called
 controlCode. <br>
 <br>
-<table cellpadding="2" cellspacing="2" border="1"
- style="text-align: left; width: 300px; margin-left: auto; margin-right: auto;">
+<table
+ style="text-align: left; width: 300px; margin-left: auto; margin-right: auto;"
+ border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top;">Pattern<br>
@@ -1726,7 +1785,6 @@ specifying your new controlCode matrix in <span
 and which column is used to define your spot types in <span
  style="font-family: courier new,courier,monospace;">controlID</span>.<br>
 </p>
-<p class="MsoNormal" style="text-align: justify;"></p>
 <p class="MsoNormal"
  style="text-align: justify; font-family: courier new,courier,monospace;">&gt;
 result &lt;- gpQuality(controlMatrix = controlCode, controlId=&#8221;Id&#8221;)</p>
@@ -1794,12 +1852,7 @@ described in Section 1.<br>
 myReference
 &lt;-&nbsp; globalQuality()</span><br style="font-family: courier new;">
 <br>
-&nbsp;&nbsp;&nbsp; 5. Create a scaling look-up table for the boxplot:<br>
-&nbsp;&nbsp;&nbsp; <span style="font-family: courier new;">&gt;
-myScalingTable &lt;- qualRefTable()</span><br
- style="font-family: courier new;">
-<br>
-&nbsp;&nbsp;&nbsp; 6. Change R working directory to the directory
+&nbsp;&nbsp;&nbsp; 5. Change R working directory to the directory
 containing
 slides&nbsp; you would like to test, as described in Section 1. You can
 only
@@ -1808,15 +1861,15 @@ compare slides from the same print-run here. If you have an experiment
 need to
 run gpQuality two times.<br>
 <br>
-&nbsp;&nbsp;&nbsp; 7. Run gpQuality using the reference measures and
+&nbsp;&nbsp;&nbsp; 6. Run gpQuality using the reference measures and
 the
 scaling table you have generated:<br>
 &nbsp;&nbsp;&nbsp; <span style="font-family: courier new;">&gt;
 results &lt;-
-gpQuality(reference = myReference, scalingTable = myScalingTable)</span><br>
+gpQuality(reference = myReference)</span><br>
+<br>
 &nbsp;&nbsp;&nbsp; Other <span style="font-family: courier new;">gpQuality
 </span>arguments described above can also be applied here.<br>
-</div>
 <p class="MsoCaption" style="text-align: left;"><br>
 </p>
 </body>
