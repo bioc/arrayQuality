@@ -2,15 +2,17 @@
 \alias{MmScalingTable}
 \alias{MmReferenceDB}
 \alias{index.html}
+\alias{HsReferenceDB}
+\alias{HsScalingTable}
 
 \title{Reference slides for Mouse oligos hybridizations}
 
 \description{
-MmReferenceDB: quality matrix compiling results from a pool of
-good hybridization slides.
+MmReferenceDB, HsReferenceDB: quality matrix compiling results from a pool of
+good hybridization slides for Mouse and Human genomes respectively.
 
-MmScalingTable: matrix of means and iqr calculated from the pool of good
-hybridization slides, for each quality measure. It is used to scale
+MmScalingTable, HsScalingTable: matrix of means and iqr calculated from the pool of good
+hybridization slides for Mouse and Human genomes respectively, for each quality measure. It is used to scale
 other arrays quality results.
 
 index.html: HTML file used for quality report.

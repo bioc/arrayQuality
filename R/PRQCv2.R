@@ -24,6 +24,8 @@ PRvQCHyb<-  function(fnames,
   ## Setting defaults
   require(marray)
   require(limma)
+
+  print("Starting PRvQCHyb")
   
   defs <- list(fill = TRUE, quote = "\"", check.names=FALSE, as.is=TRUE,
                name.Gf = "F532 Median", name.Rf = "F635 Median",
@@ -83,11 +85,15 @@ PRvQCHyb<-  function(fnames,
         {
           if(length(grep("Hs",  prname)) == 1)
             {
-              data(MmDEGenes)
-              DEGenes <- HsDEGenes;
+              stop("No previous DE results for Human yet")
+              #data(HsDEGenes)
+              #DEGenes <- HsDEGenes;
             }
           else
-            print("No previous DE results")
+            {
+              stop("No previous DE results for Human yet")
+              print("No previous DE results")
+            }
 
         }
 
@@ -130,21 +136,21 @@ PRvQCHyb<-  function(fnames,
 
       ## 1) MA-plot (Before Normalization)
       if(DEBUG) print("start 1")
-      qpMAPlots(mraw, addp=TRUE, main="MAPlot: Raw", ...)
+      qpMAPlots(mraw, addp=TRUE, main="MAPlot: Raw M", ...)
       addLines(mraw)
 
       ## 2) Boxplot split by Print-tip
       if(DEBUG) print("start 2")
       par(mar=c(5,5,5,3))
-      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot by print-tip")
+      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot:M by print-tip groups")
 
       ## 3 & 4) maM (No Normalization)
       if(DEBUG) print("start 3 & 4")
-      qpImage(mraw, xvar="maM", main="Spatial: Rank(M-raw)")
+      qpImage(mraw, xvar="maM", main="Spatial plot: Rank(M-raw)")
 
       ## 5 & 6) maA 
       if(DEBUG) print("start 5 & 6")
-      qpImage(mraw, xvar="maA", main="Spatial: A")
+      qpImage(mraw, xvar="maA", main="Spatial plot: A")
 
       ## 7) Compare old and new
       if(DEBUG) print("start 7")
@@ -153,11 +159,13 @@ PRvQCHyb<-  function(fnames,
       rownames(mnorm@maM) <- as.vector(maGeneTable(mnorm)[,"ID"])
       slope <- lm(mnorm@maM[rownames(DEGenes),1] ~ DEGenes[,"Median"])$coef[2]
       if(slope > 0){
-        plot(DEGenes[,"Median"],mnorm@maM[rownames(DEGenes),1],xlab="Past average M", ylab="current array", type="n")
+        plot(DEGenes[,"Median"],mnorm@maM[rownames(DEGenes),1],xlab="Past average M", ylab="current array", type="n",
+             main="Known DE genes: comparison to past average M")
         text(DEGenes[,"Median"],mnorm@maM[rownames(DEGenes),1],DEGenes[,"Ref"])
         }
       else{
-        plot(DEGenes[,"Median"],-mnorm@maM[rownames(DEGenes),1],xlab="Past average M", ylab="current array", type="n")
+        plot(DEGenes[,"Median"],-mnorm@maM[rownames(DEGenes),1],xlab="Past average M", ylab="current array", type="n",
+             main="Known DE genes: comparison to past average M")
         text(DEGenes[,"Median"],-mnorm@maM[rownames(DEGenes),1],DEGenes[,"Ref"])
       }
       abline(0, 1, lty=2, lwd=3, col="red")
@@ -172,7 +180,11 @@ PRvQCHyb<-  function(fnames,
       ## 10 Dot Plot
       if(DEBUG) print("start 10")
       if(length(maControls(mraw))!=0)
-        qpDotPlots(mraw, x="maA",  col=colcode)
+        {
+          qpDotPlots(mraw, x="maA",  col=colcode)
+          title( main="Dot plot: Controls A", cex=0.7)
+        }
+      
       
       ## 11 Title
       if(DEBUG) print("start 11")

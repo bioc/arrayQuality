@@ -51,6 +51,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
     xlim <- range(newdata, na.rm=TRUE)
     Cindex <- maControls(mdata) != "probes"
     Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))  ## combined control status and name
+
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
     
@@ -261,7 +262,8 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
       ## Set up output name
       if (DEBUG) print("Name the output file")
       tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
-      fstart <- paste(tmp[-length(tmp)], collapse=".")
+      tmp2 <-  sub("/", "", tmp)
+      fstart <- paste(tmp2[-length(tmp2)], collapse=".")
       if (DEBUG) print(fstart)
       
       ## subnames <-paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain)

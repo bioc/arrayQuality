@@ -325,42 +325,46 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
 
     sortedMeasures <- c(#"File", "Date",
                         "range RF", "range GF",
+                        "- RB mad", "- GB mad",
+                        "Median RS2N", "Median GS2N",
                         #"range RB", "range GB",
-                        "- Median empty ctrl", "- Median neg ctrl",
-                        "Median positive ctrl",
-                        "- MSE by print-tip",
+                        "- Median A for empty ctrl",
+                        "- Median A for neg ctrl",
+                        "Median A for positive ctrl",
+                        "Pos. ctrl median A - Neg. ctrl median A",
+                        "- Var replicated spots A values",
+                        "- Mvalues MSE by print-tip",
                         "- MSE lowess",
                         #"Spot radius",
                         #"Percentage of flagged spots",
                         "- % flagged spots",
                         #"RB variance","GB variance",
-                        "- RB mad", "- GB mad",
                         #"RB IQR", "GB IQR",
-                        "Median RS2N", "Median GS2N",
-                        "- MMRmad","- % spots MMRmad>0.5",
+                        "- Mvalues MMRmad",
+                        "- % spots with Mvalues MMRmad>0.5",
                         #"Percentage of spots MMRmad > 0.5",
                         #"MMR IQR",
-                        #"Difference empty/negative",
-                        "Positive - Negative",
-                        "- Var replicated spots")
+                        #"Difference empty/negative"
+                        )
         
 
     sortedRes <- c(#gprData[["File"]], gprData[["Date"]],
                    rangeRf, rangeGf,
+                   -RbMad, -GbMad,
+                   RS2Nmedian, GS2Nmedian,
                    #rangeRb, rangeGb,
                    -EmptyMed, -NegativeMed, PositiveMed,
+                   difPositiveNegative,
+                   -varRepA,
                    -msePtip, -mseFit,
                    #spotRadius,
-                   -percentFlag,
-                   #RBvar, GBvar,
-                   -RbMad, -GbMad,
-                   #RbIqr, GbIqr,
-                   RS2Nmedian, GS2Nmedian,
+                   -percentFlag,                                      
                    -MMRmad, -percentSpotOverMmrLim,
+                   #RBvar, GBvar,
+                   #RbIqr, GbIqr,
                    #mmrIqr,
                    #difEmptyNegative,
-                   difPositiveNegative,
-                   -varRepA
+                   
                    )
     
     #numResult <- cbind(sortedMeasures, sortedRes)
@@ -587,6 +591,7 @@ qualRefTable <- function(fnames=NULL, path=".")
 arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
 {
   organism=organism[1]
+
   if(missing(numMat))
     stop("Input error, matrix to scale missing")
   else
@@ -600,7 +605,11 @@ arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
               reftab <- MmScalingTable
             }
           else
-            reftab <- data(HsScalingTable)
+            {
+              if(!("HsScalingTable" %in% ls(1)))
+                data(HsScalingTable)              
+              reftab <- HsScalingTable
+            }
         }
       else
         reftab <- scalingData
@@ -619,7 +628,10 @@ arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
  
       #Check dimensions 
       if(nrow!=dim(reftab)[1])
-        stop("Error is scaling, files of different length")
+        {
+          print(dim(reftab))
+          stop("Error is scaling, files of different length")
+        }
       else
         { 
           tmp <- numMat
@@ -746,7 +758,11 @@ qualityScore <- function(slidequality, organism=c("Mm", "Hs"), reference=NULL)
           }
         
         else
-          reference <- data(HsReferenceDB)
+          {
+            if(!("HsReferenceDB" %in% ls(1)))
+              data(HsReferenceDB)
+            reference <- data(HsReferenceDB)
+          }
       }
 
     score <- matrix(0,nrow=length(slidequality), ncol=1)

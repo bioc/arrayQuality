@@ -123,11 +123,13 @@ PRv9mers<-  function(fnames,
       ## 1) Boxplot split by Plate
       if(DEBUG) print("start 1")
       par(mar=c(5, 4, 4, 2) + 0.1)
-      boxplot(mraw, xvar="maPlate", yvar="maLG", ylab="Log Intensity", las=2)
+      boxplot(mraw, xvar="maPlate", yvar="maLG", ylab="Log Intensity", las=2,
+              main="Boxplot by plates")
       
       ## 2) Boxplot split by Print-tip
       if(DEBUG) print("start 2")
-      boxplot(mraw, yvar="maLG", ylab="Log Intensity")
+      boxplot(mraw, yvar="maLG", ylab="Log Intensity",
+              main="Boxplot by print-tip groups")
       
 
       ## 3,4) maGf
