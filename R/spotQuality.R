@@ -31,7 +31,14 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
         else
           cat("User did not specify a galfile name, reading in ", galf, " from current directory. \n")
       }
-    galdata <- read.Galfile(galf)
+
+    opt <- list(...)
+    read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, list(galfile=galf)), formals(read.Galfile))
+
+    #read.Galfile.defs <- maDotsDefaults(opt, defs)
+    galdata <- do.call("read.Galfile", read.Galfile.defs)
+    
+    #galdata <- read.Galfile(galf)
 
     if (missing(fnames) | is.null(fnames)) 
       fnames <- dir(path, pattern = "*\\.spot$")
@@ -216,7 +223,11 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
             else
               cat("No specific galfile names, reading in ", galf, " from ", path,  "directory. \n")
           }
-        galdata <- read.Galfile(galf, path=path)
+        
+        read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, list(galfile=galf)), formals(read.Galfile))
+        galdata <- do.call("read.Galfile", read.Galfile.defs)
+ 
+        #galdata <- read.Galfile(galf, path=path)
         
         if(DEBUG) print(path)
         if(DEBUG) print(resdir)
@@ -347,8 +358,10 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
           else
             cat("No specific galfile names, reading in ", galf, " from ", path,  "directory. \n")
         }
+        read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, list(galfile=galf)), formals(read.Galfile))
+        galdata <- do.call("read.Galfile", read.Galfile.defs)
       
-      galdata <- read.Galfile(galf, path=path)
+      #galdata <- read.Galfile(galf, path=path)
       
       if(DEBUG) print(path)
       if(DEBUG) print(resdir)

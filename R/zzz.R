@@ -8,7 +8,7 @@
   ## Check if required BioConductor packages are installed
 
   requiredPacks <- c("marray", "limma", "hexbin", "convert")
-  missingPacks <- requiredPacks[!requiredPacks %in% packlist]
+  missingPacks <- requiredPacks[!requiredPacks %in% packlist[,"Package"]]
 
   if(length(missingPacks) > 0)
     {
