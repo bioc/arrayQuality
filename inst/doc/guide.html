@@ -1773,7 +1773,7 @@ pass this column name as argument at the next step.<br>
 <p class="MsoNormal"
  style="text-align: justify; font-family: courier new,courier,monospace;">&gt;
 controlCode &lt;-
-readcontrolCode(file=&#8221;mySpotTypes.txt&#8221;, controlID="ID")<br>
+readcontrolCode(file=&#8221;mySpotTypes.txt&#8221;, controlId="ID")<br>
 </p>
 <p class="MsoNormal" style="text-align: justify;">- Find which column
 of the gpr file can be used to identify your new spot types. It is
@@ -1783,7 +1783,7 @@ typically the "ID" or the "Name" column.<br>
 specifying your new controlCode matrix in <span
  style="font-family: courier new,courier,monospace;">controlMatrix</span>
 and which column is used to define your spot types in <span
- style="font-family: courier new,courier,monospace;">controlID</span>.<br>
+ style="font-family: courier new,courier,monospace;">controlId</span>.<br>
 </p>
 <p class="MsoNormal"
  style="text-align: justify; font-family: courier new,courier,monospace;">&gt;
@@ -1818,9 +1818,9 @@ header=TRUE, quote="\"", fill=TRUE)))<br>
 <br>
 <span style="font-family: times new roman,times,serif;">Then, pass your
 new matrix as argument when calling gpQuality. You can specify which
-column of the gpr file contains probes identifiers in the controlID
+column of the gpr file contains probes identifiers in the controlId
 arguments (typically, it would be "Id" or "Name").</span><br>
-&gt; results &lt;- gpQuality(controlMatrix = mycontrolCode, controlID =
+&gt; results &lt;- gpQuality(controlMatrix = mycontrolCode, controlId =
 "ID")<br style="font-family: courier new,courier,monospace;">
 </span><br>
 <br>
