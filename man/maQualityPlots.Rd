@@ -14,8 +14,8 @@ badspotfunction, controlId = c("ID", "Name"), DEBUG = FALSE, ...)
 }
 
 \arguments{
-  \item{mrawObj}{\code{marrayRaw} object representing the slides to be
-    tested.}
+  \item{mrawObj}{\code{marrayRaw}  or \code{RGList} object representing
+    the slides to be tested.}
 
   \item{headerInfo}{Text to be used as header in the diagnostic plot.}
 
