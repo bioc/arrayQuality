@@ -35,8 +35,11 @@ slideQuality(gprData = NULL, controlMatrix = controlCode, controlId = c("ID", "N
 
 \examples{
 datadir <- system.file("gprQCData", package="arrayQuality")
+if (interactive())
+{
 gprdata <- readGPR(fnames="9Mm137.gpr", path=datadir)
 results <- slideQuality(gprdata)
+}
 }
 
 \keyword{programming}

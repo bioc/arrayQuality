@@ -42,6 +42,7 @@ quote="\"", ...)
 
 \examples{
 datadir <- system.file("gprQCData", package="arrayQuality")
+if (interactive())
 gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
 }
 
