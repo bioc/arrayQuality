@@ -85,7 +85,7 @@ HTML report. For more details about the QC measures and the plots, please refer 
 \author{Agnes Paquet}
 
 \seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}},
-  \code{\link{scaleRefTable}}, \link{marray}
+  \code{\link{scaleRefTable}}
 }
 
 \examples{

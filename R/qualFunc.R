@@ -163,7 +163,8 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     if (DEBUG) print("SlideQuality 8")
 
     # Controls
-    Control <- arrayControls(gprData, SFGHControlcode = controlMatrix, id = controlId)
+    if (DEBUG) print("before arrayControls")
+    Control <- arrayControls(gprData, SFGHControlcode = controlMatrix, id ="ID")
     numE <- numNeg <- numPos <- numProb <- 0
     emp <- neg <- pos <- NA
 

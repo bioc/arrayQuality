@@ -249,8 +249,7 @@ gpQuality <- function(fnames = NULL, path = ".",
             if (DEBUG) print("In the loop ")
             f <- fnames[i]
             gp <- readGPR(fnames = f, path=path)
-            restmp <- slideQuality(gp, controlMatrix = controlMatrix,
-                                   controlId = controlId, DEBUG=DEBUG)
+            restmp <- slideQuality(gp, controlMatrix = controlMatrix, DEBUG=DEBUG)
             
             ###start plot
             Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 

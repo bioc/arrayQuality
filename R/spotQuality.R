@@ -18,6 +18,7 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
   {
     if (DEBUG) print("Starting readSpot")
     if (DEBUG) print(path)
+    controlId <- controlId[1]
     # Test if input data is OK
 ##    if (is.null(path))  path <- "."
 
@@ -33,8 +34,11 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
       }
 
     opt <- list(...)
-    read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, list(galfile=galf)), formals(read.Galfile))
-
+    defs <- list(galfile=galf, path = path, sep=sep, skip=skip,
+                  quote = quote) 
+    read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, defs),
+                                     formals(read.Galfile))
+    if (DEBUG) print("Calling read.Galfile")
     #read.Galfile.defs <- maDotsDefaults(opt, defs)
     galdata <- do.call("read.Galfile", read.Galfile.defs)
     
@@ -46,7 +50,8 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
     f <- fullfnames[1]
     opt <- list(...)
     
-    # Search in the Agilent file where are the colums starting
+    # Search in the Spot file where are the colums starting
+    if (DEBUG) print("Estimating number of lines to skip")
     y <- readLines(fullfnames[1], n = 100)
     skip <- grep("Gmedian", y)[1] - 1
     if (DEBUG) print(skip)
@@ -67,9 +72,14 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
     h <- strsplit(readLines(f, n = skip + 1), split = sep)
     h <- as.list(unlist(h[[length(h)]]))
     names(h) <- gsub("\"", "", unlist(h))
-    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip + 
-                1, quote = quote, ...)
-
+#    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip + 
+ #               1, quote = quote, ...)
+    scan.defs <- list(file=f,quiet = TRUE, what = h, sep = sep, skip = skip + 
+                1, quote = quote)
+    scan.args <- maDotsMatch(maDotsMatch(opt, scan.defs),
+                             formals(args("scan")))
+    
+    dat <- do.call("scan", scan.args[-grep("nmax", names(scan.args))])
     gc <- as.numeric(dat[["grid.r"]])
     gr <- as.numeric(dat[["grid.c"]])
     numcol <- max(gc)
@@ -78,6 +88,12 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
     row <- cbind(row, as.numeric(dat[["spot.r"]]))
     name <- cbind(name, galdata$gnames@maInfo[["Name"]])
     id <- cbind(id, galdata$gnames@maInfo[[controlId]])
+    if (DEBUG)
+      {
+        print("cchecking id")
+        print(class(id))
+        print(length(id))
+      }
     Gfmedian <- cbind(Gfmedian, as.numeric(dat[["Gmedian"]]))
     Gfmean <- cbind(Gfmean, as.numeric(dat[["Gmean"]]))        
     Gfsd <- cbind(Gfsd, as.numeric(dat[["GIQR"]]))
@@ -233,7 +249,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
         if(DEBUG) print(resdir)
         
         f <- fnames[1]
-        gp <- readSpot(fnames=f, path=path, galfile=galf)
+        gp <- readSpot(fnames=f, path=path, galfile=galfile, controlId=controlId,...)
         numrow <- length(gp[["GfMedian"]])
         numcol <- length(fnames)
 
@@ -251,13 +267,13 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
         rm(f, gp)
         
         # Call to slideQuality for each spot file
-
+        if (DEBUG) print("Before loop")
         for (i in 1:length(fnames))
           {
             if (DEBUG) print("In the loop ")
             f <- fnames[i]
-            gp <- readSpot(fnames = f, path=path)
-            restmp <- slideQuality(gp, controlMatrix = controlMatrix,DEBUG=DEBUG)
+            gp <- readSpot(fnames = f, path=path, galfile=galfile,controlId = controlId, ...)
+            restmp <- slideQuality(gp, controlMatrix = controlMatrix, DEBUG=DEBUG) #controlId = "ID"
                         
             ###start plot
             Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 

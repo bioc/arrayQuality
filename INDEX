@@ -1,1 +1,31 @@
-testx                   ~~function to do ... ~~
+9Mm137.gpr              Example GPR files
+agQuality               Diagnostic plots and comparative boxplots for
+                        general hybridization, Agilent format
+arrayScal               Internal arrayQuality functions
+globalQuality           Quality measures for general hybridization.
+gpQuality               Diagnostic plots and comparative boxplots for
+                        general hybridization
+maQualityPlots          Qualitative diagnostic plot for general
+                        hybridization
+MmDEGenes               Known DE genes for Mouse quality
+                        hybridizations.
+MmScalingTable          Reference slides for Mouse oligos
+                        hybridizations
+PRv9mers                Print Run Quality version 9mers
+PRvQCHyb                Print run Quality version Quality Control
+                        Hybridization
+qualBoxplot             Comparative boxplot for general hybridization
+                        Quality Control
+qualityScore            Quality Control score for general
+                        hybridization
+readAgilent             Extraction of measures from Agilent (.txt)
+                        files.
+readcontrolCode         Control status information
+readGPR                 Reading GenePix gpr file
+readSpot                Extraction of measures from Spot (.spot)
+                        files.
+scaleRefTable           General hybridization quality scaling
+slideQuality            Quality Control statistics for general
+                        hybridization
+spotQuality             Diagnostic plots and comparative boxplots for
+                        general hybridization, Spot format

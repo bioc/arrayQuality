@@ -28,7 +28,7 @@
 \author{Agnes Paquet}
 
 \seealso{\code{\link{gpQuality}}, \code{\link{globalQuality}},
-  \code{\link{qualBoxplot}}, \code{\link{MmScalingTable}}
+  \code{\link{qualBoxplot}}}
 }
 
 \keyword{programming}
