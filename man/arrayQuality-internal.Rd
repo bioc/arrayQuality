@@ -1,16 +1,18 @@
 \name{Internal functions}
 \alias{arrayScal}
-\alias{EMSplit}
-\alias{globalQuality}
-\alias{qualPlot}
+\alias{qualBoxplot}
 \alias{qualRefTable}
-\alias{readGPR}
-\alias{slideQuality}
+\alias{quality2HTML}
+\alias{maQualityPlots}
+\alias{maCompLayout}
+\alias{EMSplit}
 \alias{qpS2N}
 \alias{qpPTLoess}
 \alias{qpImage}
 \alias{qpHexbin}
 \alias{setCtlCol}
+\alias{arrayControls}
+\alias{replicatesAvariance}
 
 \title{Internal arrayQuality functions}
  

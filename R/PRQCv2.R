@@ -41,7 +41,7 @@ PRvQCHyb<-  function(fnames,
   
   if (is.null(path)) {
     fnames <- fnames
-    Resdir <- paste(prname, "PRQC", sep="")
+    resdir <- paste(prname, "PRQC", sep="")
   }else {
     resdir <- file.path(path, paste(prname,"PRQC", sep=""))    
   }

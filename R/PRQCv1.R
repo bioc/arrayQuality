@@ -25,9 +25,10 @@ PRv9mers<-  function(fnames,
   require(marray)
   require(limma)
   
-  defs <- list(fill = TRUE, quote = "\"", check.names=FALSE, as.is=TRUE, comment.char="", sep="\t", header=TRUE)
+  defs <- list(fill = TRUE, name.Gf="F532 Median", name.Gb="B532 Median", check.names=FALSE, as.is=TRUE,
+               comment.char="", sep="\t", header=TRUE, quote = "\"", name.W="Flags")
   opt <- list(...)
-  args <- maDotsMatch(opt, defs)
+  Args <- maDotsMatch(opt, defs)
   estpMatrix <- signalMatrix<- NULL
   
   if (DEBUG) print("Getting File Names")
@@ -55,11 +56,12 @@ PRv9mers<-  function(fnames,
       fstart <- paste(tmp[-length(tmp)], collapse=".")
 
       ## Set up arguments
-      read.args <- maDotsMatch(args, formals(args("read.GenePix")))
+      read.args <- maDotsMatch(Args, formals(args("read.GenePix")))
       read.args$fnames <- f
-      read.args$path <- NULL
+      read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
+      read.args <- c(read.args, list(name.Rf=NULL, name.Rb=NULL))
       if(DEBUG) cat("Reading", read.args$file, "...\n")
-      mraw <- do.call("read.GenePix", read.args)
+      mraw <- do.call("read.GenePix", read.args) 
       GInfo <- maGeneTable(mraw)
 
       ###################
@@ -164,10 +166,11 @@ PRv9mers<-  function(fnames,
       colnames(estpMatrix) <- fnames
       estpMatrixAve <- apply(estpMatrix, 1, median, na.rm=TRUE)
       signalMatrixAve <- apply(signalMatrix, 1, median, na.rm=TRUE)
-      Info <- cbind(ID=GInfo[,"ID"], estpMatrix, average=round(estpMatrixAve,3), Signal = signalMatrixAve)
-      write.table(Info,file=file.path(resdir, paste(prname,"9mer.xls", sep="")), row.names=FALSE, sep="\t")
       if(!is.null(GInfo[,"ID"]))
          {
+           Info <- cbind(ID=GInfo[,"ID"], Name=GInfo[,"Name"],
+                         estpMatrix, average=round(estpMatrixAve,3), Signal = signalMatrixAve)
+           write.table(Info,file=file.path(resdir, paste(prname,"9mer.xls", sep="")), row.names=FALSE, sep="\t")
            tmpid <- maControls(mraw)
            write.table(Info[((tmpid == "probes") & (estpMatrixAve <=0.5)),],
                        file=file.path(resdir, paste(prname,"Missing.xls", sep="")), row.names=FALSE, sep="\t")

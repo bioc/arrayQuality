@@ -1,10 +1,10 @@
 Package: arrayQuality
-Version: 0.0.6
-Date: 2004-03-10
+Version: 0.0.7
+Date: 2004-04-90
 Title: Assessing array quality on spotted arrays
 Depends:  R (>= 1.4.0), marray
 Author: Agnes Paquet and Jean Yee Hwa Yang <yeehwa@stat.berkeley.edu>
 Maintainer: A. Paquet <apaquet@medsfgh.ucsf.edu>
 Description: Functions for performing print-run and array level quality assessment. 
 License: LGPL
-URL: http://www.biostat.ucsf.edu/jean  
+URL: http://www.stat.berkeley.edu/~yeehwa  

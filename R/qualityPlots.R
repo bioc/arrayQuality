@@ -8,6 +8,15 @@
 
 
 
+##############################
+## rm.na is in package marray
+
+
+########################
+## [Internal Function]
+## Set control colors
+########################
+
 setCtlCol <- function(mdata)
   {
     colcode <- c(2:(length(unique(as.integer(maControls(mdata))))+1))
@@ -42,6 +51,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
     newdata <- eval(call(xvar, mdata))
     xlim <- range(newdata, na.rm=TRUE)
     Cindex <- maControls(mdata) != "probes"
+    print("here")
     Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))  ## combined control status and name
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
@@ -136,10 +146,26 @@ qpMAPlots <-  function(mdata, addp=TRUE, main="", ...)
 
 ##########################################################
 ## [Internal Function]
+## Print-tip split loess plots
+## Modified from Gordon's code
+##########################################################
+
+qpPTLoess <- function(mdata, span=0.4) {
+  y <- maM(mdata)
+  x <- maA(mdata)
+  tmp <- coplot(y~x|factor(maGridCol(mdata)) * factor(maNgr(mdata) - maGridRow(mdata) +1),
+                xlab=c("A","Tip Column"),  ylab=c("M","Tip Row"),  pch=".",
+                span=span,  show.given=FALSE,  panel=panel.smooth)
+  invisible()
+}
+
+
+##########################################################
+## [Internal Function]
 ## Spatial plots
 ##########################################################
 
-qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ol.col="red", ...)
+qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ...)
 {
   par(mar=c(2,3,5,2))
   #convert marrayRaw into marrayNorm, needed for assignment
@@ -149,10 +175,10 @@ qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ol.col="red", ...)
       if(class(mdata) != "marrayNorm")
         tmpNorm <- as(mdata, "marrayNorm")
       tmpNorm@maM <- as.matrix(rank(as.numeric(eval(call(xvar, mdata)))))
-      tmp <- image(tmpNorm, xvar="maM", main=main, bar=FALSE, overlay=overlay, ol.col=ol.col, ...)
+      tmp <- image(tmpNorm, xvar="maM", main=main, bar=FALSE, overlay=overlay, ...)
     }
   else
-    tmp <- image(mdata, xvar=xvar, main=main, bar=FALSE, zlim=c(0,16), overlay=overlay, ol.col=ol.col, ...)
+    tmp <- image(mdata, xvar=xvar, main=main, bar=FALSE, zlim=c(0,16), overlay=overlay, ...)
   par(mar=c(2,1, 5,4))
   maColorBar(tmp$x.bar, horizontal = FALSE, col = tmp$x.col,  main = "")
   par(mar=c(5,4,4,2) + 0.1) ## set back to default
@@ -194,18 +220,6 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
         legend(xcood, 1, names(tmp), lty=1, lwd=2, col=colcode[names(tmp)], cex=0.8)
       }
   }
-
-##########################################################
-## [Internal Function]
-## rm RM data
-##########################################################
-rm.na <- 
-  function (x) 
-  {
-    ind <- is.na(x) | is.nan(x) | is.infinite(x)
-    return(x[!ind])
-  }
-
 
 ## mraw == marrayRaw object
 ## mrawheader == Heading information
@@ -295,7 +309,7 @@ maQualityPlots <-  function(mraw, headerInfo="", save = TRUE,
   ## 5 & 6) maM (After Normalization)
   if(DEBUG) print("start 5 & 6")
   ov.sub <- as.vector(maW(mnorm)) < 0
-  qpImage(mnorm, xvar="maM", main="Spatial: M-Norm", overlay=ov.sub, ol.col ="red")
+  qpImage(mnorm, xvar="maM", main="Spatial: M-Norm", overlay=ov.sub)
 
   ## 7 & 8) maA 
   if(DEBUG) print("start 7 & 8")
