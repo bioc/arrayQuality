@@ -49,7 +49,7 @@ qualBoxplot(arrayQuality = NULL, reference = NULL, organism = c("Mm", "Hs"), DEB
   \code{\link{spotQuality}}, \code{\link{agQuality}}}
 
 \examples{
-#datadir <- system.file("data", package="arrayQuality")
+#datadir <- system.file("gprQCData", package="arrayQuality")
 #gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
 #arrayQuality <- slideQuality(gprData, organism="Mm")
 #qualBoxplot(arrayQuality)

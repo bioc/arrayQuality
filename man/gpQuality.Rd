@@ -89,7 +89,7 @@ HTML report. For more details about the QC measures and the plots, please refer 
 }
 
 \examples{
-  datadir <- system.file("data", package="arrayQuality")
+  datadir <- system.file("gprQCData", package="arrayQuality")
   results <- gpQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
 }
 

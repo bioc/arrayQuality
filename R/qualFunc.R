@@ -443,7 +443,7 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
     }
 
     outputfile <- file(file.path(resdir,"qualityReport.html"),"w") 
-    datadir <- system.file("data", package="arrayQuality")
+    datadir <- system.file("gprQCData", package="arrayQuality")
     html <- paste(readLines(file.path(datadir, "index.html")), "\n", collapse="")
 
     split <- unlist(strsplit(html, split="<a name=\"table\"></a>"))
