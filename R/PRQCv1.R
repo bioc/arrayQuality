@@ -41,7 +41,8 @@ PRv9mers<-  function(fnames,
     fnames <- fnames
     resdir <- paste(prname, "PRQC", sep="")
   }else {
-    fnames <- file.path(path, fnames)
+    #fnames <- file.path(path, fnames)
+    #print(fnames)
     resdir <- file.path(path, paste(prname,"PRQC", sep=""))
   }
 
@@ -53,6 +54,8 @@ PRv9mers<-  function(fnames,
   for(f in fnames)
     {
 
+      print("in the loop")
+      print(f)
       ## Set up output name
       if (DEBUG) print("Name the output file")
       tmp <- unlist(strsplit(f, "/"))
@@ -64,10 +67,11 @@ PRv9mers<-  function(fnames,
       read.args <- maDotsMatch(Args, formals(args("read.GenePix")))
       read.args$fnames <- f
       read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
-      print("TESTING 1")
-      if(DEBUG) print(read.args$path)
+
+      read.args$path <- path
       read.args <- c(read.args, list(name.Rf=NULL, name.Rb=NULL))
-      if(DEBUG) cat("Reading", read.args$file, "...\n")
+      
+      if(DEBUG) cat("Reading", read.args$fnames, "...\n")
       mraw <- do.call("read.GenePix", read.args) 
       GInfo <- maGeneTable(mraw)
 
@@ -155,7 +159,7 @@ PRv9mers<-  function(fnames,
       layout(1)
       par(mar=c(2,2,4,2))
       mtext(plotdef$main, line=3)
-      mrawheader <- readGPRHeaders(f)
+      mrawheader <- readGPRHeaders(file.path(path,f))
       mtext(paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain), line=2, cex=0.8)
     
       

@@ -430,8 +430,15 @@ gpQuality <- function(fnames = NULL, path = ".",
     tmp <- NULL
     score <- matrix(0, nrow=length(fnames), ncol=2)
     colnames(score) <- c("Mean score", "Min val")
+
+    curdir <- getwd()
+    if (!file.exists(resdir))
+      dir.create(resdir)
+    setwd(resdir)
+    if (DEBUG) print(getwd())
     
-    # Call to slideQuality for each gpr file
+   # Call to slideQuality for each gpr file
+
     for (i in 1:length(fnames))
       {
         if (DEBUG) print("In the loop ")
@@ -439,14 +446,8 @@ gpQuality <- function(fnames = NULL, path = ".",
         gp <- readGPR(fnames = f, path=path)
         restmp <- slideQuality(gp)
         score[i,] <- c(mean(restmp[,1], na.rm=TRUE), min(restmp[,1], na.rm=TRUE))
-
-        #start plot
         
-        curdir <- getwd()
-        if (!file.exists(resdir))
-          dir.create(resdir)
-        setwd(resdir)
-        if (DEBUG) print(getwd())
+        ###start plot
         
         #Create marrayRaw for maQualityPlots
         Gf <- gp[["GfMedian"]]; Gb <- gp[["GbMedian"]]
