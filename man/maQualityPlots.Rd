@@ -10,7 +10,7 @@
 
 \usage{
 maQualityPlots(mrawObj, headerInfo = "", save = TRUE, dev = "png", col,
-badspotfunction, DEBUG = FALSE, ...)
+badspotfunction, controlId = c("ID", "Name"), DEBUG = FALSE, ...)
 }
 
 \arguments{
@@ -29,6 +29,9 @@ badspotfunction, DEBUG = FALSE, ...)
     categories of spots.}
 
   \item{badspotfunction}{Function to use for bad spots on the array.}
+
+  \item{controlId}{Character string. Name of the column of the gpr
+    file used to define controls (or provides the name of the probes).}
 
   \item{DEBUG}{If 'TRUE', debug statements are printed.}
   

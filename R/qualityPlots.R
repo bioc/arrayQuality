@@ -230,6 +230,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
                             save = TRUE, 
                             dev = "png",  #set default to be png
                             col, badspotfunction,
+                            controlId=c("ID", "Name"),
                             DEBUG=FALSE, ...)
 {
   require(hexbin)
@@ -334,13 +335,13 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       if(DEBUG) print("start 11")
       if(length(maControls(mnorm))!=0)
         qpDotPlots(mnorm, xvar="maM", col=colcode,
-                   main="Control normalized M", cex.main=0.8)
+                   main="Control normalized M", cex.main=0.8, id=controlId)
 #      title(main= "Controls normalized M")
       
       ## 12 maM Dot plot
       if(DEBUG) print("start 12")
       if(length(maControls(mraw))!=0)
-        qpDotPlots(mraw, xvar="maA", col=colcode, main="Control A", cex.main=0.8)
+        qpDotPlots(mraw, xvar="maA", col=colcode, main="Control A", cex.main=0.8, id=controlId)
        #title(main= "Controls A")
      
       if(DEBUG) print("start 13")

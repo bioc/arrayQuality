@@ -471,7 +471,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         mlayout <- maCompLayout(as.matrix(cbind(gp[["Block"]],
                                                 gp[["Row"]], gp[["Column"]])))
         tmp <- new("marrayInfo", maInfo=data.frame(gp[["Name"]],gp[["ID"]]))
-        mlayout@maControls <- as.factor(maGenControls(tmp))
+        mlayout@maControls <- as.factor(maGenControls(tmp, id=controlId)) ## id=controlId
         rm(f, gp)
         
         Rf <- Gf <- Rb <- Gb <- weight <- matrix(0,nrow=nrow, ncol=ncol)
@@ -525,7 +525,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         #maQualityPlots
         setwd(resdir)
         print("Starting maQualityPlots")
-        maQualityPlots(mraw, DEBUG=DEBUG)
+        maQualityPlots(mraw, controlId=controlId, DEBUG=DEBUG)
         
         #get diagnostic plots names
         tmpname <- sub(".gpr", "",colnames(mraw@maGf))
