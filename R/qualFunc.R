@@ -1,4 +1,4 @@
-######################################
+#####################################################
 ## Set of function written to estimate
 ## quality of microarray slides
 ##
@@ -267,7 +267,7 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
     # Controls
     Control <- arrayControls(gprData)
     numE <- numNeg <- numPos <- numProb <- 0
-    emp <- neg <- pos <- NULL
+    emp <- neg <- pos <- 0
 
     for(i in 1:length(Control))
       {

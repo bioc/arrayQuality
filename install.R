@@ -1,3 +1,3 @@
-require("marray", quietly=TRUE)
+#require("marray", quietly=TRUE)
 #require("mclust", quietly=TRUE)
 #library(mclust)

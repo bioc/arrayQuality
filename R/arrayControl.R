@@ -10,7 +10,10 @@ arrayControls <- function (data = NULL, SFGHControlcode = controlCode, id = "ID"
                      gId)
     if (length(position) > 0) 
       Control[position] <- as.vector(SFGHControlcode[i, "Name"])
+    else
+      print("No controls associated with this array")
     }
+  
   return(Control)
 }
 
