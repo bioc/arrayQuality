@@ -8,4 +8,3 @@ Maintainer: A. Paquet <apaquet@medsfgh.ucsf.edu>
 Description: Functions for performing print-run and array level quality assessment. 
 License: LGPL
 URL: http://www.biostat.ucsf.edu/jean  
-ReleaseLevel: devel
