@@ -1,6 +1,6 @@
 ##########################################################3
 ## Quality control plots
-## 
+##
 ## Author: Jean Yang, Agnes Paquet
 ## Modified March, 17, 2003
 
@@ -57,7 +57,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
 
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
-    
+
     if(length(y[names(y) != "probes"]) != 0)  ## check that there exist control spots
       {
         ## There are control spots
@@ -68,7 +68,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
         })
         exty <- exty[lapply(exty, length) != 0]
         ylim <- c(1, sum(unlist(lapply(exty, length))))
-        
+
         par(mar=c(4,7,3,2), cex=1)  ## A wide left side to allow for gene names
         plot(1,1, type="n", xlim=xlim, ylim=ylim, axes=FALSE, xlab=xvar, ylab="",...)
         ii <- 1
@@ -82,7 +82,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
             }
         axis(1)
         lab <- paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep="")
-        axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.6) 
+        axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.6)
         box()
 
 
@@ -112,7 +112,7 @@ qpHexbin <-  function(mdata, main="", ...)
   col <- BTY
   maxcnt  <-  max(bin$cnt)
   colorcut <-  seq(0, 1, length = min(17,maxcnt))
- 
+
   yrange <- c(min(maM(mdata), na.rm=TRUE), max(maM(mdata), na.rm=TRUE) + 1)
   plot(bin$xbnds, bin$ybnds, type = "n", xlab="A", ylab="M", ylim=yrange, main=main)
   hexagons(bin, colramp = col, colorcut = colorcut, maxcnt = maxcnt)
@@ -134,11 +134,11 @@ qpMAPlots <-  function(mdata, addp=TRUE, main="", ...)
   opt <- list(...)
   par(mar=c(5,4,3,2), cex=0.6)
   y <- max(maM(mdata), na.rm=TRUE) + 2
-  x <- min(maA(mdata), na.rm=TRUE) 
+  x <- min(maA(mdata), na.rm=TRUE)
   defs <- maDotsDefaults(opt, maDefaultPar(mdata, x="maA", y="maM", z="maPrintTip"))
   plot(mdata, lines.func=NULL, legend.func=NULL, col="gray",
        ylim=c(min(maM(mdata), na.rm=TRUE),y),  main=main) ## took xlim=c(0,16) out
-  abline(h=0,col="blue",lwd=2.5, lty=2)  
+  abline(h=0,col="blue",lwd=2.5, lty=2)
   legend.func <- do.call("maLegendLines", defs$def.legend)
   legend.func(x, y)
   ## HARD CODE red represents bad spots
@@ -175,7 +175,7 @@ qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ...)
   if(xvar == "maM")
     {
       tmpNorm <- mdata
-      if(class(mdata) != "marrayNorm")
+      if(!is(mdata, "marrayNorm"))
         tmpNorm <- as(mdata, "marrayNorm")
       tmpNorm@maM <- as.matrix(rank(as.numeric(eval(call(xvar, mdata)))))
       tmp <- image(tmpNorm, xvar="maM", main=main, bar=FALSE, overlay=overlay, ...)
@@ -195,22 +195,22 @@ qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ...)
 
 qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
   {
-    
+
     if(channel == "red"){
       if(length(maRb(mdata))!=0)
         S2N <- as.vector(log(maRf(mdata),2) - log(maRb(mdata),2))
       else
         S2N <- as.vector(log(maRf(mdata),2))}
- 
+
     if(channel == "green"){
       if(length(maGb(mdata))!=0)
         S2N <- as.vector(log(maGf(mdata),2) - log(maGb(mdata),2))
       else
         S2N <- as.vector(log(maGf(mdata),2))}
-    
+
     lab <- paste("S2N : ","mean:", round(mean(rm.na(S2N)), 2)," : ", "var:", round(var(rm.na(S2N)), 2))
     hist(rm.na(S2N), main=lab, col=channel, nclass=50, freq=FALSE, ylim=c(0,1.1));
-    
+
     if(length(maControls(mdata))!=0)
       {
         tmp <- split(S2N, maControls(mdata))
@@ -227,7 +227,7 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 ## mraw == marrayRaw object
 ## mrawheader == Heading information
 maQualityPlots <-  function(mrawObj, headerInfo="",
-                            save = TRUE, 
+                            save = TRUE,
                             dev = "png",  #set default to be png
                             col, badspotfunction,
                             controlId=c("ID", "Name"),
@@ -250,7 +250,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
     {
       mraw <- mrawObj[,i]
       opt <- list(...)
-      
+
       ## re-evaluate W
       if (DEBUG) print("Re-evaluate Weigth")
       if(missing(badspotfunction))
@@ -261,11 +261,11 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       else
         if(!is.null(badspotfunction))
           mraw@maW <- do.call(badspotfunction, list(mraw@maW))
-      
+
       ## setting controls cols
       ifelse(missing(col), colcode<- setCtlCol(mraw) , colcode <- col)
       if(DEBUG) cat("check Control color code", colcode, "\n")
-      
+
       ## Set up no backgroud data and normalization
       if (DEBUG) print("Set up data and normalization")
       nbgraw <- mraw;
@@ -273,7 +273,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
         nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
       norm.defs <- maDotsDefaults(opt, list(norm="p"))
       mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
-      
+
       ## Set up output name
       if (DEBUG) print("Name the output file")
       tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
@@ -283,10 +283,10 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
         fstart <- paste(tmp2[-length(tmp2)], collapse=".")
       else
         fstart <- tmp2
-      
+
       if (DEBUG) print(fstart)
-      
-      
+
+
   ###################
   ## Setting up output device
   ###################
@@ -301,63 +301,63 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
                         )
       if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
         print("Format error, format will be set to PNG")
-      
+
       fname <- paste("diagPlot", fstart,  plotdef$suffix, sep=".")
       if (DEBUG) print(fname)
       plotdef <- c(plotdef, list(main=paste(fname, ": Qualitative Diagnostic Plots")))
-      
+
       ###################
       ## Plot
       ###################
       ## Match args and calls function
       ## Start device and layout
       if(DEBUG) print("start layout")
-      if(save)  do.call(dev, maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)) ) 
+      if(save)  do.call(dev, maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)) )
       layout.show(  layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
                                     14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
                            height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7)))
-      
+
       ## 1) Split MA-plot (Before Normalization)
       if(DEBUG) print("start 1")
       qpMAPlots(nbgraw, addp=TRUE, main="MA-Plot :: raw", ...)
       addLines(nbgraw)
-      
-      
+
+
       ## 2) HEXbin MA-plot (After Normalization)
       if(DEBUG) print("start 2")
       qpHexbin(mnorm, main="MA-Plot :: Norm")
-      
+
       ## 3 & 4) maM (Before
       if(DEBUG) print("start 3, 4")
       qpImage(nbgraw, xvar="maM", main="Spatial: Rank(M-Raw)")
-      
+
       ## 5 & 6) maM (After Normalization)
       if(DEBUG) print("start 5 & 6")
       ov.sub <- as.vector(maW(mnorm)) < 0
       qpImage(mnorm, xvar="maM", main="Spatial: Rank(M-Norm)", overlay=ov.sub)
-      
-      ## 7 & 8) maA 
+
+      ## 7 & 8) maA
       if(DEBUG) print("start 7 & 8")
       qpImage(nbgraw, xvar="maA", main="Spatial: A")
-      
+
       ## 9 & 10  Red and Green Signal to Noise (background corrected)
       if(DEBUG) print("start 9 & 10")
       qpS2N(mraw, channel="red", colcode=colcode)
       qpS2N(mraw, channel="green", colcode=colcode)
-      
+
       ## 11 maM Dot plot
       if(DEBUG) print("start 11")
       if(length(maControls(mnorm))!=0)
         qpDotPlots(mnorm, xvar="maM", col=colcode,
                    main="Control normalized M", cex.main=0.8, id=controlId)
 #      title(main= "Controls normalized M")
-      
+
       ## 12 maM Dot plot
       if(DEBUG) print("start 12")
       if(length(maControls(mraw))!=0)
         qpDotPlots(mraw, xvar="maA", col=colcode, main="Control A", cex.main=0.8, id=controlId)
        #title(main= "Controls A")
-     
+
       if(DEBUG) print("start 13")
       ## 13
       layout(1)
@@ -365,7 +365,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       mtext(plotdef$main, line=3)
       mtext(headerInfo, line=2, cex = 0.7)
       mtext(paste("Call:", maNormCall(mnorm)[3]), line=1, cex = 0.7)
-      
+
       ## Finishing
       if(DEBUG) cat("Done...")
       if (save == TRUE) {
