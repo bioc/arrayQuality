@@ -22,7 +22,7 @@
 readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
                      sep ="\t", quote= "",...)
   {
-    print("Starting readGPR")
+    if (DEBUG) print("Starting readGPR")
     if (DEBUG) print(path)
     # Test if input data is OK
     if (is.null(path))
@@ -389,18 +389,23 @@ slideQuality <- function(gprData=NULL,output = TRUE, DEBUG=FALSE,...)
 ## Example:
 ## test <- gp(path="C:/Mydoc/Projects/quality/DemoA/", resdir="QualPlot")
 
+## Reference = output from globalQuality
+## ScalingTable: output from qualRef
+## Must be run on the same gpr files
 gpQuality <- function(fnames = NULL, path = ".",
-                          organism=c("Mm", "Hs"),
-                          output=FALSE,
-                          resdir=".",
-                          dev="png", #set default to be png 
-                          DEBUG = FALSE,...)
+                      organism=c("Mm", "Hs"),
+                      reference=NULL,
+                      scalingTable=NULL,
+                      output=FALSE,
+                      resdir=".",
+                      dev="png", #set default to be png 
+                      DEBUG = FALSE,...)
   {
 
-    print(output)
+    print("Starting gpQuality...")
+
     
     # Check input arguments
-    if (DEBUG) print("Starting global quality")
     if (missing(path) | is.null(path))
       path <- getwd()
     
@@ -443,7 +448,6 @@ gpQuality <- function(fnames = NULL, path = ".",
 
     #Allocation of matrix for marrayraw object
 
-    if(DEBUG) print("Starting reading gpr")
     if(DEBUG) print(path)
     if(DEBUG) print(resdir)
     f <- fnames[1]
@@ -470,7 +474,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         f <- fnames[i]
         gp <- readGPR(fnames = f, path=path)
         restmp <- slideQuality(gp, DEBUG=DEBUG)
-        scal <- arrayScal(restmp, organism=organism)
+        scal <- arrayScal(restmp, organism=organism, scalingData=scalingTable)
         score[i,] <- c(mean(qualityScore(restmp[,1]), na.rm=TRUE), min(scal, na.rm=TRUE))
         
         ###start plot
@@ -485,7 +489,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
         do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
         par(mar=c(3,10,2,8))
-        nbtmp <- qualBoxplot(restmp)
+        nbtmp <- qualBoxplot(restmp, reference=reference, scalingTable=scalingTable)
         dev.off()
         setwd(curdir)
 
@@ -499,6 +503,8 @@ gpQuality <- function(fnames = NULL, path = ".",
         meas <- rownames(restmp)
       }
 
+    print("Comparative plots done")
+    
     #Create marrayRaw
     colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- filenames
     if (DEBUG) print("building mraw")
@@ -507,9 +513,8 @@ gpQuality <- function(fnames = NULL, path = ".",
                 maW=weight, maGnames=tmp)
     #maQualityPlots
     setwd(resdir)
-    print("maQualityPlots")
-    print(output)
-    maQualityPlots(mraw, output=output, DEBUG=DEBUG)
+    print("Starting maQualityPlots")
+    maQualityPlots(mraw, DEBUG=DEBUG)
 
     #get diagnostic plots names
     tmp <- sub(".gpr", "",colnames(mraw@maGf))
@@ -527,14 +532,17 @@ gpQuality <- function(fnames = NULL, path = ".",
 
     colnames(quality) <- fnames
     rownames(quality) <- meas
-    
+
+    print("gpQuality done")
     # Results
     if (output)
-      write.table(quality, "quality.txt",sep="\t", col.names=NA)
-
+      {
+        print("Printing results to file")
+        write.table(quality, "quality.txt",sep="\t", col.names=NA)
+        outputNormData(mraw)
+      }
     return(list(mraw=mraw, score=score, quality=quality))
   }
-
 
 ###############################################
 ## Given a set of reference slides
@@ -545,7 +553,6 @@ gpQuality <- function(fnames = NULL, path = ".",
 
 qualRefTable <- function(fnames=NULL, path=".")
   {
-    print("Starting qualRefTable")
     if (missing(path) | is.null(path))
       path <- "."
 
@@ -575,12 +582,10 @@ qualRefTable <- function(fnames=NULL, path=".")
 ## Takes a matrix/vector of numbers as argument
 ## Scales this matrix according to values in scalingData
 ## if scalingData is missing, use scaling matrix (Mm by default, or Hs)
-## To use with globalQuality, remove 1st column (text)
 ## of globalQuality result
 
 arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
 {
-  print("Starting arrayScal")
   organism=organism[1]
   if(missing(numMat))
     stop("Input error, matrix to scale missing")
@@ -726,18 +731,23 @@ quality2HTML <- function(fnames=NULL, path=".", DiagPlot=NULL, QCplot=NULL, resd
   }
 
 #slidequality is the result of slideQuality for ONE slide
-qualityScore <- function(slidequality, organism=c("Mm", "Hs"))
+qualityScore <- function(slidequality, organism=c("Mm", "Hs"), reference=NULL)
   {
     organism <- organism[1]
     slidequality <- as.vector(slidequality)
-    if(organism == "Mm")
+
+    if(is.null(reference))
       {
-        if (!("MmReferenceDB" %in% ls(1)))
-          data(MmReferenceDB)
-        reference <- MmReferenceDB
+        if(organism == "Mm")
+          {
+            if (!("MmReferenceDB" %in% ls(1)))
+              data(MmReferenceDB)
+            reference <- MmReferenceDB
+          }
+        
+        else
+          reference <- data(HsReferenceDB)
       }
-    else
-      reference <- data(HsReferenceDB)
 
     score <- matrix(0,nrow=length(slidequality), ncol=1)
 
@@ -788,6 +798,7 @@ globalQuality <- function(fnames = NULL, path = ".",
     if (output)
       write.table(quality, "quality.txt",sep="\t", col.names=NA)
     
+    
     return(quality)
   }
   
@@ -808,7 +819,7 @@ globalQuality <- function(fnames = NULL, path = ".",
 # slideQuality and globalQuality respectively
 
 
-qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),...)
+qualBoxplot <- function(arrayQuality,  reference=NULL, scalingTable=NULL, organism=c("Mm", "Hs"),...)
   {
     print("starting plot")
     # Reference = output of globalQuality for ref slides
@@ -828,15 +839,14 @@ qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),..
         else
           reference <- data(HsReferenceDB)
       }
-    
-    scalref <- arrayScal(reference)
-    scalarray <- arrayScal(arrayQuality)
+
+    scalref <- arrayScal(reference, scalingData=scalingTable)
+    scalarray <- arrayScal(arrayQuality, scalingData=scalingTable)
     
     if(is.null(dim(scalref))|nrow(arrayQuality)!=nrow(reference))
       stop("Input must be a matrix resulting from slideQuality.R")
     else
       {
-        print("Boxplot")
         #Boxplot of reference arrays quality measure
         nr <- nrow(scalref)
 
@@ -870,7 +880,6 @@ qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),..
 
         isBelowLim <- matrix(FALSE, ncol=nc, nrow=nr)
         
-        print("lines")
         for(i in 1:nc)
           {
             lines(scalarray[,i], 1:nr, col=col[i], lty=2)
@@ -894,3 +903,8 @@ qualBoxplot <- function(arrayQuality,  reference=NULL, organism=c("Mm", "Hs"),..
       }
   }
 
+outputNormData <- function(mraw)
+  {
+    mnorm <- maNorm(mraw)
+    write.marray(mnorm, "NormalizedData.xls")
+  }

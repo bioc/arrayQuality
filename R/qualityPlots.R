@@ -1,10 +1,9 @@
 ##########################################################3
 ## Quality control plots
 ## 
-## Created from maDiagnPlots.R
+## Author: Jean Yang, Agnes Paquet
 ## Modified March, 17, 2003
-##
-## source("C:/MyDoc/Projects/Rpackages/arrayQuality/R/qualityPlots.R")
+
 
 
 
@@ -51,7 +50,6 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
     newdata <- eval(call(xvar, mdata))
     xlim <- range(newdata, na.rm=TRUE)
     Cindex <- maControls(mdata) != "probes"
-    print("here")
     Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))  ## combined control status and name
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
@@ -226,7 +224,6 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE, 
                             dev = "png",  #set default to be png
                             col, badspotfunction,
-                            output=FALSE,
                             DEBUG=FALSE, ...)
 {
   require(hexbin)
@@ -235,7 +232,6 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
   if(DEBUG) print(dim(mrawObj))
   for(i in 1:dim(mrawObj)[2])
     {
-      print(i)
       mraw <- mrawObj[,i]
       opt <- list(...)
       
@@ -261,12 +257,6 @@ maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE,
         nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
       norm.defs <- maDotsDefaults(opt, list(norm="p"))
       mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
-
-      if (output)
-        {
-          print(length(colnames(maRf(mraw))))
-          write.marray(mnorm, "maNormalizedResults.xls")
-        }
       
       ## Set up output name
       if (DEBUG) print("Name the output file")
