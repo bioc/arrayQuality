@@ -64,7 +64,8 @@ PRvQCHyb<-  function(fnames,
       ## marrayRaw
       read.args <- maDotsMatch(args, formals(args("read.GenePix")))
       read.args$fnames <- f
-      read.args$path <- NULL
+      #read.args$path <- NULL
+      read.args$path <- path
       if(DEBUG) cat("Reading", read.args$file, "...\n")
       bgraw <- do.call("read.GenePix", read.args)
       GInfo <- maGeneTable(bgraw)

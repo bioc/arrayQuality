@@ -3,7 +3,7 @@
 ## quality of microarray slides
 ##
 ## Author: Agnes Paquet
-## Modified: 04/9/2004
+## Modified: 04/16/2004
 
 
 ###################################################
@@ -425,6 +425,7 @@ gpQuality <- function(fnames = NULL, path = ".",
     # Prepares results
     quality <- NULL
     tmp <- NULL
+    score <- NULL
 
     # Call to slideQuality for each gpr file
     for (f in fnames)
@@ -433,6 +434,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         gp <- readGPR(fnames = f, path=path)
         restmp <- slideQuality(gp)
 
+        
         if (plot==TRUE)
          {
            curdir <- getwd()
@@ -468,6 +470,7 @@ gpQuality <- function(fnames = NULL, path = ".",
            print(paste("save as ",plotname))
            setwd(curdir)
          }
+        
         
         quality <- cbind(quality, restmp[,1])
         meas <- rownames(restmp)
@@ -610,12 +613,12 @@ qualBoxplot <- function(arrayQuality,reference=NULL, organism=c("Mm", "Hs"),...)
       }
     
     scalref <- arrayScal(reference)
-    print(paste("length scalref= ", dim(scalref), sep=" "))
+    #print(paste("length scalref= ", dim(scalref), sep=" "))
     scalarray <- arrayScal(arrayQuality)
-    print(paste("dim scalarray= ", dim(scalarray), sep=" "))
+    #print(paste("dim scalarray= ", dim(scalarray), sep=" "))
     
     if(is.null(dim(scalref))|nrow(arrayQuality)!=nrow(reference))
-      stop("Input must be a matrix resulting from globalQuality.R")
+      stop("Input must be a matrix resulting from slideQuality.R")
     else
       {
         print("Boxplot")
@@ -695,8 +698,13 @@ as.integer(nsc)
 quality2HTML <- function(path=".", resdir=".")
   {
 
-    HTwrap <- function(x, tag = "TD") {
-      paste("<", tag, ">", x, "</", tag, ">", sep = "")
+    HTwrap <- function(x, tag = "TD", option="align", value="center") {
+      if (option == "")
+        {
+          paste("<", tag, "\"",  ">", x, "</", tag, ">", sep = "")
+        }
+      else
+        paste("<", tag," ", option, "=\"",value, "\"",  ">", x, "</", tag, ">", sep = "")
     }
     
     HTimg <- function(src){
@@ -734,12 +742,13 @@ quality2HTML <- function(path=".", resdir=".")
 
     datadir <- system.file("data", package="arrayQuality")
     html <- paste(readLines(file.path(datadir, "index.html")), "\n", collapse="")
-    split <- unlist(strsplit(html, split="id=\"table\">"))
+#    split <- unlist(strsplit(html, split="id=\"table\">"))
+    split <- unlist(strsplit(html, split="<a name=\"table\"></a>"))
 
     tab <- tableTag(path)
     
-    cat(split[1], HTwrap(tab, tag="TABLE"), split[2], file=output)
-      
+#    cat(split[1], HTwrap(tab, tag="TABLE"), split[2], file=output)
+    cat(split[1], tab,split[2], file=output)     
     close(output)
   }
 

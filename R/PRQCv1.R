@@ -35,12 +35,14 @@ PRv9mers<-  function(fnames,
   ## Getting File names
   if (missing(fnames))
     fnames <- file.path(path, dir(path, pattern = "*\\.gpr$"))
+  
 
   if (is.null(path)) {
     fnames <- fnames
     resdir <- paste(prname, "PRQC", sep="")
   }else {
-    resdir <- file.path(path, paste(prname,"PRQC", sep=""))    
+    resdir <- file.path(path, paste(prname,"PRQC", sep=""))
+    #fnames <- file.path(path, fnames)
   }
   dir.create(resdir)
   print(resdir)
@@ -58,7 +60,10 @@ PRv9mers<-  function(fnames,
       ## Set up arguments
       read.args <- maDotsMatch(Args, formals(args("read.GenePix")))
       read.args$fnames <- f
-      read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
+      #read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
+       read.args$name.Rf <- read.args$name.Rb <- NULL
+      read.args$path <- path
+      if(DEBUG) print(read.args$path)
       read.args <- c(read.args, list(name.Rf=NULL, name.Rb=NULL))
       if(DEBUG) cat("Reading", read.args$file, "...\n")
       mraw <- do.call("read.GenePix", read.args) 
