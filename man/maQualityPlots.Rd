@@ -9,8 +9,8 @@
 }
 
 \usage{
-maQualityPlots(mrawObj, headerInfo = "", save = TRUE, dev = "png", col,
-badspotfunction, controlId = c("ID", "Name"), DEBUG = FALSE, ...)
+maQualityPlots(mrawObj, headerInfo = "", save = TRUE, dev = "png", col=NULL,
+badspotfunction=NULL, controlId = c("ID", "Name"), DEBUG = FALSE, ...)
 }
 
 \arguments{

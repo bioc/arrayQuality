@@ -9,7 +9,7 @@
 
 \usage{
 readGPR(fnames = NULL, path= ".", DEBUG=FALSE, skip = 0, sep ="\t",
-quote="", ...)
+quote="\"", ...)
 }
 
 \arguments{
@@ -41,8 +41,8 @@ quote="", ...)
 }
 
 \examples{
-#datadir <- system.file("data", package="arrayQuality")
-#gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
+datadir <- system.file("data", package="arrayQuality")
+gprData <- readGPR(fnames="9Mm137.gpr", path=datadir)
 }
 
 \keyword{programming}

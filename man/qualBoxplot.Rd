@@ -8,8 +8,7 @@
   slides.}
 
 \usage{
-qualBoxplot(arrayQuality = NULL, reference = NULL, scalingTable = NULL,
-organism = c("Mm", "Hs"), ...)
+qualBoxplot(arrayQuality = NULL, reference = NULL, organism = c("Mm", "Hs"), DEBUG=FALSE,...)
 }
 
 \arguments{
@@ -20,13 +19,12 @@ organism = c("Mm", "Hs"), ...)
     reference table to compare slides. If 'NULL', the default table
     corresponding to "organism" will be used. See details for more information.}
   
-  \item{scalingTable}{A matrix resulting from qualRefTable, used to
-    scale quality measures before plotting them. If 'NULL',the default table
-    corresponding to organism will be used. See details for more information.}
   \item{organism}{A "character" string naming the organism genome
     printed on the array, either "Mm" or "Hs". By default, organism is
     set to "Mm". It is used to retrieve the corresponding reference
     tables.}
+
+  \item{DEBUG}{If 'TRUE', debug statements are printed.}
 
   \item{\dots}{additional arguments}
 
@@ -34,11 +32,9 @@ organism = c("Mm", "Hs"), ...)
 
 \details{
   You can use your own set of references created
-  using \code{globalQuality} and \code{qualRefTable} passed
-  in the arguments "reference" and "scalingTable", or use
-  the reference QC values stored in the datasets \code{MmReferenceDB} and
-  \code{MmScalingTable}.
-}
+  using \code{globalQuality} passed
+  in the arguments "reference", or use
+  the reference QC values stored in the datasets \code{MmReferenceDB}.}
  
 \value{
   Returns a score vector containing, for each column in "arrayQuality",
@@ -49,7 +45,8 @@ organism = c("Mm", "Hs"), ...)
 
 \author{Agnes Paquet}
 
-\seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}}, \code{\link{qualRefTable}}}
+\seealso{\code{\link{globalQuality}}, \code{\link{gpQuality}},
+  \code{\link{spotQuality}}, \code{\link{agQuality}}}
 
 \examples{
 #datadir <- system.file("data", package="arrayQuality")

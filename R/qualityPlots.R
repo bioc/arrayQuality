@@ -2,8 +2,8 @@
 ## Quality control plots
 ##
 ## Author: Jean Yang, Agnes Paquet
-## Modified March, 17, 2003
-
+## Modified Sept, 14, 2004
+## source("~/Projects/madman/Rpacks/arrayQuality/R/qualityPlots.R")
 
 
 
@@ -229,12 +229,13 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 maQualityPlots <-  function(mrawObj, headerInfo="",
                             save = TRUE,
                             dev = "png",  #set default to be png
-                            col, badspotfunction,
+                            col=NULL, badspotfunction=NULL,
                             controlId=c("ID", "Name"),
                             DEBUG=FALSE, ...)
 {
   require(hexbin)
   if (DEBUG) print("function starting")
+  controlId <- controlId[1]
 
   #Convert RGList to mraw if needed
 
@@ -252,11 +253,11 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       opt <- list(...)
 
       ## re-evaluate W
-      if (DEBUG) print("Re-evaluate Weigth")
-      if(missing(badspotfunction))
+      if (DEBUG) print("Re-evaluate Weight")
+      if(missing(badspotfunction)||is.null(badspotfunction))
         {
           tmp <- do.call("gpFlagWt", list(mraw@maW))
-          mraw@maW <- tmp
+          mraw@maW <- tmp 
         }
       else
         if(!is.null(badspotfunction))
@@ -271,7 +272,14 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       nbgraw <- mraw;
       if(length(mraw@maGb) != 0)
         nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
-      norm.defs <- maDotsDefaults(opt, list(norm="p"))
+
+      if (DEBUG) print("Reading normalization parameters")
+      if (DEBUG) print(opt)
+      defs <- list(norm="p")
+      norm.defs <- maDotsMatch(maDotsDefaults(opt, defs), formals(args("maNorm")))
+
+      if (DEBUG) cat("Using normalization method:  ", norm.defs$norm, "\n")
+
       mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
 
       ## Set up output name
@@ -312,10 +320,13 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       ## Match args and calls function
       ## Start device and layout
       if(DEBUG) print("start layout")
-      if(save)  do.call(dev, maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)) )
-      layout.show(  layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
-                                    14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
-                           height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7)))
+      
+      if(save)
+        do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)), formals(args(dev))))
+      
+      layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
+                      14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
+             height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7))
 
       ## 1) Split MA-plot (Before Normalization)
       if(DEBUG) print("start 1")
@@ -327,7 +338,7 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       if(DEBUG) print("start 2")
       qpHexbin(mnorm, main="MA-Plot :: Norm")
 
-      ## 3 & 4) maM (Before
+      ## 3 & 4) maM (Before Normalizaton)
       if(DEBUG) print("start 3, 4")
       qpImage(nbgraw, xvar="maM", main="Spatial: Rank(M-Raw)")
 

@@ -4,14 +4,14 @@
 \title{Quality measures for general hybridization.}
 
 \description{
-  This function provides Quality Control measures for GenePix
-  format files. It is used to create a table of measures to be used as
-  reference in gpQuality.
+  This function provides Quality Control measures for GenePix, Spot and
+  Agilent format files. It is used to create a table of measures to be used as
+  reference in gpQuality, spotQuality or agQuality.
 }
 
 \usage{
 globalQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
-output = FALSE, resdir = ".", DEBUG = FALSE,...)
+output = FALSE, resdir = ".", DEBUG = FALSE, inputsource = "readGPR",...)
 }
 
 \arguments{
@@ -34,6 +34,12 @@ output = FALSE, resdir = ".", DEBUG = FALSE,...)
 
   \item{DEBUG}{If 'TRUE', debug statements are printed.}
 
+  \item{inputsource}{A "character" string providing the name of the function to
+    use to read the input files. It should be inputsource = "readGPR"
+    for GenePix format files, inputsource = "readSpot" for Spot files, or
+    inputsource = "readAgilent" for Agilent format. By default,
+    'inputsource' is set to "readGPR".}
+  
   \item{\dots}{additional arguments}
 }
 
@@ -45,12 +51,13 @@ output = FALSE, resdir = ".", DEBUG = FALSE,...)
 \author{Agnes Paquet}
 
 \seealso{\code{\link{gpQuality}}, \code{\link{slideQuality}},
-  \code{\link{MmReferenceDB}}
+  \code{\link{MmReferenceDB}}, \code{\link{readGPR}},
+  \code{\link{readSpot}}, \code{\link{readAgilent}}
 }
 
 \examples{
-##datadir <- system.file("data", package="arrayQuality")
-##reference <- globalQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
+datadir <- system.file("data", package="arrayQuality")
+reference <- globalQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
 }
 
 \keyword{programming}

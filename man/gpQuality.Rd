@@ -12,9 +12,8 @@
 \usage{
 
 gpQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
-compBoxplot = TRUE, reference = NULL, scalingTable = NULL, controlMatrix
-= controlCode, controlId = c("ID", "Name"), output = FALSE, resdir =
-".", dev= "png", DEBUG = FALSE,...)
+compBoxplot = TRUE, reference = NULL, controlMatrix = controlCode,
+controlId = c("ID", "Name"), output = FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
 }
 
 \arguments{
@@ -37,12 +36,11 @@ compBoxplot = TRUE, reference = NULL, scalingTable = NULL, controlMatrix
     reference table to compare slides. If 'NULL', the default table
     corresponding to organism will be used. See details for more information.}
   
-  \item{scalingTable}{A matrix resulting from qualRefTable, used to
-    scale quality measures before plotting them. If 'NULL',the default table
-    corresponding to organism will be used. See details for more
-    information.}
-
-  \item{controlMatrix}{A matrix defining control status information.}
+ 
+  \item{controlMatrix}{A character matrix of n by 2 columns. The first
+    column contains a few regular expression of spotted probe sequences
+    and the second column contains the corresponding control status. By
+    default, controlMatrix is set to controlCode.}
 
   \item{controlId}{Character string. Name of the column of the gpr
     file used to define controls.}
@@ -86,7 +84,9 @@ HTML report. For more details about the QC measures and the plots, please refer 
 
 \author{Agnes Paquet}
 
-\seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}}, \code{\link{qualRefTable}}}
+\seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}},
+  \code{\link{scaleRefTable}}, \link{marray}
+}
 
 \examples{
   datadir <- system.file("data", package="arrayQuality")
