@@ -1,9 +1,8 @@
+
 \name{gprDB}
-\alias{MmScalingTable}
 \alias{MmReferenceDB}
 \alias{index.html}
 \alias{HsReferenceDB}
-\alias{HsScalingTable}
 
 \title{Reference slides for Mouse oligos hybridizations}
 

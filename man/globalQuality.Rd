@@ -57,6 +57,7 @@ output = FALSE, resdir = ".", DEBUG = FALSE, inputsource = "readGPR",...)
 
 \examples{
 datadir <- system.file("gprQCData", package="arrayQuality")
+if (interactive())
 reference <- globalQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
 }
 
