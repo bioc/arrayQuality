@@ -1,0 +1,1492 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>userguide</title>
+</head>
+<body>
+<h1 style="text-align: center;"><a name="_Toc72663188">Quality Control
+for spotted
+arrays</a></h1>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" align="center" style="text-align: center;">June 3,
+2004</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" align="center" style="text-align: center;">Agnes
+Paquet<sup>2</sup>,
+Andrea Barczak<sup>2</sup>, (Jean) Yee Hwa Yang<sup>1,2</sup></p>
+<p class="MsoNormal" align="center" style="text-align: center;"><o:p></o:p></p>
+<p class="MsoNormal" align="center" style="text-align: center;">1.
+Department of
+Medicine, <st1:placetype w:st="on">University</st1:placetype> of <st1:placename
+ w:st="on">California</st1:placename>, <st1:place w:st="on"><st1:city
+ w:st="on">San Francisco</st1:city></st1:place><br>
+<a href="http://www.biostat.ucsf.edu/jean">http://www.biostat.ucsf.edu/jean</a></p>
+<p class="MsoNormal" align="center" style="text-align: center;">2.
+Functional
+Genomics Core Facility, <st1:placetype w:st="on">University</st1:placetype>
+of <st1:placename w:st="on">California</st1:placename>, <st1:place
+ w:st="on"><st1:city w:st="on">San Francisco</st1:city></st1:place></p>
+<p class="MsoNormal" align="center" style="text-align: center;">apaquet@medsfgh.ucsf.edu<br>
+</p>
+<div style="text-align: left;"><br>
+<br>
+<br>
+<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663189">1.
+Quick starting guide to arrayQuality</a><o:p></o:p></h1>
+<h1 style="margin-left: 0in; text-indent: 0in;"><o:p>&nbsp;</o:p></h1>
+<h3><a name="_Toc72663190">Installing arrayQuality</a><o:p>&nbsp;</o:p></h3>
+<p class="MsoNormal">To install the <span style="font-family: Courier;">arrayQuality
+</span>package for Windows operating systems, first start R and make
+sure you
+are connected to the Internet. Then, select &#8220;<span
+ style="font-family: Courier;">Packages</span>&#8221;
+from the menu, and click on &#8220;<span style="font-family: Courier;">Install
+package(s) from Bioconductor&#8230;</span>&#8221;. Select <span
+ style="font-family: Courier;">arrayQuality</span>
+in the list in the pop-up window, and click on &#8220;<span
+ style="font-family: Courier;">OK</span>&#8221;.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663191">Using arrayQuality functions PRv9mers,
+PRvQCHyb and
+gpQuality</a><o:p>&nbsp;</o:p></h3>
+<p class="MsoNormal">These section provides a quick starting guide to
+use the
+package. There are three main functions provided to automatically read
+in data,
+generate some diagnostic plots, and save them as images in png format.
+To use
+them, follow the steps below:<br>
+<o:p>&nbsp;</o:p></p>
+<ol style="margin-top: 0in;" start="1" type="1">
+  <li class="MsoNormal" style="">Create a directory and move the image
+processing output files (e.g. .gpr files) of the slides of interest to
+this directory. Make sure that <b style="">all files</b> in the
+directory come from the <b style="">SAME print-run</b> (same GAL file).</li>
+</ol>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="2" type="1">
+  <li class="MsoNormal" style="">Start R, and change R working
+directory to the one you have created. In the R menu, select <span
+ style="font-family: Courier;">File</span>, then click on &#8220;<span
+ style="font-family: Courier;">Change dir&#8230;</span>&#8221;. Browse to your
+directory from the pop-up window, or enter it manually, and click <span
+ style="font-family: Courier;">OK</span>. To double check that you are
+in the correct directory: in the File menu, click on &#8220;<span
+ style="font-family: Courier;">Display file(s)&#8230;</span>&#8221;.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="text-indent: 0.25in;">To load the package
+in your R
+session: type</p>
+<p class="MsoNormal" style="text-indent: 0.5in;">&gt; <span
+ style="font-family: Courier;">library(arrayQuality)<o:p></o:p></span></p>
+<p class="MsoNormal" style="text-indent: 0.5in;"><o:p></o:p></p>
+<p class="MsoNormal" style="text-indent: 0.25in;">It will also
+automatically load <span class="codeChar">marray</span> and <span
+ class="codeChar">limma</span> packages.<br>
+<br>
+</p>
+<p class="MsoNormal" style="margin-left: 0.75in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.75in;"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="3" type="1">
+  <li class="MsoNormal" style="">For 9-mers analysis, run the following
+command in R: </li>
+</ol>
+<p class="code" style="text-indent: 0.5in; font-family: courier new;">&gt;
+PRv9mers(prname=&#8221;12Mm&#8221;)</p>
+<p class="code" style="text-indent: 0.5in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.25in;">where <b style=""><span
+ style="font-family: Courier;">prname</span></b> is the name of the
+print-run. </p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p>&nbsp;</o:p></p>
+<ol style="margin-top: 0in;" start="4" type="1">
+  <li class="MsoNormal" style="">For QCHyb analysis, run the following
+command in R:</li>
+</ol>
+<p class="code"
+ style="margin-left: 0.25in; text-indent: 0.25in; font-family: courier new;">&gt;
+PRvQCHyb(prname=&#8221;9Mm&#8221;)</p>
+<p class="code" style="margin-left: 0.25in; text-indent: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.25in;">where <b style=""><span
+ style="font-family: Courier;">prname</span></b><span
+ style="font-family: Courier;"> </span>is the name<span
+ style="font-family: Courier;">
+</span>of the print-run.</p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.25in;">This function
+supports Mouse (Mm)
+genome only at the moment.</p>
+<p class="MsoNormal" style="margin-left: 0.5in;"><o:p>&nbsp;</o:p></p>
+<ol style="margin-top: 0in;" start="5" type="1">
+  <li class="MsoNormal" style="">For general hybridization quality of
+GenePix format files (.gpr files), run the following command in R:</li>
+</ol>
+<p class="code" style="text-indent: 0.5in; font-family: courier new;">&gt;
+results
+&lt;- gpQuality(organism="Mm")</p>
+<p class="MsoNormal" style="text-indent: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="text-indent: 0.25in;">This function
+supports Mouse (Mm)
+and Human (Hs) genomes only.</p>
+<p class="MsoNormal" style="text-indent: 0.25in;"><o:p>&nbsp;</o:p></p>
+<p class="MsoNormal">6.<span style="">&nbsp;&nbsp;
+</span>Each
+function will generate specific plots and files. For more details about
+each
+function&#8217;s arguments and results, please refer to the corresponding
+section of
+this document and to the online help.</p>
+<p class="MsoNormal">Most users will not be required to use <span
+ style="font-family: courier new;">PRv9mers</span> and <span
+ style="font-family: courier new;">PRvQCHyb</span>. The key function
+for quality control is <span
+ style="font-family: courier new; text-decoration: underline;">gpQuality</span>.<o:p><br>
+<br>
+&nbsp;
+<br>
+</o:p></p>
+<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663192">2.
+Introduction to microarray quality</a></h1>
+<br>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">A microarray experiment is composed of several
+steps,
+including experimental design, sample preparation, and various
+statistical
+analyses (figure 1). They are represented in the microarray lifecycle
+below. As
+microarray technology is complex and sensitive, it is important to
+assess the
+performance of each step before going to the next one. In addition,
+this is
+also a good way to trace back the cycle to understand potential causes
+for
+upstream problems.</p>
+</div>
+<p class="MsoNormal" style="text-align: left;"><br>
+</p>
+<div style="text-align: center;"><img
+ src="images/lifecycle.png" title=""
+ alt="microarray experiment lifecycle" align="top"
+ style="border: 0px solid ; width: 470px; height: 322px;">&nbsp;</div>
+<p class="MsoCaption" align="center" style="text-align: center;">Figure
+1: Microarray
+experiment lifecycle<br>
+</p>
+<div style="text-align: left;"><br>
+<p class="MsoNormal">For spotted array experiments, quality controls
+can be
+summarized into 4 steps:</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="1" type="1">
+  <li class="MsoNormal" style="">Print quality</li>
+</ol>
+<p class="MsoNormal" style="margin-left: 1in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>9mers hybridization</p>
+<p class="MsoNormal" style="margin-left: 1in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Quality Control hybridization</p>
+<ol style="margin-top: 0in;" start="2" type="1">
+  <li class="MsoNormal" style="">mRNA quality</li>
+  <li class="MsoNormal" style="">Array hybridization quality</li>
+  <li class="MsoNormal" style="">Spot quality</li>
+</ol>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class="MsoNormal">Each step must be performed in a sequential order,
+as
+represented in Figure 2.<br>
+</p>
+<p class="MsoNormal"><br>
+</p>
+<p class="MsoNormal" style="text-align: center;"><o:p>&nbsp;</o:p><img
+ src="images/qualityDiagram.png" title=""
+ alt="Quality control steps for microarray experiment"
+ style="width: 576px; height: 336px;"><o:p></o:p></p>
+<p class="MsoCaption" align="center" style="text-align: center;">Figure
+2: Quality
+Control for spotted arrays experiment </p>
+<br>
+<p class="MsoNormal">Our package provides graphical tools to look at
+two of these
+components: print-run quality and array hybridization quality.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">A)<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;
+</span></span></span>Print
+quality:</p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.25in;">This component is
+highly tailored
+to the Shared Genomics Core Facility at UCSF, but the framework can be
+adapted
+to other Core facilities or laboratories printing their arrays. It is
+an
+essential component of a printed array experiment, as any print pin,
+probe or
+slide surface defect will affect the quality of hybridization to the
+slide, and
+this can&#8217;t be fixed by statistics. Only prints that did pass the
+quality
+control check will be used for actual hybridization. </p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">B)<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;
+</span></span></span>Hybridization
+quality. </p>
+<p class="MsoNormal" style="margin-left: 0.25in;">This is a global
+assessment of the
+hybridization performance. It helps determine for example any problem
+with the
+dyes, or uneven hybridization. Then, once you have determined that your
+hybridization is good, you can look at each individual spot quality,
+remove bad
+spots, and perform statistical analysis.</p>
+<p class="MsoNormal"><o:p>&nbsp;<br>
+<br>
+</o:p></p>
+<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663193">3.
+Print-run quality control</a></h1>
+<p class="MsoNormal">When a print-run is completed, it is necessary to
+verify the
+quality of the resulting arrays. This can be done by using two kinds of
+hybridization to the new slides. The first type of hybridization, which
+we term
+&#8220;9mers hyb&#8221;, uses small oligonucleotides (random 9-mers), which will
+hybridize
+to each probe. This hybridization will help to determine the quality of
+spot
+morphology as well as the presence or absence of spotted
+oligonucleotides. The
+resulting data will be used to create a list of all missing spots.</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">The second type of hybridization, which we will
+term Quality
+Control Hybridization (QCHyb), uses mRNA from predefined cell lines
+(e.g. liver
+vs. pool, K562 vs. Human Universal Reference pool from Stratagene).
+These
+hybridizations can be use as a more quantitative description of the
+slides. The
+same comparison hybridizations are done for different print-run,
+assessing their
+reproducibility. QCHybs are also used to verify accuracy
+of GAL
+files, number of missing spots, binding capacity, background signal
+intensity&#8230;</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">The arrayQuality package provides specific tools
+to help
+assess quality of slides for both 9-mers and QC hybridization. </p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><o:p>&nbsp;<br>
+<br>
+</o:p></p>
+<h2><a name="_Toc72663194">3.1 9-mers hybridizations</a></h2>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><br>
+In the package, the graphical function to assess
+9mers
+hybridization quality is <span class="codeChar">PRv9mers()</span>. It
+runs using
+one single command line script. To use it:</p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Copy all 9-mers hybridizations gpr
+files from the
+<b style="">SAME print-run</b> (same GAL file) to a
+directory.</p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Change R working directory to the
+one containing
+your gpr files as described in section 1.</p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Type:</p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&gt;
+<span style="font-family: Courier;">PRv9mers(prname=&#8221;12Mm&#8221;)</span>.</p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal">The <span style="font-family: Courier;">prname</span>
+argument
+represents the name of your print-run. For more details about other
+arguments,
+please refer to the online manual.<br>
+</p>
+<p class="MsoNormal"><br>
+</p>
+<h3><a name="_Toc72663195">Results</a><o:p>&nbsp;</o:p></h3>
+<p class="MsoNormal"><span style="font-family: courier new;">PRv9mers()</span>provides
+the following results:</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span
+ style=""><span style="">1.<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Diagnostic
+plots as image in .png format for each tested slide</p>
+<p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in;">2. An Excel file
+(typically named
+9Mm9mer.xls, where 9Mm is the name of your print-run, as passed to <span
+ class="codeChar">prname</span>) containing for each spot on the slide:</p>
+<p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
+ style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Name and ID of the spot</p>
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
+ style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>The probability of being present or
+absent (p
+from EM algorithm) </p>
+<p class="MsoNormal" style="margin-left: 1in;">A spot is considered
+absent if p
+&lt; 0.5.</p>
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
+ style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>The raw signal intensity (Signal
+column) or
+average raw signal intensity if several files are tested together for
+each
+spot.</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<div style="margin-left: 40px;">&nbsp;&nbsp; 3. An Excel file
+containing all
+missing probe ids, to be used as a quicklist in another software,
+Acuity
+(http://www.axon.com/gn_Acuity.html).<br>
+</div>
+<p class="MsoNormal"><o:p>&nbsp;<br>
+&nbsp;&nbsp;&nbsp; <br>
+</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663196">Description of the diagnostic plots</a> </h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Figure 3 shows an example from a typical 9-mers
+hybridization. This image is divided in 5 plots. </p>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="1" type="1">
+  <li class="MsoNormal" style="">The first column (left) represents
+boxplots of log intensity, by plates (top) and by print-tip group
+(bottom).&nbsp; In this example, you can notice on the boxplot by
+plates
+(top left corner) that plates 44 and 48 have lower intensity and wider
+range
+than the others. Both plates contain mostly empty controls, as designed
+by
+Operon.</li>
+</ol>
+<ol style="margin-top: 0in;" start="1" type="1">
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="2" type="1">
+  <li class="MsoNormal" style="">Central plot: spatial plot of
+intensity. This helps
+to locate missing spots. The color scale reflects the signal intensity,
+the darker the color of the plot, the stronger the signal. Missing
+spots are represented in white. In Figure 3 spatial plot, top right
+corner white spots come from the empty
+spots.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="3" type="1">
+  <li class="MsoNormal" style="">Right column: Density plot of the
+foreground and
+background log intensity. </li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="3" type="1">
+  <ol style="margin-top: 0in;" start="1" type="a">
+    <li class="MsoNormal" style="">Foreground density plot: it should
+be composed of 2 peaks. A smaller peak in the low intensity region
+containing missing spots and negative control spots, and a higher one
+representing the rest of the spots (probes). The number of present and
+absent spots, excluding empty controls, estimated by EM algorithm is
+indicated on the graph.</li>
+  </ol>
+</ol>
+<p class="MsoNormal" style="margin-left: 0.75in;"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="3" type="1">
+  <ol style="margin-top: 0in;" start="2" type="a">
+    <li class="MsoNormal" style="">Background density plot: one peak in
+the low intensity region. If a slide is of good quality, the background
+peak should not overlap too much with the foreground peak corresponding
+to the bulk of the data.</li>
+  </ol>
+</ol>
+<p class="MsoNormal"><o:p>&nbsp;&nbsp;&nbsp; </o:p>Density plots are
+used to compare foreground and background peaks, using the
+X-axis
+scale. They should be clearly separated. The number of missing spots
+should be
+low.<o:p>&nbsp; </o:p>Missing
+spots ids may
+be incorporated in the analysis later, e.g. by down weighting them in
+linear
+models.</p>
+<p class="MsoNormal"><o:p><br>
+</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663197">Example</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">This example uses 9-mer hybridization data
+performed in the
+Functional Genomics Core Facility in UCSF. This print-run was created
+using
+Operon Version 2 Mouse oligonucleotides.</p>
+<p class="code"><o:p></o:p></p>
+<p class="code"><o:p></o:p></p>
+<p class="code" style="font-family: courier new;">&gt;
+library(arrayQuality)</p>
+<p class="code" style="font-family: courier new;">&gt; datadir &lt;-
+system.file("data",
+package="arrayQuality")</p>
+<p class="code" style="font-family: courier new;">&gt;PRv9mers(fnames="12Mm250.gpr",path=datadir,
+prname="12Mm")<br>
+</p>
+<p class="code" style="font-family: courier new;"><br>
+<br>
+</p>
+<p class="MsoNormal" style="text-align: center;"><o:p>&nbsp;</o:p><img
+ src="images/9mersDiagnosticPlot.png" title=""
+ alt="Example of 9-mers hybridization diagnostic plot"
+ style="width: 600px; height: 500px;"><o:p></o:p></p>
+<p class="MsoCaption" align="center" style="text-align: center;">Figure
+3: Example of
+diagnostic plot for 9-mers hybridization</p>
+<p class="MsoNormal"><o:p><br>
+</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h2><a name="_Toc72663199">3.2 Quality Control hybridizations</a><o:p>&nbsp;</o:p></h2>
+<p class="MsoNormal"><br>
+9-mers hybridizations help verify that
+oligonucleotides have
+been spotted properly on the slides. The next print-run quality control
+step
+will be:</p>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span
+ style=""><span style="">1.<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Detect
+any difference in overall signal intensity compared to other print-runs
+</p>
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
+ style=""><span style="">a.<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>70-mers
+oligonucleotides hybridizations </p>
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span
+ style=""><span style="">b.<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Selection
+of several test slides to ensure that the same quantity of material was
+spotted
+across the platter, as a print-run will generate 255 slides using the
+same well
+for one probe. QCHybs are performed using one slide from the beginning
+of the
+print, one from the middle, one from the end (e.g. numbers 20,100 and
+255 in
+the Functional Genomics Core Facility).</p>
+<p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span
+ style=""><span style="">2.<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Check
+if the GAL file was generated properly, i.e. check that no error was
+made with
+ordering or orientation of the plates during the print.</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span
+ style=""><span style="">3.<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Reproducibility:</p>
+<p class="MsoNormal" style="margin-left: 0.5in;">A good way to verify
+the quality of
+a new print is to hybridize known samples to new slides. Then, we can
+compare
+signal intensity from the new slides to existing data, and check that
+there is
+no loss in signal. Log ratios (M) for known samples should be similar
+across
+print-runs. Example of samples used for QCHybs
+includes Human Reference pool, Mouse liver, Mouse lung, with dye swaps.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">The function in the package which performs the
+quality
+assessment for QCHybs is <span style="font-family: Courier;">PRvQCHyb()</span>.
+<br>
+</p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Copy the QCHybs gpr files from the <b>SAME
+print-run</b> (same GAL file) in a directory. </p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Change R working directory to the
+one containing
+your gpr files as described in section 1.</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Type:</p>
+<p class="MsoNormal"
+ style="margin-left: 0.25in; font-family: courier new;">&gt; <span
+ class="codeChar">PRvQCHyb(prname="9Mm")</span></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">where <span class="codeChar">prname</span> is the
+name of the
+print-run. For more details about its arguments, please refer
+to the
+online manual.<br>
+&nbsp;
+<o:p><br>
+<br>
+</o:p></p>
+<h3><a name="_Toc72663200">Results</a><o:p>&nbsp;</o:p></h3>
+<p class="MsoNormal"><span style="font-family: Courier;">PRvQCHyb()</span>
+returns
+a diagnostic plot as an image in .png format for each tested slide.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Throughout our document, we will be using the
+color code
+described in Table 1 to highlight control spots.</p>
+<p class="MsoNormal" style="text-align: left;"><o:p>&nbsp;</o:p></p>
+<div style="text-align: center;"></div>
+<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
+  <tbody>
+    <tr align="left">
+      <td style="vertical-align: top;">Positive controls<br>
+      </td>
+      <td style="vertical-align: top;">Red<br>
+      </td>
+    </tr>
+    <tr align="left">
+      <td style="vertical-align: top;">Empty controls<br>
+      </td>
+      <td style="vertical-align: top;">Blue<br>
+      </td>
+    </tr>
+    <tr align="left">
+      <td style="vertical-align: top;">Negative controls<br>
+      </td>
+      <td style="vertical-align: top;">Navy Blue<br>
+      </td>
+    </tr>
+    <tr align="left">
+      <td style="vertical-align: top;">Probes<br>
+      </td>
+      <td style="vertical-align: top;">Green<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: left;">Missing spots<br>
+      </td>
+      <td style="vertical-align: top; text-align: left;">White</td>
+    </tr>
+  </tbody>
+</table>
+<p class="MsoCaption" align="center" style="text-align: center;"><o:p></o:p><span
+ style="">Table 1: Color code used in arrayQuality<o:p></o:p></span></p>
+<h3><br>
+</h3>
+<h3>Restrictions:<br>
+</h3>
+<p class="MsoNormal">Currently,<span class="codeChar"> PRQCHyb()</span>
+supports
+Mouse genome (Mm) only. We will add Human data as soon as it becomes
+available.</p>
+<p class="MsoNormal"><o:p>&nbsp;<br>
+<br>
+</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663202">Description of the diagnostic plots</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Figure 4 shows an example of a nice print-run
+QCHyb.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="1" type="1">
+  <li class="MsoNormal" style="">MA-plot of raw M values. No
+background subtraction is performed. The colored lines represent the
+loess curves for each print-tip group. The red dots highlight&nbsp; any
+spot with corresponding weigthed value&nbsp; less than 0. Users can
+create their own weigthing scheme or function. Things to look for in a
+MA-plot are saturation of spots and the trend of loess curves, which is
+an indicator of the amount of normalization to be performed.<br>
+  </li>
+</ol>
+<o:p></o:p>
+<ol style="margin-top: 0in;" start="1" type="1">
+</ol>
+<ol style="margin-top: 0in;" start="2" type="1">
+  <li class="MsoNormal" style="">Boxplot of raw M values by print-tip
+group, without background subtraction. </li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="3" type="1">
+  <li class="MsoNormal" style="">Spatial plot of rank of raw M values
+(no background subtraction): Each spot is ranked according to its M
+value. We use a blue to yellow color scale,where blue represents the
+higher rank (1), and yellow represents the lower one. Missing spots are
+represented as white squares.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="4" type="1">
+  <li class="MsoNormal" style="">Spatial plot of A values. The color
+indicates the strength of the signal intensity, i.e. the darker the
+color, the stronger the signal. Missing spots are represented in white.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="5" type="1">
+  <li class="MsoNormal" style="">Histogram of the
+signal-to-noise log-ratio (SNR) for Cy5 and Cy3 channels. The mean and
+the
+variance of the signal are printed on top of the histogram. In
+addition, overlay density of SNr stratified by different control types
+(status) are highlighted. Their color schemes are provided in Table 1.
+The SNR is a good indicator for dye problems. The
+negative
+controls and empty controls density lines should be closer, almost
+superimposed. </li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="6" type="1">
+  <li class="MsoNormal" style="">Comparison of Mvalues of probes known
+to be differentially expressed from the tested array to average Mvalues
+obtained during previous hybridizations. This plot is aimed at
+verifying the reproducibility of print-runs. The dotted lines are the
+diagonal (no change) and the +2/-2 fold change lines. Each probe is
+represented by a number, and described in the file MmDEGenes.xls. Most
+of the spots should lie between the +2/-2
+fold-change regions.
+If the technique was perfect, you should see a straight line on the
+diagonal.
+If any probe falls off this region (number 29 here), you can look up
+its number
+in our probe list in MmDEgenes.xls and get more information about it.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="7" type="1">
+  <li class="MsoNormal" style="">Dot plot of controls A values, without
+background subtraction.
+Controls with more than 3 replicates are represented on the Y-axis, the
+color scheme is represented in Table 1. Intensity of positive controls
+should be in
+the
+high-intensity region, negative and empty controls
+should be
+in the lower intensity region. Positive controls range and
+negative/empty
+controls range should be separated. Replicate spots signal should be
+tight.<br>
+  </li>
+</ol>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663203">Example</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Data for this example was provided by the
+Functional
+Genomics Core Facility in UCSF. We have tested slide number 137 from
+print-run
+9Mm. This print-run uses Operon Version 2 Mouse oligos. Results are
+represented
+figure 4.<br>
+<o:p>&nbsp;</o:p></p>
+<p class="code" style="font-family: courier new;">&gt;
+library(arrayQuality)</p>
+<p class="code" style="font-family: courier new;">&gt; datadir &lt;-
+system.file("data",
+package="arrayQuality")</p>
+<p class="code" style="font-family: courier new;">&gt;
+PRvQCHyb(fnames=&#8221;9Mm137.png&#8221;, path=datadir,
+prname="9Mm")</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<div style="text-align: center;"><o:p></o:p><img
+ src="images/QCHybDiagPlot.png" title=""
+ alt="Example of QCHyb diagnostic plot"
+ style="width: 800px; height: 500px;"><o:p><br>
+</o:p></div>
+<p class="MsoCaption" align="center" style="text-align: center;">Figure
+4: Diagnostic
+plot for print-run Quality Control hybridization</p>
+<p class="MsoNormal">
+</p>
+<o:p></o:p>
+<p class="MsoNormal"><o:p></o:p><span style="font-weight: bold;"><br>
+<br>
+</span></p>
+<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663205">4.
+General hybridization quality</a><br>
+</h1>
+<p class="MsoNormal"><o:p><br>
+&nbsp;<br>
+</o:p></p>
+<p class="MsoNormal">This component is aimed at verifying the
+performance of your
+hybridization, given the good quality of the slide, before any
+preprocessing
+steps or further quality assessment on individual spots. This is where
+you
+determine if your experiment quality is good enough to enter your
+dataset. For
+example, you will need to remove any hybridization with very low SNR,
+or large
+spatial artifacts.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Our package provides two kinds of quality control
+plots. The
+first one is a qualitative quality control measurement as a diagnostic
+plot.
+It is a quick visual way to determine hybridization quality gathering
+information from several statistical tools. More details on individual
+diagnostic plots can be found in the vignette &#8220;marrayPlots&#8221; in the
+package <span style="font-family: courier new;">marray</span>. The
+second
+one is
+a more quantitative comparison of slide quality. We extract some
+statistical
+measures
+from the test slide and we compare them against results obtained for a
+collection
+of slides of &#8220;good quality&#8221; to assess the quality of the
+hybridization. This
+comparison is visualized through a comparative boxplot. Results are
+displayed in a HTML report. Figure 5 shows a screen shot of a typical
+HTML report. Users can click on each image to obtain a higher
+resolution plot.<br>
+<o:p>&nbsp;</o:p></p>
+<p class="MsoNormal">To use this function:<br>
+<o:p>&nbsp;</o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Copy the gpr files from the <b style="">SAME
+print-run</b> (same GAL file) in a directory. </p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Change R working directory to the
+one containing
+your gpr files as described in Section 1<br>
+</p>
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>To generate<span style="font-weight: bold;"> both
+diagnostic plots and comparative boxplots</span> on all files in the
+directory, run:<br>
+<span class="codeChar" style="font-family: courier new;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &gt;
+result &lt;- gpQuality(organism=&#8221;Mm&#8221;)<br>
+<span style="font-family: times new roman,times,serif;"><br
+ style="font-family: times new roman,times,serif;">
+</span>&nbsp; </span><span style=""><span style="">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp; -<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>To generate<span style="font-weight: bold;">
+diagnostic plots only</span>, run:<br>
+&gt; j&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <span style="font-family: courier new;"><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &gt;&nbsp; result &lt;-
+gpQuality(organism="Mm", compBoxplot="FALSE")<br>
+</span></p>
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;"><span
+ style="font-family: courier new;"><span
+ style="font-family: times new roman,times,serif;">In this case,
+quantitative quality measures will not be calculated and the HTML
+report will <span style="font-weight: bold;">not</span> be generated.<br>
+H</span> <br>
+</span></p>
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;">-
+To write down your <span style="font-weight: bold;">quantitative
+quality measures and your normalized data to a file</span>: set <span
+ style="font-family: courier new;">output = TRUE</span> when calling <span
+ style="font-family: courier new;">gpQuality</span>:</p>
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;"><span
+ style="font-family: courier new;">&gt; result &lt;-
+gpQuality(organism="Mm", output=TRUE)</span><br>
+If&nbsp; <br>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; This command will
+create two files: quality.txt, which contains your quality measures,
+and NormalizedData.xls, which contains your normalized M values. If you
+have set <span style="font-family: courier new;">compBoxplot = FALSE</span>,<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; quantitative
+quality measures are not calculated. Therefore, you will not generate
+the quality.txt file.<br>
+<br>
+</p>
+<span class="codeChar" style="font-family: courier new;"></span>
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;">
+</p>
+<p class="MsoNormal" style="margin-left: 0.5in;"><o:p></o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">You can also specify your own collection of good
+quality
+slides using the functions <span class="codeChar"
+ style="font-family: courier new;">globalQuality</span><span
+ style="font-family: courier new;"> </span>and <span class="codeChar"
+ style="font-family: courier new;">qualRefTable</span>. For more
+details about these functions,
+please refer to the online help and the example at the end of this
+Section.<o:p><br>
+</o:p></p>
+<br>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663207">Results</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><span class="codeChar"
+ style="font-family: courier new;">gpQuality()</span> outputs<br>
+</p>
+<ul>
+  <li>In the working directory:</li>
+</ul>
+<p class="MsoNormal" style="margin-left: 39pt; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>two plots for each test slide (a
+diagnostic
+plot and a comparative boxplot)</p>
+<p class="MsoNormal" style="margin-left: 39pt; text-indent: -0.25in;"><span
+ style=""><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>a HTML quality report<br>
+<br>
+</p>
+<ul>
+  <li>In the R global environment, the function returns a list of two
+objects:<span style="font-family: Wingdings;"><span style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;
+    <br>
+    </span></span></span></li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; A
+marrayRaw object describing all tested
+slides</p>
+<p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; A quality
+measures matrix: this matrix contains all comparison measures values
+extracted for each test slide. Each column of the matrix represents a
+different slide.<br>
+</p>
+<ul style="margin-left: 40px;">
+</ul>
+<p class="MsoNormal" style="margin-left: 3pt;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 3pt;">For each slide, you will
+find on
+the report how many of your slide&#8217;s results are below the recommended
+range. If
+you want to specify a directory to store the results, you can do it by
+modifying the argument <span class="codeChar"
+ style="font-family: courier new,courier,monospace;">resdir</span><span
+ style="font-family: courier new,courier,monospace;">
+</span>accordingly. For more
+details about <span class="codeChar" style="font-family: courier new;">gpQuality</span>
+arguments,
+please refer to
+the online manual.<br>
+</p>
+<p class="MsoNormal" style="margin-left: 3pt;"><br>
+</p>
+<p class="MsoNormal" style="margin-left: 3pt; text-align: center;"><img
+ src="images/htmlReport.png" title=""
+ alt="Example ofgpQuality HTML report"
+ style="width: 600px; height: 445px;"><br>
+</p>
+<p class="MsoNormal" style="text-align: center;"><o:p>Figure 5: Example
+of HTML report generated by gpQuality<br>
+</o:p></p>
+<p class="MsoNormal"><o:p><br>
+</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663206">Restrictions</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><span style="font-family: courier new;">gpQuality</span>
+calls two key functions, <span style="font-family: courier new;">maQualityPlots
+</span>and <span style="font-family: courier new;">qualBoxplot</span>.
+<span style="font-family: courier new;">qualBoxplot</span> supports
+Mouse (Mm) and Human (Hs)
+genomes
+only. To generate quality plots for other genomes, you need to set <span
+ style="font-family: courier new;">gpQuality </span>argument <span
+ style="font-family: courier new;">compBoxplot = FALSE</span>. In this
+case, only the diagnostic plots will be generated.<br>
+</p>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><b style="">Description of the
+diagnostic plots:<o:p></o:p></b></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Figure 6 represents an example of a good
+hybridization
+diagnostic plot. </p>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="1" type="1">
+  <li class="MsoNormal" style="">MA-plot of raw M. No
+background subtraction is performed. The colored lines represent the
+loess curves for each print-tip group. The red dots highlight&nbsp; any
+spot with corresponding weigthed value&nbsp; less than 0. Users can
+create their own weigthing scheme or function. Things to look for in a
+MA-plot are saturation of spots and the trend of loess curves, which is
+an indicator of the amount of normalization to be performed.</li>
+</ol>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="2" type="1">
+  <li class="MsoNormal" style="">MA-plot of normalized data density. By
+default, print-tip loess normalization is used. Instead of the typical
+MA-plot, we have used the package "<span
+ style="font-family: courier new;">hexbin</span>" to highlight density
+of dots on the MA-plot. A light yellow color indicates a high density
+of dots, whereas blue color represents a lower density. This plot gives
+you information on the bulk of your data
+intensity
+(low/high signal) </li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="3" type="1">
+  <li class="MsoNormal" style="">Spatial plot of rank of raw M values
+(no background subtraction): Each spot is ranked according to its M
+value. We use a blue to yellow color scale,where blue represents the
+higher rank (1), and yellow represents the lower one. Missing spots are
+represented as white squares. This is a quick way to visually detect
+uneven
+hybridization
+and missing spots.</li>
+</ol>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="4" type="1">
+  <li class="MsoNormal" style="">Spatial plot of normalized M values
+ranks. By default, print-tip loess normalization is used. Each spot is
+ranked according to
+its M value. We use a blue to yellow color scale,where blue represents
+the
+higher rank (1), and yellow represents the lower one. Missing spots are
+represented as white squares. In addition, flagged spots are
+higllighted by a black square. This type of graphical representation
+helps verify that normalization removed any spatial
+effects. </li>
+</ol>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="5" type="1">
+  <li class="MsoNormal" style="">Spatial plot of raw A values. The
+color indicates the strength of the signal intensity, i.e. the darker
+the color, the stronger the signal. Missing spots are represented in
+white.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="6" type="1">
+  <li class="MsoNormal" style="">Histogram of the
+signal-to-noise log-ratio (SNR) for Cy5 and Cy3 channels. The mean and
+the
+variance of the signal are printed on top of the histogram. In
+addition, overlay density of SNR stratified by different control types
+(status) are highlighted. Their color schemes are provided in Table 1.
+The SNR is a good indicator for dye problems. The
+negative
+and empty controls density lines should be closer, almost
+superimposed.</li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="7" type="1">
+  <li class="MsoNormal" style="">Dot plot of controls normalized M
+values. Controls with more than 3 replicates are represented on the
+Y-axis, the color scheme is represented in Table 1. Controls M values
+should be tight. and close to 0.<br>
+  </li>
+</ol>
+<p class="MsoNormal"><o:p></o:p></p>
+<ol style="margin-top: 0in;" start="8" type="1">
+  <li class="MsoNormal" style="">Dot plot of controls A values, without
+background subtraction.
+Controls with more than 3 replicates are represented on the Y-axis, the
+color scheme is represented in Table 1. Intensity of positive controls
+should be in
+the
+high-intensity region, negative and empty controls
+should be
+in the lower intensity region. Positive controls range and
+negative/empty
+controls range should be separated. <br>
+  </li>
+</ol>
+<br>
+<h3><a name="_Toc72663208">Description of the comparative Boxplot:</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Figure 7 shows an example of a comparative boxplot.</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">We have chosen a wide range of measures to
+quantify the
+quality of a typical hybridization: single channel measures
+(range of
+foreground
+signal, MAD of background, signal to noise ratio&#8230;), two channel
+measures
+(median A values for each type of controls, amount of normalization
+needed&#8230;),
+percentage of flagged spots... Some measures have been negated such
+that the
+quality scale had an increasing trend from problematic to good quality.
+<br>
+</p>
+<p class="MsoNormal">For each measure, we have represented the
+following on the graph :<br>
+</p>
+<p class="MsoNormal" style="margin-left: 0.25in;"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Boxplot of the reference slides values. </p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>1<sup>st</sup> and 3<sup>rd</sup> quantiles before
+scaling for each boxplot.</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span
+ style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Y-axis on the right : for each
+measure,
+we have
+printed 2 values. The first one is the percentage of reference slides
+measures
+under your slide&#8217;s result. The second one your slide value for this
+measure, before
+scaling.<br>
+</p>
+&nbsp;&nbsp;&nbsp; &nbsp; -&nbsp;&nbsp;&nbsp; We have scaled all the
+results to be
+able to
+compare them on the same graph. &nbsp;
+<p class="MsoNormal"><o:p></o:p></p>
+&nbsp;&nbsp;&nbsp; &nbsp;
+-&nbsp;&nbsp; The red dots are the test slide scaled values<br>
+<br>
+&nbsp;<br>
+The 16 measures we have selected are listed below. <br>
+<br>
+<p class="MsoNormal" style="margin-left: 40px;">1. <span
+ style="font-weight: bold;">rangeRf</span>: Range of Cy5 foreground,
+where the range is defined by:<br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">rangeRf = max(log2
+(median Cy5 foreground)) - min(log2(median Cy5 foreground))<br>
+where median Cy5 foreground corresponds to the "F635 Median" column of
+the gpr file.<br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>&nbsp;</o:p></p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">2. <span
+ style="font-weight: bold;">rangeGf</span>: Range of Cy3 foreground,
+where the range is defined by:<br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">rangeGf = max(log2
+(median Cy3 foreground)) - min(log2(median Cy3 foreground))<br>
+where median Cy3 foreground corresponds to the "F532 Median" column of
+the gpr file.</p>
+<p class="MsoNormal" style="margin-left: 40px;"><br>
+3.<b> -RbMad: </b>Cy5 background MAD<b><br>
+</b>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">RbMad = mad[log2(Cy5
+background)]</p>
+<p class="MsoNormal" style="margin-left: 40px;">where:<br>
+- Cy5 background corresponds to the "B635 Median" column of the gpr file<br>
+- MAD = <span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">median{
+| Y &#8211;mu | }, when Y is normal<br>
+<br>
+</span></p>
+<div style="margin-left: 40px;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p></o:p></p>
+<div style="margin-left: 40px;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p></o:p></p>
+<div style="margin-left: 40px;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;"><span lang="DA" style="">4.&nbsp;
+-<b>GbMad: </b></span>Cy3 background MAD<b><br>
+</b>
+</p>
+<div style="margin-left: 40px;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;">GbMad = mad[log2(Cy3
+background)]</p>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;">where:<br>
+- Cy3 background corresponds to the "B532 Median" column of the gpr file<br>
+- MAD = <span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">median{
+| Y &#8211;mu | }, when Y is normal<br>
+</span>
+<p><br>
+</p>
+5.&nbsp; <span style="font-weight: bold;">Median</span> <b>RS2N:</b>
+Median Signal To Noise log-ratio for Cy5<br>
+<p class="MsoNormal">RS2N = log2( mean Cy5 foreground / Median Cy5
+background )<br>
+</p>
+<p class="MsoNormal">RS2Nmedian = median(RS2N)&nbsp;</p>
+<p class="MsoNormal"><o:p>where:<br>
+- mean Cy5 foreground is the "F635 Mean" column of the gpr file<br>
+- median Cy5 background is the "B635 Median" column of the gpr file<br>
+&nbsp;</o:p></p>
+<p class="MsoNormal">6. <b>Median GS2N: </b>Median Signal To Noise
+log-ratio for Cy3</p>
+<p class="MsoNormal">GS2N = log2( mean Cy3 foreground / Median Cy3
+background )<br>
+</p>
+<p class="MsoNormal">GS2Nmedian = median(GS2N)<br>
+</p>
+<p class="MsoNormal">where:<br>
+- mean Cy3 foreground is the "F532 Mean" column of the gpr file<br>
+- median Cy3 background is the "B532 Median" column of the gpr file<br>
+</p>
+</div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p></o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">7. <span
+ style="font-weight: bold;">-Median A for empty control</span>:<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">Median A = [
+log2(median Cy5 foreground) + log2(Cy3 foreground) ] / 2</p>
+<p class="MsoNormal" style="margin-left: 40px;">Median A for empty
+control = median( A(Empty controls))</p>
+<p class="MsoNormal" style="margin-left: 40px;">where:<br>
+- median Cy5 foreground corresponds to the "F635 Median" column of the
+gpr file<br>
+- median Cy3 foreground corresponds to the "F532 Median" column of the
+gpr file<br>
+- Empty controls are the probes labelled "Empty" <br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>&nbsp;</o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">8. <b>-Median A for
+negative control</b>:<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">Median A = [
+log2(median Cy5 foreground) + log2(Cy3 foreground) ] / 2</p>
+<p class="MsoNormal" style="margin-left: 40px;">Median A for negative
+control = median( A(Negativecontrols))</p>
+<p class="MsoNormal" style="margin-left: 40px;">where:<br>
+- median Cy5 foreground corresponds to the "F635 Median" column of the
+gpr file<br>
+- median Cy3 foreground corresponds to the "F532 Median" column of the
+gpr file<br>
+- Negative controls are the probes labelled "Negative" <br>
+<br>
+</p>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">9.&nbsp;<b>Median A
+values for Positive controls:</b>&nbsp;</p>
+<p class="MsoNormal" style="margin-left: 40px;"><b><o:p></o:p></b></p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">A = [ log2(median Cy5
+foreground) + log2(Cy3 foreground) ] / 2</p>
+<p class="MsoNormal" style="margin-left: 40px;">Median A for positive
+control = median( A(Positive controls))</p>
+<p class="MsoNormal" style="margin-left: 40px;">where:<br>
+- median Cy5 foreground corresponds to the "F635 Median" column of the
+gpr file<br>
+- median Cy3 foreground corresponds to the "F532 Median" column of the
+gpr file<br>
+- Positive controls are the probes labelled "Positive" <br>
+</p>
+<div style="margin-left: 40px;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p><br>
+</o:p></p>
+<p class="MsoNormal" style="margin-left: 40px;">10. <b></b><span
+ style="font-weight: bold;">Difference between A values for Positive
+controls and&nbsp; A values for
+Negative controls</span></p>
+<div style="margin-left: 40px; font-weight: bold;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>difference =&nbsp;
+</o:p>median( A(Positive controls)) - median( A(Negativecontrols))<o:p><br>
+<br>
+</o:p></p>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;">
+</div>
+<p class="MsoNormal" style="margin-left: 40px;">11. <b>-varRepA</b>:
+variance of replicates spots A values <br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">varRepA = var[
+A(replicates) ]<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">where:<br>
+- A = [ log2(median Cy5 foreground) + log2(Cy3 foreground) ] / 2<br>
+- median Cy5 foreground corresponds to the "F635 Median" column of the
+gpr file<br>
+- median Cy3 foreground corresponds to the "F532 Median" column of the
+gpr file<br>
+<o:p><br>
+<br>
+</o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">12. <b>-msePtip</b>:
+MSE of M values by print-tip group, no background subtraction</p>
+<p class="MsoNormal" style="margin-left: 40px;">&nbsp;M =&nbsp;
+log2(Median Cy5 foreground) - log2(Median Cy3 foreground)<br>
+msePtip = MSE( mean M by print-tip)<o:p><br>
+</o:p></p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>where:<br>
+</o:p>- median Cy5 foreground corresponds to the "F635 Median" column
+of the gpr file<br>
+- median Cy3 foreground corresponds to the "F532 Median" column of the
+gpr file<br>
+- <span style="font-size: 9.5pt;">MSE(X) = <a
+ href="http://stat-www.berkeley.edu/users/stark/SticiGui/Text/#expectation">E</a></span>(<span
+ style="font-size: 9.5pt;"> (X-<em><span style="font-family: Arial;">t</span></em>)<sup>2</sup>
+</span>), with t a parameter and X an estimator of t.<br>
+<o:p>&nbsp;</o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">13. <b>-mseFit</b>:
+MSE of lowess curve</p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">fit = lowess(A, M)<o:p>&nbsp;</o:p><br>
+mseFit = MSE(fit$y)<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>where:<br>
+- </o:p>A = [ log2(median Cy5 foreground) + log2(Cy3 foreground) ] / 2<br>
+- M =&nbsp; log2(Median Cy5 foreground) - log2(Median Cy3 foreground)<br>
+<o:p></o:p>
+- median Cy5 foreground corresponds to the "F635 Median" column of the
+gpr file<br>
+- median Cy3 foreground corresponds to the "F532 Median" column of the
+gpr file<br>
+- <span style="font-size: 9.5pt;">MSE(X) = <a
+ href="http://stat-www.berkeley.edu/users/stark/SticiGui/Text/#expectation">E</a></span>(<span
+ style="font-size: 9.5pt;"> (X-<em><span style="font-family: Arial;">t</span></em>)<sup>2</sup>
+</span>), with t a parameter and X an estimator of t.<br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>&nbsp;</o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">14. <span
+ style="font-weight: bold;">-Percentage of flagged spots</span><br
+ style="font-weight: bold;">
+<br>
+[number of spot with flag &lt; 0 / number of spots] * 100</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">where flag is the
+information from the "Flags" column of the gpr file. Only spots with
+flag less than 0 are taken into account.<br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p>&nbsp;</o:p><span
+ lang="DA" style=""><o:p></o:p></span><br>
+15. <b>-M values MMRmad<br>
+</b></p>
+<p class="MsoNormal" style="margin-left: 40px;">MMR = Mmean &#8211; Mmedian<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">MAD(MMR)<br>
+<br>
+where:<br>
+- Mmean =&nbsp; log2(Mean Cy5 foreground) - log2(Mean Cy3 foreground)<br>
+M values calculated using mean signal<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">- Mmedian = log2(Median
+Cy5 foreground) - log2(Median Cy3 foreground)<br>
+M values calculated using median signal<br>
+</p>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">- mean Cy5 (Cy3)
+foreground is the "F635 Mean" ("F532 Mean") column of the gpr file <br>
+- median Cy5 (Cy3) foreground is the "F635 Median" ("F532
+Median")&nbsp; column of the gpr file<br>
+- MAD = <span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">median{
+| Y &#8211;mu | }, when Y is normal<br>
+</span><o:p>&nbsp;</o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;">16. <span
+ style="font-weight: bold;">-Percentage of spots with abs[MMR] &gt; 0.5</span><br
+ style="font-weight: bold;">
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">where:<br>
+- MMR = Mmean &#8211; Mmedian</p>
+<p class="MsoNormal" style="margin-left: 40px;">- Mmean =&nbsp;
+log2(Mean Cy5 foreground) - log2(Mean Cy3 foreground)<br>
+M values calculated using mean signal<br>
+</p>
+<p class="MsoNormal" style="margin-left: 40px;">- Mmedian = log2(Median
+Cy5 foreground) - log2(Median Cy3 foreground)<br>
+M values calculated using median signal<br>
+</p>
+<div style="margin-left: 40px;">
+</div>
+<div style="margin-left: 40px;">- mean Cy5 (Cy3) foreground is the
+"F635 Mean" ("F532 Mean") column of the gpr file <br>
+- median Cy5 (Cy3) foreground is the "F635 Median" ("F532
+Median")&nbsp; column of the gpr file<br>
+</div>
+<div style="margin-left: 40px;"></div>
+<p class="MsoNormal" style="margin-left: 40px;"><o:p></o:p></p>
+<div style="margin-left: 40px;"></div>
+<div style="margin-left: 40px;"></div>
+<span style="font-family: &quot;Times New Roman&quot;;"><span style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;</span></span></span><br>
+<br>
+<p class="MsoNormal"><o:p></o:p></p>
+<h3><a name="_Toc72663209">Example</a></h3>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal">Data for this example was provided by the
+Functional
+Genomics Core Facility in UCSF. We have tested slide number "137" from
+print-run
+"9Mm". This array was fabricated using Operon Version 2 Mouse oligos
+and the hybridization measures differential gene expression in two RNA
+samples, Mouse Liver and Mouse Reference Pool. Results are
+represented Figure 5 and Figure 6.<br>
+<br>
+</p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="code" style="font-family: times new roman,times,serif;">To
+generate diagnostic plots, comparative boxplots, HTML report and to
+write your quality measure and normalized data to a file in a directory
+named "Results":</p>
+<p class="code" style="font-family: courier new;">&gt;
+library(arrayQuality)</p>
+<p class="code" style="font-family: courier new;">&gt; datadir &lt;-
+system.file("data",
+package="arrayQuality")</p>
+<p class="code" align="left"
+ style="text-align: left; font-family: courier new;">&gt; result &lt;-
+gpQuality(<span style="color: black;">fnames = "9Mm137.gpr", path =
+datadir,<o:p></o:p>
+organism = &#8221;Mm&#8221;, output = TRUE, resdir = "Results")<o:p></o:p></span></p>
+<p class="MsoNormal"><o:p></o:p></p>
+<p class="MsoNormal"><o:p><br>
+</o:p></p>
+<div style="text-align: center;"><img
+ src="images/genHybDiagPlot.png" title=""
+ alt="Example of general hybridization diagnostic plot"
+ style="width: 576px; height: 432px;"><o:p><br>
+&nbsp;<br>
+</o:p>Figure 6: General hybridization quality diagnostic plot<br>
+<div style="text-align: left;"><br>
+<br>
+<div style="text-align: center;"><img
+ src="images/comparativeBoxplot.png" title=""
+ alt="General hybridization quality: comparative boxplot"
+ style="width: 500px; height: 375px;"><br>
+</div>
+</div>
+</div>
+<p class="MsoCaption" align="center" style="text-align: center;">Figure
+7:
+Comparative boxplot </p>
+<p class="MsoNormal"><o:p></o:p></p>
+<br>
+<br>
+<br>
+The comparative boxplot is created using reference slides from the
+Functional Genomics Core Facility in UCSF, and references are provided
+for Human and Mouse genomes only.&nbsp; If you would like to use your
+own set of reference slides, you will need to follow a few steps to
+create the necessary look-up tables. This feature can be use for
+example if you want to study hybridization quality for other genomes,
+or if you would like to compare slide quality within a a large dataset.
+To generate your own references:<br>
+<br>
+&nbsp;&nbsp;&nbsp; 1. Gather the slides of "good" quality you would
+like to use as reference
+in a directory, for example "MyReferences". Slides can be from
+different print-runs.<br>
+<br>
+&nbsp;&nbsp;&nbsp; 2. Change R working directory to "MyReferences", as
+described in Section 1.<br>
+<br>
+&nbsp;&nbsp;&nbsp; 3. Load arrayQuality package by typing <span
+ style="font-family: courier new;">library(arrayQuality)</span> in R<br>
+<br>
+&nbsp;&nbsp;&nbsp; 4. Create your reference quality measures by typing:<br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: courier new;">&gt;
+myReference &lt;-&nbsp; globalQuality()</span><br
+ style="font-family: courier new;">
+<br>
+&nbsp;&nbsp;&nbsp; 5. Create a scaling look-up table for the boxplot:<br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: courier new;">&gt;
+myScalingTable &lt;- qualRefTable()</span><br
+ style="font-family: courier new;">
+<br>
+&nbsp;&nbsp;&nbsp; 6. Change R working directory to the directory
+containing slides&nbsp; you
+would like to test, as described in Section 1. You can only compare
+slides from the same print-run here. If you have an experiment
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; using
+two print-runs, you will need to run gpQuality two times.<br>
+<br>
+&nbsp;&nbsp;&nbsp; 7. Run gpQuality using the reference measures and
+the scaling table you have generated:<br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: courier new;">&gt;
+results &lt;- gpQuality(reference = myReference, scalingTable =
+myScalingTable)</span><br>
+&nbsp;&nbsp;&nbsp; Other <span style="font-family: courier new;">gpQuality
+</span>arguments described above can also be applied here.<br>
+</div>
+<p class="MsoCaption" style="text-align: left;"><br>
+</p>
+</body>
+</html>
