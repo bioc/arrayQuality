@@ -12,9 +12,6 @@ PRv9mers(fnames, path = ".", dev = "png", DEBUG = FALSE, prargs = NULL, samepr =
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 
-  \item{pch}{point style for different control samples.}
-  \item{col}{color code for different control samples.}
-
   \item{fnames}{A "character" string naming the input files.}
   \item{path}{A "character" string representing the data directory. By
           default this is set to the current working directory (".").}
@@ -45,7 +42,6 @@ PRv9mers(fnames, path = ".", dev = "png", DEBUG = FALSE, prargs = NULL, samepr =
 
 \author{Jean Yee Hwa Yang}
 
-\seealso{ ~~objects to See Also as \code{\link{~~fun~~}}, ~~~ }
 \examples{
    datadir <- system.file("data", package="arrayQuality")
    PRv9mers(fnames="12Mm250.gpr", path=datadir, prname="12Mm")

@@ -18,7 +18,7 @@
 ## Combines read.marrayRaw, maQualityMain, gpTools
 ## One slide only!!!
 
-## returns a list of vector containing infor from grp file column
+## returns a list of vector containing info from grp file column
 readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
                      sep ="\t", quote= "",...)
   {
@@ -129,7 +129,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ## Argument: result of readGPR
 ## Returns: matrix of numbers
 
-slideQuality <- function(gprData=NULL,output = TRUE, DEBUG=FALSE,...)
+slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
   {
     if (DEBUG) print("SlideQuality starting")
     
@@ -760,13 +760,13 @@ qualityScore <- function(slidequality, organism=c("Mm", "Hs"), reference=NULL)
 
   }
 
-
+# Reads in gpr files
+# returns matrix of QC measures
 globalQuality <- function(fnames = NULL, path = ".",
                           organism=c("Mm", "Hs"),
-                          output=TRUE,# plot=TRUE,
+                          output=FALSE,
                           resdir=".",
-                          dev="png", #set default to be png 
-                          DEBUG = TRUE,...)
+                          DEBUG = FALSE,...)
   {
     # Check input arguments
     if (DEBUG) print("Starting globalQuality")
@@ -798,7 +798,6 @@ globalQuality <- function(fnames = NULL, path = ".",
     if (output)
       write.table(quality, "quality.txt",sep="\t", col.names=NA)
     
-    
     return(quality)
   }
   
@@ -819,8 +818,11 @@ globalQuality <- function(fnames = NULL, path = ".",
 # slideQuality and globalQuality respectively
 
 
-qualBoxplot <- function(arrayQuality,  reference=NULL, scalingTable=NULL, organism=c("Mm", "Hs"),...)
+qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, organism=c("Mm", "Hs"),...)
   {
+    if (is.null(arrayQuality) || missing(arrayQuality))
+      stop("No data to plot")
+    
     print("starting plot")
     # Reference = output of globalQuality for ref slides
     # if NULL, reads in matrix store as RData

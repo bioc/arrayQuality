@@ -10,8 +10,10 @@
 }
 
 \source{These data were provided by members of the UCSF Shared
-  functional genomics core lab.}
+  Functional Genomics Core Facility.}
 
 \keyword{datasets}
+
+
 
 

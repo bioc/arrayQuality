@@ -1,8 +1,9 @@
 Package: arrayQuality
-Version: 0.0.8
+Version: 0.0.9
 Date: 2004-04-90
 Title: Assessing array quality on spotted arrays
-Depends:  R (>= 1.4.0), marray, mclust
+Depends:  R (>= 1.4.0), marray, mclust 
+Suggests:
 Author: Agnes Paquet and Jean Yee Hwa Yang <yeehwa@stat.berkeley.edu>
 Maintainer: A. Paquet <apaquet@medsfgh.ucsf.edu>
 Description: Functions for performing print-run and array level quality assessment. 
