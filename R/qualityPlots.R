@@ -226,11 +226,14 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 maQualityPlots <-  function(mraw, headerInfo="", save = TRUE, 
                             dev = "png",  #set default to be png
                             col, badspotfunction,
-                            DEBUG=FALSE, ...)
+                            DEBUG=TRUE, ...)
 {
   require(hexbin)
   if (DEBUG) print("function starting")
-  mraw <- mraw[,1]
+
+  for(i in 1:dim(mraw)[2])
+    {
+  mraw <- mraw[,i]
   opt <- list(...)
 
   ## re-evaluate W
@@ -345,5 +348,6 @@ maQualityPlots <-  function(mraw, headerInfo="", save = TRUE,
     cat(paste("save as", fname, "\n"))
     dev.off()
   }
+}
 }
 

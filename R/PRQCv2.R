@@ -5,8 +5,6 @@
 ## Two functions: PRvQCHyb
 ####################################################### 
 
-## setwd("C:/MyDoc/Projects/SFGH/Quality/PrintRun/QCHyb/")
-## source("C:/MyDoc/Projects/Rpackages/arrayQuality/R/PRQCv2.R")
 ## PRvQCHyb(fnames="9mm.186.gpr", prname="9Mm", DEBUG=TRUE)
 ## PRvQCHyb(path="9Mm", prname="9Mm", DEBUG=TRUE)
 
@@ -45,8 +43,9 @@ PRvQCHyb<-  function(fnames,
   }else {
     resdir <- file.path(path, paste(prname,"PRQC", sep=""))    
   }
-  
-  dir.create(resdir)
+
+  if(!file.exists(resdir))
+    dir.create(resdir)
   if(DEBUG) print(resdir)
   
   for(f in fnames)
@@ -180,7 +179,7 @@ PRvQCHyb<-  function(fnames,
       layout(1)
       par(mar=c(2,2,4,2))
       mtext(plotdef$main, line=3)
-      mrawheader <- readGPRHeaders(f)
+      mrawheader <- readGPRHeaders(file.path(path,f))
       mtext(paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain), line=2, cex=0.8)
       if(DEBUG) print("Done...")
       

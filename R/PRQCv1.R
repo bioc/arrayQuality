@@ -6,10 +6,9 @@
 ##              : PRvQCHyb
 ####################################################### 
 
-## setwd("C:/MyDoc/Projects/SFGH/Quality/PrintRun/9mers/")
-## source("C:/MyDoc/Projects/Rpackages/arrayQuality/R/PRQCv1.R")
-## TOUSE: PRv9mers(fnames="9Mm.28.gpr", path="09Mm", prname="09Mm", DEBUG=TRUE)
-## PRv9mers(path="08Hs", prname="08Hs", DEBUG=TRUE)
+## TOUSE:
+# PRv9mers(fnames="9Mm.28.gpr", path="09Mm", prname="09Mm", DEBUG=TRUE)
+# PRv9mers(path="08Hs", prname="08Hs", DEBUG=TRUE)
 
 PRv9mers<-  function(fnames,
                     path=".",
@@ -34,17 +33,21 @@ PRv9mers<-  function(fnames,
   if (DEBUG) print("Getting File Names")
   ## Getting File names
   if (missing(fnames))
-    fnames <- file.path(path, dir(path, pattern = "*\\.gpr$"))
+#    fnames <- file.path(path, dir(path, pattern = "*\\.gpr$"))
+    fnames <- dir(path, pattern = "*\\.gpr$")
   
 
   if (is.null(path)) {
     fnames <- fnames
     resdir <- paste(prname, "PRQC", sep="")
   }else {
+    fnames <- file.path(path, fnames)
     resdir <- file.path(path, paste(prname,"PRQC", sep=""))
-    #fnames <- file.path(path, fnames)
   }
-  dir.create(resdir)
+
+  if(!file.exists(resdir))
+    dir.create(resdir)
+  
   print(resdir)
   
   for(f in fnames)
@@ -60,9 +63,8 @@ PRv9mers<-  function(fnames,
       ## Set up arguments
       read.args <- maDotsMatch(Args, formals(args("read.GenePix")))
       read.args$fnames <- f
-      #read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
-       read.args$name.Rf <- read.args$name.Rb <- NULL
-      read.args$path <- path
+      read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
+      print("TESTING 1")
       if(DEBUG) print(read.args$path)
       read.args <- c(read.args, list(name.Rf=NULL, name.Rb=NULL))
       if(DEBUG) cat("Reading", read.args$file, "...\n")
