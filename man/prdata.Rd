@@ -1,0 +1,17 @@
+\name{prdata}
+\alias{9Mm137.gpr}
+\alias{12Mm250.gpr}
+
+\title{Example GPR files}
+
+\description{
+  9Mm137.gpr is QCHyb from 9Mm printrun.\\
+  12Mm250.gpr is 9mers Hyb from 12Mm printrun.
+}
+
+\source{These data were provided by members of the UCSF Shared
+  functional genomics core lab.}
+
+\keyword{datasets}
+
+

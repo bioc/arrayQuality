@@ -1,0 +1,335 @@
+##########################################################3
+## Quality control plots
+## 
+## Created from maDiagnPlots.R
+## Modified March, 17, 2003
+##
+## source("C:/MyDoc/Projects/Rpackages/arrayQuality/R/qualityPlots.R")
+
+
+
+setCtlCol <- function(mdata)
+  {
+    colcode <- c(2:(length(unique(as.integer(maControls(mdata))))+1))
+    tmp <- levels(maControls(mdata));  ctlcode <- c()
+    if("Positive" %in% tmp) ctlcode <- c(ctlcode, "Positive")
+    if("probes" %in% tmp) ctlcode <- c(ctlcode, "probes")
+    if("Negative" %in% tmp) ctlcode <- c(ctlcode, "Negative")
+    if("Empty" %in% tmp) ctlcode <- c(ctlcode, "Empty")
+    names(colcode) <- c(ctlcode, setdiff(tmp, ctlcode))
+    return(colcode)
+  }
+
+########################
+## [Internal Function]
+## Gene Pix reweighting
+########################
+gpFlagWt <- function(x)
+{
+  res <- rep(NA, length(x))
+  res[x < -60] <- -100
+  res[x == -50] <- 0
+  res[x > -50] <- 100
+  return(as.matrix(res))
+}
+
+##########################################################
+## [Internal Function]
+## Dot plot:  not really for general use [Internal Function]
+##########################################################
+qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, ...)
+  {
+    newdata <- eval(call(xvar, mdata))
+    xlim <- range(newdata, na.rm=TRUE)
+    Cindex <- maControls(mdata) != "probes"
+    Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))  ## combined control status and name
+    IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
+    y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
+    
+    if(length(y[names(y) != "probes"]) != 0)  ## check that there exist control spots
+      {
+        ## There are control spots
+        exty <- lapply(y[names(y) != "probes"], function(x){
+          ext <- split(x, x[, IDindex])
+          extid <- lapply(ext, function(xx){as.integer(row.names(xx))})
+          extid[lapply(extid, length) > nrep]
+        })
+        exty <- exty[lapply(exty, length) != 0]
+        ylim <- c(1, sum(unlist(lapply(exty, length))))
+        
+        par(mar=c(4,7,3,2), cex=1)  ## A wide left side to allow for gene names
+        plot(1,1, type="n", xlim=xlim, ylim=ylim, axes=FALSE, xlab=xvar, ylab="", ...)
+        ii <- 1
+        for(i in 1:length(exty))
+          for(j in 1:length(exty[[i]]))
+            {
+              ind <- exty[[i]][[j]]
+              points(newdata[ind], rep(ii, length(newdata[ind])), pch=pch, col=colcode[names(exty)[i]])
+              points(median(newdata[ind], na.rm=TRUE), ii, pch=18, col="black")
+              ii <- ii + 1
+            }
+        axis(1)
+        lab <- paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep="")
+        axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.6) 
+        box()
+      }
+     else
+       {
+         ## There are NO control spots
+         plot(1, 1, axes=FALSE, xlab="", ylab="", type="n")
+         text(1, 1, "No Control Genes")
+         box()
+       }
+    return()
+  }
+
+
+##########################################################
+## [Internal Function]
+## Hexbin Plots
+##########################################################
+
+qpHexbin <-  function(mdata, main="", ...)
+{
+  par(mar=c(5,4,3,2))
+  y <- maM(mdata)
+  x <- maA(mdata)
+  nalim <- !is.na(x) & !is.na(y)
+  bin <- hexbin(x[nalim],y[nalim])
+  col <- BTY
+  maxcnt  <-  max(bin$cnt)
+  colorcut <-  seq(0, 1, length = min(17,maxcnt))
+ 
+  yrange <- c(min(maM(mdata), na.rm=TRUE), max(maM(mdata), na.rm=TRUE) + 1)
+  plot(bin$xbnds, bin$ybnds, type = "n", xlab="A", ylab="M", ylim=yrange, main=main)
+  hexagons(bin, colramp = col, colorcut = colorcut, maxcnt = maxcnt)
+
+  par(mar=c(2,1,2,1))
+  plot(seq(-0, 4, length=11),  -1:9, type="n", axes=FALSE, xlab="", ylab="")
+  hex.legend(legend=4, ysize=8, lcex=1, inner=1,  maxcnt = maxcnt,
+             colorcut= colorcut, colramp = col)
+}
+
+
+##########################################################
+## [Internal Function]
+## MA-Plots with bad spots highlighted
+##########################################################
+
+qpMAPlots <-  function(mdata, addp=TRUE, main="", ...)
+{
+  opt <- list(...)
+  par(mar=c(5,4,3,2), cex=0.6)
+  y <- max(maM(mdata), na.rm=TRUE) + 2
+  x <- min(maA(mdata), na.rm=TRUE) 
+  defs <- maDotsDefaults(opt, maDefaultPar(mdata, x="maA", y="maM", z="maPrintTip"))
+  plot(mdata, lines.func=NULL, legend.func=NULL, col="gray",
+       ylim=c(min(maM(mdata), na.rm=TRUE),y),  main=main) ## took xlim=c(0,16) out
+  abline(h=0,col="blue",lwd=2.5, lty=2)  
+  legend.func <- do.call("maLegendLines", defs$def.legend)
+  legend.func(x, y)
+  ## HARD CODE red represents bad spots
+  if(addp) points(mdata, subset = maW(mdata) < 0, col="red", pch=18, cex=0.6)
+  par(mar=c(5,4,4,2) + 0.1)
+}
+
+
+##########################################################
+## [Internal Function]
+## Spatial plots
+##########################################################
+
+qpImage <- function(mdata, xvar="maM", main="", overlay=NULL, ol.col="red", ...)
+{
+  par(mar=c(2,3,5,2))
+  #convert marrayRaw into marrayNorm, needed for assignment
+  if(xvar == "maM")
+    {
+      tmpNorm <- mdata
+      if(class(mdata) != "marrayNorm")
+        tmpNorm <- as(mdata, "marrayNorm")
+      tmpNorm@maM <- as.matrix(rank(as.numeric(eval(call(xvar, mdata)))))
+      tmp <- image(tmpNorm, xvar="maM", main=main, bar=FALSE, overlay=overlay, ol.col=ol.col, ...)
+    }
+  else
+    tmp <- image(mdata, xvar=xvar, main=main, bar=FALSE, zlim=c(0,16), overlay=overlay, ol.col=ol.col, ...)
+  par(mar=c(2,1, 5,4))
+  maColorBar(tmp$x.bar, horizontal = FALSE, col = tmp$x.col,  main = "")
+  par(mar=c(5,4,4,2) + 0.1) ## set back to default
+}
+
+
+##########################################################
+## [Internal Function]
+## Signal to Noise
+##########################################################
+
+qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
+  {
+    
+    if(channel == "red"){
+      if(length(maRb(mdata))!=0)
+        S2N <- as.vector(log(maRf(mdata),2) - log(maRb(mdata),2))
+      else
+        S2N <- as.vector(log(maRf(mdata),2))}
+ 
+    if(channel == "green"){
+      if(length(maGb(mdata))!=0)
+        S2N <- as.vector(log(maGf(mdata),2) - log(maGb(mdata),2))
+      else
+        S2N <- as.vector(log(maGf(mdata),2))}
+    
+    lab <- paste("mean:", round(mean(rm.na(S2N)), 2)," : ", "var:", round(var(rm.na(S2N)), 2))
+    hist(rm.na(S2N), main=lab, col=channel, nclass=50, freq=FALSE, ylim=c(0,1.1));
+    
+    if(length(maControls(mdata))!=0)
+      {
+        tmp <- split(S2N, maControls(mdata))
+        bw <- sd(rm.na(S2N)/4)
+        tmp2 <- lapply(tmp, function(x){density(rm.na(x), bw=bw)})
+        for(i in 1:length(tmp2))
+          lines(tmp2[[i]], lwd=2, col=colcode[names(tmp2)[i]])
+        xrange <- range(rm.na(S2N))
+        xcood <- xrange[1] + (xrange[2]-xrange[1]) * 0.7
+        legend(xcood, 1, names(tmp), lty=1, lwd=2, col=colcode[names(tmp)], cex=0.8)
+      }
+  }
+
+##########################################################
+## [Internal Function]
+## rm RM data
+##########################################################
+rm.na <- 
+  function (x) 
+  {
+    ind <- is.na(x) | is.nan(x) | is.infinite(x)
+    return(x[!ind])
+  }
+
+
+## mraw == marrayRaw object
+## mrawheader == Heading information
+maQualityPlots <-  function(mraw, headerInfo="", save = TRUE, 
+                            dev = "png",  #set default to be png
+                            col, badspotfunction,
+                            DEBUG=FALSE, ...)
+{
+  require(hexbin)
+  if (DEBUG) print("function starting")
+  mraw <- mraw[,1]
+  opt <- list(...)
+
+  ## re-evaluate W
+  if (DEBUG) print("Re-evaluate Weigth")
+  if(missing(badspotfunction))
+    {
+      tmp <- do.call("gpFlagWt", list(mraw@maW))
+      mraw@maW <- tmp
+    }
+  else
+    if(!is.null(badspotfunction))
+      mraw@maW <- do.call(badspotfunction, list(mraw@maW))
+
+  ## setting controls cols
+  ifelse(missing(col), colcode<- setCtlCol(mraw) , colcode <- col)
+  if(DEBUG) cat("check Control color code", colcode, "\n")
+
+  ## Set up no backgroud data and normalization
+  if (DEBUG) print("Set up data and normalization")
+  nbgraw <- mraw;
+  if(length(mraw@maGb) != 0)
+    nbgraw@maGb <- nbgraw@maRb <- matrix(0,0,0)
+  norm.defs <- maDotsDefaults(opt, list(norm="p"))
+  mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
+
+  ## Set up output name
+  if (DEBUG) print("Name the output file")
+  tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
+  fstart <- paste(tmp[-length(tmp)], collapse=".")
+  
+  ## subnames <-paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain)
+  
+  ###################
+  ## Setting up output device
+  ###################
+  if (DEBUG) print("Name of output device")
+  plotdef <- switch(dev,
+                    "bmp" = list(dev=list(width=1600, height=1200, bg="white"), suffix="bmp"),
+                    "jpeg" = list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
+                    "jpg" =  list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
+                    "postscript" = list(dev=list(paper="special", width=16, height=12, bg="white"), suffix="ps"),
+                    "png" =  list(dev=list(width=1600, height=1200, bg="white"), suffix="png"),
+                    list(dev=list(width=1600, height=1200,bg="white"), suffix="png"),
+                    )
+  if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
+    print("Format error, format will be set to PNG")
+  
+  fname <- paste("QCPlot", fstart,  plotdef$suffix, sep=".")
+  plotdef <- c(plotdef, list(main=paste(fname, ": Qualitative Diagnostic Plots")))
+
+  ###################
+  ## Plot
+  ###################
+  ## Match args and calls function
+  ## Start device and layout
+  if(DEBUG) print("start layout")
+  if(save)  do.call(dev, maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)) ) 
+  layout.show(  layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
+                                14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
+                     height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7)))
+
+  ## 1) Split MA-plot (Before Normalization)
+  if(DEBUG) print("start 1")
+  qpMAPlots(nbgraw, addp=TRUE, main="MA-Plot :: raw", ...)
+  addLines(nbgraw)
+
+  
+  ## 2) HEXbin MA-plot (After Normalization)
+  if(DEBUG) print("start 2")
+  qpHexbin(mnorm, main="MA-Plot :: Norm")
+
+  ## 3 & 4) maM (Before
+  if(DEBUG) print("start 3, 4")
+  qpImage(nbgraw, xvar="maM", main="Spatial: Rank(M-Raw)")
+
+  ## 5 & 6) maM (After Normalization)
+  if(DEBUG) print("start 5 & 6")
+  ov.sub <- as.vector(maW(mnorm)) < 0
+  qpImage(mnorm, xvar="maM", main="Spatial: M-Norm", overlay=ov.sub, ol.col ="red")
+
+  ## 7 & 8) maA 
+  if(DEBUG) print("start 7 & 8")
+  qpImage(nbgraw, xvar="maA", main="Spatial: A")
+
+  ## 9 & 10  Red and Green Signal to Noise (background corrected)
+  if(DEBUG) print("start 9 & 10")
+  qpS2N(mraw, channel="red", colcode=colcode)
+  qpS2N(mraw, channel="green", colcode=colcode)
+
+  ## 11 maM Dot plot
+  if(DEBUG) print("start 11")
+  if(length(maControls(mnorm))!=0)
+    qpDotPlots(mnorm, xvar="maM", col=colcode)
+  title(main= "Normalized M")
+  
+  ## 12 maM Dot plot
+  if(DEBUG) print("start 12")
+  if(length(maControls(mraw))!=0)
+    qpDotPlots(mraw, xvar="maA", col=colcode)
+
+  if(DEBUG) print("start 13")
+  ## 13
+  layout(1)
+  par(mar=c(2,2,4,2))
+  mtext(plotdef$main, line=3)
+  mtext(headerInfo, line=2, cex = 0.7)
+  mtext(paste("Call:", maNormCall(mnorm)[3]), line=1, cex = 0.7)
+
+  ## Finishing
+  if(DEBUG) cat("Done...")
+  if (save == TRUE) {
+    cat(paste("save as", fname, "\n"))
+    dev.off()
+  }
+}
+
