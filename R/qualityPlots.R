@@ -284,8 +284,9 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
 
       ## Set up output name
       if (DEBUG) print("Name the output file")
-      tmp <- unlist(strsplit(colnames(mraw@maGf), "\\."))
-      tmp2 <-  sub("/", "", tmp)
+      tmp <- unlist(strsplit(colnames(mraw@maGf), "/"))
+      tmp3 <- unlist(strsplit(tmp[length(tmp)], "\\."))
+      tmp2 <-  sub("/", "", tmp3)
 
       if(length(tmp2) > 1)
         fstart <- paste(tmp2[-length(tmp2)], collapse=".")
