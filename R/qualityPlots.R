@@ -321,14 +321,29 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       ## Match args and calls function
       ## Start device and layout
       if(DEBUG) print("start layout")
-      
+
+
       if(save)
-        do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)), formals(args(dev))))
+        {
+          if(plotdef$suffix != "ps")
+            do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)), formals(args(dev))))
+          else
+            do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=fname), plotdef$dev)), formals(args(dev))))
+        }
       
+      ## Feb 23, 2005: JYH
+      ## Modified width from 1.5 to 2 for the color bar.  This stops the error
+      ## Figure margins too large when dev="postscript".  It was not a problem
+      ## for any other dev setting. 
+      
+      ##      layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
+      ##                      14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
+      ##             height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7))
       layout(matrix(c(14, 1,2,2, 14,0,3,3, 14,4,6,6, 14, 5, 7, 7, 14, 8, 10, 11,
                       14, 9, 10, 11, 14, 12, 13, 13), 4, 7),
-             height=c(1, 10, 5, 5), width = c(11, 2, 5, 1.5 ,5, 1.5, 7))
+             height=c(1, 10, 5, 5), width = c(11, 2, 5, 2 ,5, 2, 7))
 
+      
       ## 1) Split MA-plot (Before Normalization)
       if(DEBUG) print("start 1")
       qpMAPlots(nbgraw, addp=TRUE, main="MA-Plot :: raw", ...)
