@@ -1,7 +1,7 @@
 \name{gpQuality}
 \alias{gpQuality}
 
-\title{Quality score and diagnostic plots for general hybridization}
+\title{Diagnostic plots and comparative boxplots for general hybridization}
  
 \description{
   This component provides qualitative diagnostic plots and quantitative
@@ -12,7 +12,8 @@
 \usage{
 
 gpQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
-reference = NULL, scalingTable = NULL, output = FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
+compBoxplot = TRUE, reference = NULL, scalingTable = NULL, output =
+FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
 }
 
 \arguments{
@@ -24,7 +25,12 @@ reference = NULL, scalingTable = NULL, output = FALSE, resdir = ".", dev= "png",
   
   \item{organism}{A "character" string naming the organism genome
     printed on the array, either "Mm" or "Hs". By default, organism is
-    set to "Mm". It is used to retrieve the corresponding reference tables.}
+    set to "Mm". It is used to retrieve the corresponding reference
+    tables.}
+
+  \item{compBoxplot}{Logical. If set to 'FALSE', only qualitative
+    diagnostic plots will be plotted. gpQuality ouput will be limited to
+    a diagnostic plot by gpr file and a marrayRaw object.}
 
   \item{reference}{A matrix resulting from globalQuality, to be used as
     reference table to compare slides. If 'NULL', the default table
@@ -34,8 +40,8 @@ reference = NULL, scalingTable = NULL, output = FALSE, resdir = ".", dev= "png",
     scale quality measures before plotting them. If 'NULL',the default table
     corresponding to organism will be used. See details for more information.}
 
-  \item{output}{Logical. If 'TRUE', normalized M values corrsponding to
-    the input GenePix files are printed.}
+  \item{output}{Logical. If 'TRUE', normalized M values corresponding to
+    the input GenePix files and quality measures are printed to a file.}
 
   \item{resdir}{A "character" string representing the directory where
     the results will be saved. By default, this is set to the current
@@ -65,10 +71,9 @@ HTML report. For more details about the QC measures and the plots, please refer 
 }
 
 \value{
-  A list of 3 elements:
+  A list of 2 elements:
 
   \item{mraw}{A marrayRaw object created from the input files.}
-  \item{score}{A matrix of Quality Control score for each input slide.}
   \item{quality}{A matrix containing Quality Control measures for all slides.}
 }
 
@@ -77,8 +82,8 @@ HTML report. For more details about the QC measures and the plots, please refer 
 \seealso{\code{\link{globalQuality}}, \code{\link{qualBoxplot}}, \code{\link{qualRefTable}}}
 
 \examples{
-##datadir <- system.file("data", package="arrayQuality")
-##results <- gpQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
+  datadir <- system.file("data", package="arrayQuality")
+  results <- gpQuality(fnames="9Mm137.gpr", path=datadir, organism="Mm")
 }
 
 \keyword{hplot}

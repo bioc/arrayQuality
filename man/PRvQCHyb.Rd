@@ -45,7 +45,7 @@ PRvQCHyb(fnames, path=".", dev = "png", DEBUG=FALSE, prargs=NULL, samepr=TRUE, p
 \author{Jean Yee Hwa Yang}
 
 \examples{
-##   datadir <- system.file("data", package="arrayQuality")
-##   PRvQCHyb(fnames="9Mm137.gpr", path=datadir, prname="9Mm")
+  datadir <- system.file("data", package="arrayQuality")
+  PRvQCHyb(fnames="9Mm137.gpr", path=datadir, prname="9Mm")
 }
 \keyword{hplot}% at least one, from doc/KEYWORDS

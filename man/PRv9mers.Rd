@@ -43,8 +43,8 @@ PRv9mers(fnames, path = ".", dev = "png", DEBUG = FALSE, prargs = NULL, samepr =
 \author{Jean Yee Hwa Yang}
 
 \examples{
-##   datadir <- system.file("data", package="arrayQuality")
-##   PRv9mers(fnames="12Mm250.gpr", path=datadir, prname="12Mm")
+   datadir <- system.file("data", package="arrayQuality")
+   PRv9mers(fnames="12Mm250.gpr", path=datadir, prname="12Mm")
 }
 \keyword{hplot}% at least one, from doc/KEYWORDS
 
