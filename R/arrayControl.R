@@ -21,7 +21,7 @@ arrayReplicates <- function(data=NULL, id="ID", cut=5)
     if(!is.element(id, names(data)))
       stop("Data type is not correct")
 
-    geneList <- as.vector(data[["ID"]])
+    geneList <- as.vector(data[[id]])
     y <- table(geneList)
     Replicates <- names(y)[y > cut]
     return(Replicates)
@@ -40,14 +40,20 @@ replicatesAvariance <- function(slide = NULL, id="ID")
     Replicates <- arrayReplicates(gprData)
     gId <- gprData[["ID"]]
     
-    index <- NULL
+    index <- c()
     for(r in Replicates){
       for(i in 1:length(gId)){
         if (r == gId[i]) index <- c(index,i)
       }
     }
-    repA <- (log.na(gprData[["RfMedian"]][index],2) +
-                log.na(gprData[["GfMedian"]][index],2))/2
+
+    if(length(index) == 0)
+      repA <- NA
+    else
+      {
+        repA <- (log.na(gprData[["RfMedian"]][index],2) +
+                 log.na(gprData[["GfMedian"]][index],2))/2
+      }
     varRepA <- var(repA, na.rm=TRUE)
     return(varRepA)
   }

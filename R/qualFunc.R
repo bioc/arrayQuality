@@ -129,7 +129,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ## Argument: result of readGPR
 ## Returns: matrix of numbers
 
-slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
+slideQuality <- function(gprData=NULL, controlId = c("ID", "Name"), DEBUG=FALSE,...)
   {
     if (DEBUG) print("SlideQuality starting")
     
@@ -140,6 +140,8 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
     # Read data in
 
     if (DEBUG) print("SlideQuality 1")
+
+    controlId <- controlId[1]
 
     ############################################
     ## Channel specific data
@@ -265,7 +267,7 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
     if (DEBUG) print("SlideQuality 8")
 
     # Controls
-    Control <- arrayControls(gprData)
+    Control <- arrayControls(gprData, id = controlId)
     numE <- numNeg <- numPos <- numProb <- 0
     emp <- neg <- pos <- NA
 
@@ -298,19 +300,24 @@ slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
     # Replicates
     if (DEBUG) print("SlideQuality 9")
 
-    gId <- gprData[["ID"]]
-    Replicates <- arrayReplicates(gprData)
+    gId <- gprData[[controlId]]
+    Replicates <- arrayReplicates(gprData, id = controlId)
+
+    if (DEBUG) print(length(Replicates))
   
-    index <- NULL
+    index <- c()
     for(r in Replicates){
       for(i in 1:length(gId)){
         if (r == gId[i]) index <- c(index,i)
       }
     }
-    
-    repA <- Amedian[index]
-    varRepA <- var(repA, na.rm=TRUE)
 
+    if (length(index) == 0)
+      repA <- NA
+    else 
+      repA <- Amedian[index]
+    
+    varRepA <- var(repA, na.rm=TRUE)
 
     # Flags
     Flags <- gprData[["Flags"]]
@@ -400,6 +407,7 @@ gpQuality <- function(fnames = NULL, path = ".",
                       compBoxplot = TRUE,
                       reference=NULL,
                       scalingTable=NULL,
+                      controlId = c("ID", "Name"),
                       output=FALSE,
                       resdir=".",
                       dev="png", #set default to be png 
@@ -416,6 +424,8 @@ gpQuality <- function(fnames = NULL, path = ".",
       fnames <- dir(path, pattern = "*\\.gpr$")
 
     organism <- organism[1]
+    controlId <- controlId[1]
+    if (DEBUG) print(controlId)
     opt <- list(...)
     
  ###################
@@ -475,7 +485,7 @@ gpQuality <- function(fnames = NULL, path = ".",
             if (DEBUG) print("In the loop ")
             f <- fnames[i]
             gp <- readGPR(fnames = f, path=path)
-            restmp <- slideQuality(gp, DEBUG=DEBUG)
+            restmp <- slideQuality(gp, controlId = controlId, DEBUG=DEBUG)
             scal <- arrayScal(restmp, organism=organism, scalingData=scalingTable)
             
             ###start plot

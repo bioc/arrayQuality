@@ -7,12 +7,15 @@
   provide quality control statistics.}
 
 \usage{
-slideQuality(gprData = NULL, DEBUG = FALSE,...)
+slideQuality(gprData = NULL, controlId = c("ID", "Name"), DEBUG = FALSE,...)
 }
 
 \arguments{
   \item{gprData}{A list of vector, results from \code{readGPR},
     containing information extracted from the gpr file.}
+
+  \item{controlId}{Character string. Name of the column of the gpr
+    file used to define controls.}
 
   \item{DEBUG}{If 'TRUE', debug statements are printed.}
   

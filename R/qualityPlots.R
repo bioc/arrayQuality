@@ -226,7 +226,8 @@ qpS2N <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 
 ## mraw == marrayRaw object
 ## mrawheader == Heading information
-maQualityPlots <-  function(mrawObj, headerInfo="", save = TRUE, 
+maQualityPlots <-  function(mrawObj, headerInfo="",
+                            save = TRUE, 
                             dev = "png",  #set default to be png
                             col, badspotfunction,
                             DEBUG=FALSE, ...)

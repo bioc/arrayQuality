@@ -12,8 +12,8 @@
 \usage{
 
 gpQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
-compBoxplot = TRUE, reference = NULL, scalingTable = NULL, output =
-FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
+compBoxplot = TRUE, reference = NULL, scalingTable = NULL, controlId =
+c("ID", "Name"), output = FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
 }
 
 \arguments{
@@ -38,7 +38,11 @@ FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
   
   \item{scalingTable}{A matrix resulting from qualRefTable, used to
     scale quality measures before plotting them. If 'NULL',the default table
-    corresponding to organism will be used. See details for more information.}
+    corresponding to organism will be used. See details for more
+    information.}
+
+  \item{controlId}{Character string. Name of the column of the gpr
+    file used to define controls.}
 
   \item{output}{Logical. If 'TRUE', normalized M values corresponding to
     the input GenePix files and quality measures are printed to a file.}
