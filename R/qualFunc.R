@@ -1,4 +1,4 @@
-#####################################################
+######################################
 ## Set of function written to estimate
 ## quality of microarray slides
 ##
@@ -20,7 +20,7 @@
 
 ## returns a list of vector containing info from grp file column
 readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
-                     sep ="\t", quote= "\"",...)
+                     sep ="\t", quote= "",...)
   {
     if (DEBUG) print("Starting readGPR")
     if (DEBUG) print(path)
@@ -129,7 +129,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ## Argument: result of readGPR
 ## Returns: matrix of numbers
 
-slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = c("ID", "Name"), DEBUG=FALSE,...)
+slideQuality <- function(gprData=NULL, DEBUG=FALSE,...)
   {
     if (DEBUG) print("SlideQuality starting")
     
@@ -140,8 +140,6 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     # Read data in
 
     if (DEBUG) print("SlideQuality 1")
-
-    controlId <- controlId[1]
 
     ############################################
     ## Channel specific data
@@ -267,9 +265,9 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     if (DEBUG) print("SlideQuality 8")
 
     # Controls
-    Control <- arrayControls(gprData, SFGHControlcode = controlMatrix, id = controlId)
+    Control <- arrayControls(gprData)
     numE <- numNeg <- numPos <- numProb <- 0
-    emp <- neg <- pos <- NA
+    emp <- neg <- pos <- NULL
 
     for(i in 1:length(Control))
       {
@@ -290,9 +288,9 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
           }
       }
 
-    EmptyMed <- median(as.numeric(emp), na.rm=TRUE)
-    NegativeMed <- median(as.numeric(neg), na.rm=TRUE)
-    PositiveMed <- median(as.numeric(pos), na.rm=TRUE)
+    EmptyMed <- median(emp, na.rm=TRUE)
+    NegativeMed <- median(neg, na.rm=TRUE)
+    PositiveMed <- median(pos, na.rm=TRUE)
 
     difEmptyNegative <- EmptyMed - NegativeMed
     difPositiveNegative <- PositiveMed - NegativeMed
@@ -300,24 +298,19 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     # Replicates
     if (DEBUG) print("SlideQuality 9")
 
-    gId <- gprData[[controlId]]
-    Replicates <- arrayReplicates(gprData, id = controlId)
-
-    if (DEBUG) print(length(Replicates))
+    gId <- gprData[["ID"]]
+    Replicates <- arrayReplicates(gprData)
   
-    index <- c()
+    index <- NULL
     for(r in Replicates){
       for(i in 1:length(gId)){
         if (r == gId[i]) index <- c(index,i)
       }
     }
-
-    if (length(index) == 0)
-      repA <- NA
-    else 
-      repA <- Amedian[index]
     
+    repA <- Amedian[index]
     varRepA <- var(repA, na.rm=TRUE)
+
 
     # Flags
     Flags <- gprData[["Flags"]]
@@ -330,33 +323,51 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     # We want a list of all numbers, returned as a matrix
     # Easier to compare later
 
-    sortedMeasures <- c("range RF", "range GF",
+    sortedMeasures <- c(#"File", "Date",
+                        "range RF", "range GF",
                         "- RB mad", "- GB mad",
                         "Median RS2N", "Median GS2N",
+                        #"range RB", "range GB",
                         "- Median A for empty ctrl",
                         "- Median A for neg ctrl",
                         "Median A for positive ctrl",
-                        "Pos ctl median A - Neg ctl median A",
+                        "Pos. ctrl median A - Neg. ctrl median A",
                         "- Var replicated spots A values",
                         "- Mvalues MSE by print-tip",
                         "- MSE lowess",
+                        #"Spot radius",
+                        #"Percentage of flagged spots",
                         "- % flagged spots",
+                        #"RB variance","GB variance",
+                        #"RB IQR", "GB IQR",
                         "- Mvalues MMRmad",
                         "- % spots with Mvalues MMRmad>0.5",
+                        #"Percentage of spots MMRmad > 0.5",
+                        #"MMR IQR",
+                        #"Difference empty/negative"
                         )
         
 
-    sortedRes <- c(rangeRf, rangeGf,
+    sortedRes <- c(#gprData[["File"]], gprData[["Date"]],
+                   rangeRf, rangeGf,
                    -RbMad, -GbMad,
                    RS2Nmedian, GS2Nmedian,
+                   #rangeRb, rangeGb,
                    -EmptyMed, -NegativeMed, PositiveMed,
                    difPositiveNegative,
                    -varRepA,
                    -msePtip, -mseFit,
+                   #spotRadius,
                    -percentFlag,                                      
                    -MMRmad, -percentSpotOverMmrLim,
+                   #RBvar, GBvar,
+                   #RbIqr, GbIqr,
+                   #mmrIqr,
+                   #difEmptyNegative,
+                   
                    )
     
+    #numResult <- cbind(sortedMeasures, sortedRes)
     numResult <- as.matrix(sortedRes)
     rownames(numResult) <- sortedMeasures
     colnames(numResult) <- gprData[["File"]]
@@ -372,51 +383,48 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
 ###################################################
 
 ## Takes all .gpr file into acccount
+## Returns a matrix
 ## Plot quality boxplot and diagnostic plots
 ## creates html report
-## if output: writes quality and normalized data to file
-## return quality measure and marrayRaw object in a list
+## if output: writes quality to file
+## return quality score and quality measures in a list
 
 #############
 ## Example:
-## test <- gpQuality(path="C:/Mydoc/Projects/quality/DemoA/", resdir="QualPlot")
+## test <- gp(path="C:/Mydoc/Projects/quality/DemoA/", resdir="QualPlot")
 
 ## Reference = output from globalQuality
 ## ScalingTable: output from qualRef
 ## Must be run on the same gpr files
 gpQuality <- function(fnames = NULL, path = ".",
                       organism=c("Mm", "Hs"),
-                      compBoxplot = TRUE,
                       reference=NULL,
                       scalingTable=NULL,
-                      controlMatrix = controlCode,
-                      controlId = c("ID", "Name"),
                       output=FALSE,
                       resdir=".",
                       dev="png", #set default to be png 
                       DEBUG = FALSE,...)
-{
+  {
 
     print("Starting gpQuality...")
+
     
     # Check input arguments
     if (missing(path) | is.null(path))
       path <- getwd()
     
+      #path <- "."
+
     if (missing(fnames) | is.null(fnames))
       fnames <- dir(path, pattern = "*\\.gpr$")
 
     organism <- organism[1]
-    controlId <- controlId[1]
-    if (DEBUG) print(controlId)
-
-    if (DEBUG) print(controlMatrix)
-    
     opt <- list(...)
+
     
  ###################
  ## Setting up output device
-
+ ###################
     if (DEBUG) print("Name of output device")
     plotdef <- switch(dev,
                       "bmp" = list(dev=list(width=800, height=600, bg="white"), suffix="bmp"),
@@ -429,159 +437,120 @@ gpQuality <- function(fnames = NULL, path = ".",
     if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
       print("Format error, format will be set to PNG")
 
-    if (DEBUG) print(paste("compBoxplot = ",compBoxplot, sep=""))
+    # Prepares results
+    quality <- NULL
+    tmp <- NULL
+    QCp <- c()
+    Dp <- c()
+    score <- matrix(0, nrow=length(fnames), ncol=2)
+    colnames(score) <- c("Mean score", "Min val")
+
+    curdir <- getwd()
+    if (!file.exists(resdir))
+      dir.create(resdir)
+    if (DEBUG) print(getwd())
+
+    #Allocation of matrix for marrayraw object
+
+    if(DEBUG) print(path)
+    if(DEBUG) print(resdir)
+    f <- fnames[1]
+    gp <- readGPR(fnames=f, path=path)
+    nrow <- length(gp[["RfMedian"]])
+    ncol <- length(fnames)
     
-    if (compBoxplot)
+    mlayout <- maCompLayout(as.matrix(cbind(gp[["Block"]],
+                                            gp[["Row"]], gp[["Column"]])))
+    tmp <- new("marrayInfo", maInfo=data.frame(gp[["Name"]], gp[["ID"]]))
+    mlayout@maControls <- as.factor(maGenControls(tmp))
+    
+    rm(f, gp)
+
+    Rf <- Gf <- Rb <- Gb <- weight <- matrix(0,nrow=nrow, ncol=ncol)
+    filenames <- c()
+    nb <- c()
+    
+    # Call to slideQuality for each gpr file
+
+    for (i in 1:length(fnames))
       {
-    
-        # Prepares results
-        quality <- NULL
-        tmp <- NULL
-        QCp <- c()
-        Dp <- c()
+        if (DEBUG) print("In the loop ")
+        f <- fnames[i]
+        gp <- readGPR(fnames = f, path=path)
+        restmp <- slideQuality(gp, DEBUG=DEBUG)
+        scal <- arrayScal(restmp, organism=organism, scalingData=scalingTable)
+        score[i,] <- c(mean(qualityScore(restmp[,1]), na.rm=TRUE), min(scal, na.rm=TRUE))
         
-        curdir <- getwd()
-        if (!file.exists(resdir))
-          dir.create(resdir)
-        if (DEBUG) print(getwd())
+        ###start plot
+        Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 
+        Rf[,i] <- gp[["RfMedian"]]; Rb[,i] <- gp[["RbMedian"]]
+        weight[,i] <- gp[["Flags"]]
+        filenames <- c(filenames, gp[["File"]])
         
-        #Allocation of matrix for marrayraw object
-
-        if(DEBUG) print(path)
-        if(DEBUG) print(resdir)
-        f <- fnames[1]
-        gp <- readGPR(fnames=f, path=path)
-        nrow <- length(gp[["RfMedian"]])
-        ncol <- length(fnames)
-        if(DEBUG) print("creating layout")
-        mlayout <- maCompLayout(as.matrix(cbind(gp[["Block"]],
-                                                gp[["Row"]], gp[["Column"]])))
-        tmp <- new("marrayInfo", maInfo=data.frame(gp[["Name"]],gp[["ID"]]))
-        mlayout@maControls <- as.factor(maGenControls(tmp, controlcode = controlMatrix,
-                                                      id=controlId)) 
-        rm(f, gp)
-        
-        Rf <- Gf <- Rb <- Gb <- weight <- matrix(0,nrow=nrow, ncol=ncol)
-        filenames <- c()
-        nb <- c()
-        
-        # Call to slideQuality for each gpr file
-
-        for (i in 1:length(fnames))
-          {
-            if (DEBUG) print("In the loop ")
-            f <- fnames[i]
-            gp <- readGPR(fnames = f, path=path)
-            restmp <- slideQuality(gp, controlMatrix = controlMatrix,
-                                   controlId = controlId, DEBUG=DEBUG)
-            scal <- arrayScal(restmp, organism=organism, scalingData=scalingTable)
-            
-            ###start plot
-            Gf[,i] <- gp[["GfMedian"]]; Gb[,i] <-gp[["GbMedian"]] 
-            Rf[,i] <- gp[["RfMedian"]]; Rb[,i] <- gp[["RbMedian"]]
-            weight[,i] <- gp[["Flags"]]
-            filenames <- c(filenames, gp[["File"]])
-        
-            #qualBoxplot
-            setwd(resdir)
-            plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
-            plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
-            do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
-            par(mar=c(3,14,2,6))
-            nbtmp <- qualBoxplot(restmp, reference=reference, scalingTable=scalingTable)
-            dev.off()
-            setwd(curdir)
-
-            #nb = matrix ncol=2, nrow=length(fnames)
-            nb <- rbind(nb, nbtmp)
-            QCp <- c(QCp, plotname)
-            if (DEBUG) print("End of plot")
-            if (DEBUG) print(paste("save as ",plotname))
-            if (DEBUG) print("Binding results")
-            quality <- cbind(quality, restmp[,1])
-            meas <- rownames(restmp)
-          }
-        
-        print("Comparative plots done")
-        
-        #Create marrayRaw
-        colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- filenames
-        if (DEBUG) print("building mraw")
-        mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
-                    maGb=Gb, maNotes="", maLayout=mlayout,
-                    maW=weight, maGnames=tmp)
-        #maQualityPlots
+        #qualBoxplot
         setwd(resdir)
-        print("Starting maQualityPlots")
-        maQualityPlots(mraw, controlId=controlId, DEBUG=DEBUG)
-        
-        #get diagnostic plots names
-        tmpname <- sub(".gpr", "",colnames(mraw@maGf))
-        pn <- paste("diagPlot", tmpname, sep=".")
-
-        dirfiles <- dir(".")
-        
-        for(i in 1:length(pn))
-          Dp <- c(Dp, dirfiles[grep(pn[i], dirfiles)[1]])
-        
-        if (DEBUG) print("After for loop")
-        if (DEBUG) print(nb)
-        quality2HTML(fnames=fnames,path=resdir, QCplot=QCp, DiagPlot=Dp,nbBelow=nb)
-        
-        colnames(quality) <- fnames
-        rownames(quality) <- meas
-        
-        print("gpQuality done")
-        
-       ####### Results
-        
-        if (output)
-          {
-            print("Printing results to file")
-            write.table(quality, "quality.txt",sep="\t", col.names=NA)
-            colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-            outputNormData(mraw)
-          }
-
+        plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
+        plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
+        do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
+        par(mar=c(3,10,2,8))
+        nbtmp <- qualBoxplot(restmp, reference=reference, scalingTable=scalingTable)
+        dev.off()
         setwd(curdir)
-        return(list(mraw=mraw, quality=quality))
+
+        #nb = matrix ncol=2, nrow=length(fnames)
+        nb <- rbind(nb, nbtmp)
+        QCp <- c(QCp, plotname)
+        if (DEBUG) print("End of plot")
+        if (DEBUG) print(paste("save as ",plotname))
+        if (DEBUG) print("Binding results")
+        quality <- cbind(quality, restmp[,1])
+        meas <- rownames(restmp)
       }
 
-   else {
-
-     curdir <- getwd()
-     if (!file.exists(resdir))
-       dir.create(resdir)
-     if (DEBUG) print(getwd())
-
-     
-     mraw <- read.GenePix(fnames, path)
-     colnames(maGf(mraw)) <- fnames
-     print("Starting maQualityPlots")
-     setwd(resdir)
-     maQualityPlots(mraw, controlId=controlId, DEBUG=DEBUG)
-
-     if (output)
-       {
-         print("Printing results to file")
-         outputNormData(mraw)
-       }
-
-     setwd(curdir)
-     return(list(mraw=mraw))     
-   }
-
+    print("Comparative plots done")
     
+    #Create marrayRaw
+    colnames(Gf) <- colnames(Gb) <- colnames(Rf) <- colnames(Rb) <- filenames
+    if (DEBUG) print("building mraw")
+    mraw <- new("marrayRaw", maRf=Rf, maGf=Gf, maRb=Rb,
+                maGb=Gb, maNotes="", maLayout=mlayout,
+                maW=weight, maGnames=tmp)
+    #maQualityPlots
+    setwd(resdir)
+    print("Starting maQualityPlots")
+    maQualityPlots(mraw, DEBUG=DEBUG)
+
+    #get diagnostic plots names
+    tmp <- sub(".gpr", "",colnames(mraw@maGf))
+    pn <- paste("QCPlot", tmp, sep=".")
+
+    dirfiles <- dir(".")
+    
+    for(i in 1:length(pn))
+      Dp <- c(Dp, dirfiles[grep(pn[i], dirfiles)[1]])
+    
+    if (DEBUG) print("After for loop")
+    if (DEBUG) print(nb)
+    quality2HTML(fnames=fnames,path=resdir, QCplot=QCp, DiagPlot=Dp,nbBelow=nb)
+    setwd(curdir)
+
+    colnames(quality) <- fnames
+    rownames(quality) <- meas
+
+    print("gpQuality done")
+    # Results
+    if (output)
+      {
+        print("Printing results to file")
+        write.table(quality, "quality.txt",sep="\t", col.names=NA)
+        outputNormData(mraw)
+      }
+    return(list(mraw=mraw, score=score, quality=quality))
   }
-
-
-
-
-
 
 ###############################################
 ## Given a set of reference slides
-## Returns mean and iqr for each measure
+## Returns mean, variance and iqr for each measure
 ##
 ## To be used to create reference table for scaling 
 ##############################################
@@ -683,11 +652,18 @@ arrayScal <- function(numMat, scalingData=NULL, organism=c("Mm", "Hs"))
 }
 
 
-################################################
-## HTML report
+#################################
+## Plot function
+
+# 1. Plot the boxplot
+# 2. SuperImpose value for slides of interest (1 or more)
+#arrayQuality and reference are results from globalQuality
+
+
+
 # Read in names of plots
 # suppose directory contains
-# same number of qualPlot and diagPlot
+# same number of qualPlot and QCplot
 # based on alphabetical order
 
 # nbBelow is a matrix: for each slide: number of measure below range of good slides and total number of measures
@@ -841,6 +817,14 @@ globalQuality <- function(fnames = NULL, path = ".",
     return(quality)
   }
   
+## MmReferenceDB: globalQuality from good Mm slides
+#MmReferenceDB <- globalQuality(path="C:/MyDoc/Projects/quality/TestFiles/Good")
+#save(MmReferenceDB, file="MmReferenceDB.RData")
+
+## MmScalingTable: mean and var from good Mm slide, for each measure
+#MmScalingTable <- qualRefTable(path="C:/MyDoc/Projects/quality/TestFiles/Good")
+#save(MmScalingTable, file="MmScalingTable.RData")
+
 #################################
 ## Plot function
 
@@ -855,6 +839,7 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
     if (is.null(arrayQuality) || missing(arrayQuality))
       stop("No data to plot")
     
+    print("starting plot")
     # Reference = output of globalQuality for ref slides
     # if NULL, reads in matrix store as RData
     organism<-organism[1]
@@ -881,7 +866,6 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
     else
       {
         #Boxplot of reference arrays quality measure
-
         nr <- nrow(scalref)
 
         goodLim <- matrix(0,nrow=nr,ncol=1)
@@ -890,7 +874,7 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
         plot(0:(nr+1),0:(nr+1),xlim=lim,type="n", axes=FALSE,ylab="",xlab="", xaxt="n",
              main="Array Quality Control Comparison")
 
-        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.7, las=2)
+        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.8, las=2)
         tmp <- c(paste(as.character(round(score)), "(", as.character(round(arrayQuality,1)), ")"), "% (value)")
         axis(4, at=1:(nr+1), labels=, tmp, cex.axis=0.8, las=2)
         axis(1, at=c(lim[1]+0.5, lim[2]-0.5), labels= c("Problematic", "Good"))
@@ -917,20 +901,11 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, scalingTable=NULL, o
         for(i in 1:nc)
           {
             lines(scalarray[,i], 1:nr, col=col[i], lty=2)
-            points(scalarray[,i],1:nr, col=col[i], pch=15, cex=1.5)
-            missingdata <- as.vector(is.na(scalarray[,i]))
-            if(length(missingdata[missingdata]) > 0)
-              {
-                text(rep(lim[1]+ 1,length(missingdata[missingdata])),
-                     c(1:nr)[missingdata],
-                     rep("NA", length(missingdata[missingdata])),
-                     col="green", cex=0.8)
-              }
-            
+            points( scalarray[,i],1:nr, col=col[i], pch=15, cex=1.5)
+##            text( scalarray[,i],1:nr, as.character(round(arrayQuality[,i],1)), cex=0.8)
             for(j in 1:nr)
               {
-                if(as.numeric(scalarray[j,i]) < goodLim[j,1] ||
-                   is.na(scalarray[j,i]))
+                if(scalarray[j,i] < goodLim[j,1])
                   isBelowLim[j,i] <- TRUE
               }
           }
@@ -951,14 +926,3 @@ outputNormData <- function(mraw)
     mnorm <- maNorm(mraw)
     write.marray(mnorm, "NormalizedData.xls")
   }
-
-readcontrolCode <- function(file = "SpotTypes.txt", path = NULL, sep = "\t", check.names = FALSE, controlId=c("ID", "Name"), ...) 
-  {
-    require(limma)
-    controlId <- controlId[1]
-    spotTypes <- readSpotTypes(file=file, path=path, sep=sep, check.names=check.names, ...)
-    controlCode <- spotTypes[, c(grep(controlId, colnames(spotTypes)), 1)]
-    colnames(controlCode) <- c("Pattern", "Name")
-    return(controlCode)
-  }
-

@@ -142,7 +142,7 @@ PRvQCHyb<-  function(fnames,
       ## 2) Boxplot split by Print-tip
       if(DEBUG) print("start 2")
       par(mar=c(5,5,5,3))
-      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot: Raw M by print-tip groups")
+      boxplot(mraw, yvar="maM", ylab="M values", main="Boxplot:M by print-tip groups")
 
       ## 3 & 4) maM (No Normalization)
       if(DEBUG) print("start 3 & 4")
@@ -180,15 +180,18 @@ PRvQCHyb<-  function(fnames,
       ## 10 Dot Plot
       if(DEBUG) print("start 10")
       if(length(maControls(mraw))!=0)
-        qpDotPlots(mraw, x="maA",  col=colcode)
-         
+        {
+          qpDotPlots(mraw, x="maA",  col=colcode)
+          title( main="Dot plot: Controls A", cex=0.7)
+        }
+      
       
       ## 11 Title
       if(DEBUG) print("start 11")
       layout(1)
       par(mar=c(2,2,4,2))
       mtext(plotdef$main, line=3)
-      mrawheader <- readGPRHeader(file.path(path,f))
+      mrawheader <- readGPRHeaders(file.path(path,f))
       mtext(paste("Date: ",  mrawheader$DateTime, " :: PMT", mrawheader$PMTGain), line=2, cex=0.8)
       if(DEBUG) print("Done...")
       
