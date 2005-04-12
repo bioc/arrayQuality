@@ -303,13 +303,16 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
       plotdef <- switch(dev,
                         "bmp" = list(dev=list(width=1600, height=1200, bg="white"), suffix="bmp"),
                         "jpeg" = list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
-                        "jpg" =  list(dev=list(quality=100, width=1600, height=1200, bg="white"), suffix="jpeg"),
-                        "postscript" = list(dev=list(paper="special", width=16, height=12, bg="white"), suffix="ps"),
+                        ##"postscript" = list(dev=list(paper="special", width=32.0, height=24.0, bg="white"), suffix="ps"),
+                        "postscript" = list(dev=list( bg="white"), suffix="ps"),
                         "png" =  list(dev=list(width=1600, height=1200, bg="white"), suffix="png"),
                         list(dev=list(width=1600, height=1200,bg="white"), suffix="png"),
                         )
-      if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
+      if(!is.element(dev, c("bmp", "jpeg","png","postscript")))
+              {
         print("Format error, format will be set to PNG")
+        dev = "png"
+      }
 
       fname <- paste("diagPlot", fstart,  plotdef$suffix, sep=".")
       if (DEBUG) print(fname)
@@ -324,12 +327,17 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
 
 
       if(save)
+#<<<<<<< .mine
+        #do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=fname), plotdef$dev)), formals(args(dev))))
+##      do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)), formals(args(dev))))
+#=======
         {
           if(plotdef$suffix != "ps")
             do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=fname), plotdef$dev)), formals(args(dev))))
           else
             do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=fname), plotdef$dev)), formals(args(dev))))
         }
+#>>>>>>> .r11253
       
       ## Feb 23, 2005: JYH
       ## Modified width from 1.5 to 2 for the color bar.  This stops the error

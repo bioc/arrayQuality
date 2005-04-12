@@ -5,8 +5,11 @@
 ## Author: Agnes Paquet
 ## Modified: 04/16/2004
 ##           09/21/2004
-##           09/24/2004 
+##           09/24/2004
+##           02/02/2005
+##           04/10/2005 
 ## source("~/Projects/madman/Rpacks/arrayQuality/R/readGPR.R")
+## source("~/Projects/madman/Rpacks/arrayQuality/R/gpQuality.R")
 
 ###################################################
 ## READ .gpr file, returns a list of measures
@@ -146,7 +149,6 @@ gpQuality <- function(fnames = NULL, path = ".",
                       organism=c("Mm", "Hs"),
                       compBoxplot = TRUE,
                       reference=NULL,
-                      ##scalingTable=NULL,
                       controlMatrix = controlCode,
                       controlId = c("ID", "Name"),
                       output=FALSE,
@@ -179,13 +181,17 @@ gpQuality <- function(fnames = NULL, path = ".",
     plotdef <- switch(dev,
                       "bmp" = list(dev=list(width=800, height=600, bg="white"), suffix="bmp"),
                       "jpeg" = list(dev=list(quality=100, width=800, height=600, bg="white"), suffix="jpeg"),
-                      "jpg" =  list(dev=list(quality=100, width=800, height=600, bg="white"), suffix="jpeg"),
-                      "postscript" = list(dev=list(paper="special", width=8, height=6, bg="white"), suffix="ps"),
+                      "postscript" = list(dev=list( bg="white"), suffix="ps"),
+                      #"postscript" = list(dev=list(paper="special", width=8, height=6, bg="white"), suffix="ps"),
                       "png" =  list(dev=list(width=800, height=600, bg="white"), suffix="png"),
                       list(dev=list(width=800, height=600,bg="white"), suffix="png"),
                     )
-    if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
-      print("Format error, format will be set to PNG")
+    
+    if(!is.element(dev, c("bmp", "jpeg","png","postscript")))
+      {
+        print("Format error, format will be set to PNG")
+        dev = "png"
+      }
 
     if (DEBUG) print(paste("compBoxplot = ",compBoxplot, sep=""))
 
@@ -259,11 +265,17 @@ gpQuality <- function(fnames = NULL, path = ".",
         
             #qualBoxplot
             setwd(resdir)
-            plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), dev,sep=".")
+            plotname <- paste("qualPlot",unlist(strsplit(f, ".gpr")), plotdef$suffix,sep=".")
             plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
 
-            do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)),
-                                     formals(args(dev))))
+            if(plotdef$suffix != "ps")
+              do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)), formals(args(dev))))
+            else
+              do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=plotname), plotdef$dev)), formals(args(dev))))
+
+            
+            #do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)),
+             #                        formals(args(dev))))
 
             ## was: do.call(dev, maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)))
             par(mar=c(3,14,2,6))
@@ -302,7 +314,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         defs <- list(norm="p")
         norm.defs <- maDotsDefaults(opt, defs)     
         
-        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG),
+        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                     norm.defs))
         
         #get diagnostic plots names
@@ -330,7 +342,7 @@ gpQuality <- function(fnames = NULL, path = ".",
             print("Printing results to file")
             write.table(quality, "quality.txt",sep="\t", col.names=NA)
             #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-            do.call("outputNormData", c(list(mraw=mraw), norm.defs))
+            do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
           }
 
         setwd(curdir)
@@ -357,14 +369,14 @@ gpQuality <- function(fnames = NULL, path = ".",
      norm.defs <- maDotsDefaults(opt, defs)     
      
      setwd(resdir)
-     do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG),
+     do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                  norm.defs))
 
      if (output)
        {
          print("Printing results to file")
          #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-         do.call("outputNormData", c(list(mraw=mraw), norm.defs))
+         do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
        }
 
      setwd(curdir)

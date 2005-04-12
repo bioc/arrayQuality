@@ -30,7 +30,9 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
     
     # Search in the Agilent file where are the colums starting
     y <- readLines(fullfnames[1], n = 100)
-    skip <- grep("gMedianSignal", y)[1] - 1
+##    skip <- grep("gMedianSignal", y)[1] - 1
+    skip <- grep("gMedianSignal", y)[1]
+    
     if (DEBUG) print(skip)
   
     # Read data in       
@@ -54,8 +56,8 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
       PMT <- strsplit(PMT, split="\t")
       PMTR <- PMT[[1]][1]
       PMTG <- PMT[[1]][2]
-
     }
+    
 ##    if (length(grep("NormalizationMethod", tmp)) != 0)
 ##      normMethod <- gsub("\"", "",
 ##                        strsplit(tmp[grep("NormalizationMethod",tmp)],
@@ -67,11 +69,11 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ##    normCoef <- gsub("\t", ",", normCoef1)
 
     if (DEBUG) print(paste("Reading", f))
-    h <- strsplit(readLines(f, n = skip + 1), split = sep)
+    h <- strsplit(readLines(f, n = skip), split = sep)
     h <- as.list(unlist(h[[length(h)]]))
     names(h) <- gsub("\"", "", unlist(h))
-    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip + 
-                1, quote = quote, ...)
+    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip + 1,
+                quote = quote, ...)
 
 ##    block <- cbind(block, as.numeric(dat[["Block"]]))
     column <- cbind(column, as.numeric(dat[["Col"]]))
@@ -113,25 +115,6 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
   }
 
 
-###################################################
-## Given a gpr files
-## Computes needed statistics to assess quality
-###################################################
-
-## Takes all .gpr file into acccount
-## Plot quality boxplot and diagnostic plots
-## creates html report
-## if output: writes quality and normalized data to file
-## return quality measure and marrayRaw object in a list
-
-#############
-## Example:
-## test <- gpQuality(path="C:/Mydoc/Projects/quality/DemoA/", resdir="QualPlot")
-
-## Reference = output from globalQuality
-## ScalingTable: output from qualRef
-## Must be run on the same gpr files
-
 ###########################################################################
 ##
 ##  Move controlCode and maGenControls from marrayTools to marrayClasses
@@ -148,13 +131,12 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
 ###########################################################################
 
 agcontrolCode <-
-structure(c("\(+\)", "\(-\)", "Positive", "Negative"),.Dim = c(2, 2), .Dimnames = list(c("1", "2"), c("Pattern", "Name")))
+structure(c("\\(+\\)*", "\\(-\\)*", "Positive", "Negative"),.Dim = c(2, 2), .Dimnames = list(c("1", "2"), c("Pattern", "Name")))
 
 agQuality <- function(fnames = NULL, path = ".",
                       organism = c("Mm", "Hs"),
                       compBoxplot = TRUE,
                       reference = NULL,
-                      ##scalingTable=NULL,
                       controlMatrix = agcontrolCode,
                       controlId = c("ProbeName"),
                       output = FALSE,
@@ -189,13 +171,19 @@ agQuality <- function(fnames = NULL, path = ".",
     plotdef <- switch(dev,
                       "bmp" = list(dev=list(width=800, height=600, bg="white"), suffix="bmp"),
                       "jpeg" = list(dev=list(quality=100, width=800, height=600, bg="white"), suffix="jpeg"),
-                      "jpg" =  list(dev=list(quality=100, width=800, height=600, bg="white"), suffix="jpeg"),
-                      "postscript" = list(dev=list(paper="special", width=8, height=6, bg="white"), suffix="ps"),
+                      #"jpg" =  list(dev=list(quality=100, width=800, height=600, bg="white"), suffix="jpeg"),
+                      #"postscript" = list(dev=list(paper="special", width=8, height=6, bg="white"), suffix="ps"),
+                      "postscript" = list(dev=list( bg="white"), suffix="ps"),
                       "png" =  list(dev=list(width=800, height=600, bg="white"), suffix="png"),
                       list(dev=list(width=800, height=600,bg="white"), suffix="png"),
                     )
     if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
-      print("Format error, format will be set to PNG")
+      {
+        print("Format error, format will be set to PNG")
+        dev = "png"
+      }
+
+      # was print("Format error, format will be set to PNG")
 
     if (DEBUG) print(paste("compBoxplot = ", compBoxplot, sep=""))
 
@@ -230,7 +218,7 @@ agQuality <- function(fnames = NULL, path = ".",
         ## layout problem
         
         if (DEBUG) print("call read.Agilent")
-        gp <- read.Agilent(fnames = fnames[1], path = path)
+        gp <- read.Agilent(fnames = fnames[1], path = path, DEBUG=DEBUG)
         numrow <- nrow(gp@maRf)
         numcol <- length(fnames)
         
@@ -265,11 +253,18 @@ agQuality <- function(fnames = NULL, path = ".",
             #qualBoxplot
             if (DEBUG) print("Ploting")
             setwd(resdir)
-            plotname <- paste("qualPlot",unlist(strsplit(f, ".txt")), dev,sep=".")
+            plotname <- paste("qualPlot",unlist(strsplit(f, ".txt")), plotdef$suffix,sep=".")
             plotdef <- c(plotdef, list(main=paste(f, ": Quantitative Diagnostic Plots")))
 
-            do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)),
-                                     formals(args(dev))))
+            ##do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)),
+             ##                        formals(args(dev))))
+            
+            if(plotdef$suffix != "ps")
+              do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(filename=plotname), plotdef$dev)), formals(args(dev))))
+            else
+              do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=plotname), plotdef$dev)), formals(args(dev))))
+
+            
             par(mar=c(3,14,2,6))
             nbtmp <- qualBoxplot(restmp, reference=reference, organism=organism, DEBUG=DEBUG)
             dev.off()
@@ -303,7 +298,8 @@ agQuality <- function(fnames = NULL, path = ".",
         defs <- list(norm="p")
         norm.defs <- maDotsDefaults(opt, defs)     
         
-        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG),
+        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId,
+                                         DEBUG=DEBUG, dev=dev),
                                     norm.defs))
                 
         #get diagnostic plots names
@@ -330,7 +326,7 @@ agQuality <- function(fnames = NULL, path = ".",
           {
             print("Printing results to file")
             write.table(quality, "quality.txt",sep="\t", col.names=NA)
-            do.call("outputNormData", c(list(mraw=mraw), norm.defs))            
+            do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))            
           }
 
         setwd(curdir)
@@ -355,7 +351,7 @@ agQuality <- function(fnames = NULL, path = ".",
      defs <- list(norm="p")
      norm.defs <- maDotsDefaults(opt, defs)     
      setwd(resdir)
-     do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG),
+     do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                  norm.defs))
 
      print("agQuality done")
@@ -363,7 +359,7 @@ agQuality <- function(fnames = NULL, path = ".",
      if (output)
        {
          print("Printing results to file")
-         do.call("outputNormData", c(list(mraw=mraw), norm.defs))
+         do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
        }
 
      setwd(curdir)
