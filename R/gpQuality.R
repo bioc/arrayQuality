@@ -361,8 +361,17 @@ gpQuality <- function(fnames = NULL, path = ".",
        dir.create(resdir)
      if (DEBUG) print(getwd())
 
-     
-     mraw <- read.GenePix(fnames, path)
+     ## JYH: (June 27, 2005) Fix: Adding layout information so that
+     ## controlCode can be set correctly when COMPBOXPLOT = FALSE
+     galf <- read.Galfile(galfile = fnames[1], path = path)
+     mlayout <- galf$layout
+     gnames <- galf$gnames
+     if (DEBUG) print(controlId)
+
+     mlayout@maControls <- as.factor(maGenControls(gnames, controlcode = controlMatrix,
+                                                   id=controlId))
+
+     mraw <- read.GenePix(fnames, path, layout=mlayout)
      colnames(maGf(mraw)) <- fnames
      print("Starting maQualityPlots")
      defs <- list(norm="p")
