@@ -6,6 +6,7 @@
 ## Modified: 04/16/2004
 ##           09/21/2004
 ##           09/25/2004
+##           06/27/2005
 ## source("~/Projects/madman/Rpacks/arrayQuality/R/qualFunc.R")
 #####################################################
 
@@ -671,8 +672,10 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, organism=c("Mm", "Hs
 ## By default, background subtraction IS performed
 ########################################################
 
-outputNormData <- function(mraw=NULL, DEBUG = FALSE,...)
+outputNormData <- function(mraw=NULL, DEBUG = FALSE, val=c("maM", "maA"),...)
   {
+    print("In outputNormData")
+    print(val)
     opt <- list(...)   
     norm.defs <- maDotsMatch(maDotsDefaults(opt, list(norm="p")),formals(args(maNorm)))
 
@@ -680,7 +683,7 @@ outputNormData <- function(mraw=NULL, DEBUG = FALSE,...)
     mnorm <- do.call("maNorm", c(list(mraw), norm.defs))
 
     #mnorm <- maNorm(mraw, )
-    write.marray(mnorm, "NormalizedData.xls")
+    write.marray(mnorm, "NormalizedData.xls", val=val)
   }
 
 

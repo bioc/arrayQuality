@@ -102,25 +102,61 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
 ## Hexbin Plots
 ##########################################################
 
-qpHexbin <-  function(mdata, main="", ...)
+## This is the old function
+## qpHexbin <-  function(mdata, main="", ...)
+##{
+##  par(mar=c(5,4,3,2))
+##  y <- maM(mdata)
+##  x <- maA(mdata)
+##  nalim <- !is.na(x) & !is.na(y)
+##  bin <- hexbin(x[nalim],y[nalim])
+##  col <- BTY
+##  maxcnt  <-  max(bin$cnt)
+##  colorcut <-  seq(0, 1, length = min(17,maxcnt))
+##
+##  yrange <- c(min(maM(mdata), na.rm=TRUE), max(maM(mdata), na.rm=TRUE) + 1)
+##  plot(bin$xbnds, bin$ybnds, type = "n", xlab="A", ylab="M", ylim=yrange, main=main)
+##  hexagons(bin, colramp = col, colorcut = colorcut, maxcnt = maxcnt)
+
+##  par(mar=c(2,1,2,1))
+##  plot(seq(-0, 4, length=11),  -1:9, type="n", axes=FALSE, xlab="", ylab="")
+##  hex.legend(legend=4, ysize=8, lcex=1, inner=1,  maxcnt = maxcnt,
+##             colorcut= colorcut, colramp = col)
+##}
+
+## New version of qpHexbin from Paul Murrell
+qpHexbin <- function (mdata, main = "", ...)
 {
-  par(mar=c(5,4,3,2))
   y <- maM(mdata)
   x <- maA(mdata)
   nalim <- !is.na(x) & !is.na(y)
-  bin <- hexbin(x[nalim],y[nalim])
+  bin <- hexbin(x[nalim], y[nalim])
   col <- BTY
-  maxcnt  <-  max(bin$cnt)
-  colorcut <-  seq(0, 1, length = min(17,maxcnt))
-
-  yrange <- c(min(maM(mdata), na.rm=TRUE), max(maM(mdata), na.rm=TRUE) + 1)
-  plot(bin$xbnds, bin$ybnds, type = "n", xlab="A", ylab="M", ylim=yrange, main=main)
-  hexagons(bin, colramp = col, colorcut = colorcut, maxcnt = maxcnt)
-
-  par(mar=c(2,1,2,1))
-  plot(seq(-0, 4, length=11),  -1:9, type="n", axes=FALSE, xlab="", ylab="")
-  hex.legend(legend=4, ysize=8, lcex=1, inner=1,  maxcnt = maxcnt,
-             colorcut= colorcut, colramp = col)
+  maxcnt <- max(bin@count)
+  colorcut <- seq(0, 1, length = min(17, maxcnt))
+  yrange <- c(min(maM(mdata), na.rm = TRUE), max(maM(mdata),
+                                na.rm = TRUE) + 1)
+  ## move to next traditional graphics plot region
+  frame()
+  ## Set up grid viewports that correspond to the
+  ## current traditional figure region
+  require(gridBase)
+  vps <- baseViewports()
+  pushViewport(vps$inner, vps$figure)
+  pushViewport(viewport(gp=gpar(cex=0.6)))
+  ## draw a complete hexbin plot with legend
+  plot(bin, xlab = "A", ylab = "M",
+       ## ylim = yrange,
+       main = main, colramp = col, colorcut = colorcut, maxcnt = maxcnt,
+       legend = 1,
+       lcex = 1,
+       ## ysize = 8,
+       ## inner = 1)
+       newpage=FALSE)
+  upViewport(3)
+  ## move to next traditional graphics plot region
+  ## i.e., skip over region that used to be used for hexbin legend
+  frame()
 }
 
 

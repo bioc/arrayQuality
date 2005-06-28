@@ -153,7 +153,8 @@ gpQuality <- function(fnames = NULL, path = ".",
                       controlId = c("ID", "Name"),
                       output=FALSE,
                       resdir=".",
-                      dev="png", #set default to be png 
+                      dev="png", #set default to be png
+                      val=c("maM", "maA"),
                       DEBUG = FALSE,...)
 {
 
@@ -342,7 +343,7 @@ gpQuality <- function(fnames = NULL, path = ".",
             print("Printing results to file")
             write.table(quality, "quality.txt",sep="\t", col.names=NA)
             #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-            do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
+            do.call("outputNormData", c(list(mraw=mraw), norm.defs, val=val))
           }
 
         setwd(curdir)
@@ -385,7 +386,7 @@ gpQuality <- function(fnames = NULL, path = ".",
        {
          print("Printing results to file")
          #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-         do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
+         do.call("outputNormData", c(list(mraw=mraw, val=val), norm.defs))
        }
 
      setwd(curdir)

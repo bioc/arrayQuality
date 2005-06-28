@@ -13,7 +13,8 @@
 
 gpQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
 compBoxplot = TRUE, reference = NULL, controlMatrix = controlCode,
-controlId = c("ID", "Name"), output = FALSE, resdir = ".", dev= "png", DEBUG = FALSE,...)
+controlId = c("ID", "Name"), output = FALSE, resdir = ".", dev= "png",
+val=c("maM", "maA"),DEBUG = FALSE,...)
 }
 
 \arguments{
@@ -55,6 +56,9 @@ controlId = c("ID", "Name"), output = FALSE, resdir = ".", dev= "png", DEBUG = F
   \item{dev}{A "character" string naming the graphics device. This will
     take arguments "png", "jpeg" and "ps" only. By default, dev is set
     to "png".}
+
+  \item{val}{A "character" string representing the slotNames to be
+    written in the output file.}
   
   \item{DEBUG}{If 'TRUE', debug statements are printed.}
 
