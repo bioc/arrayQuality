@@ -15,6 +15,26 @@
 \alias{arrayReplicates}
 \alias{outputNormData}
 
+\alias{qpS2Nmeebo}
+\alias{qpDotPlotsMeebo}
+\alias{qpDotPlotsMeebo2}
+\alias{qpBoxplotMeebo}
+\alias{controlCodeMeebo}
+\alias{qpMisMatchPlot}
+\alias{BEbin.linear}
+\alias{qpBEplot.linear}
+\alias{qpTiling}
+\alias{getSpikeIds}
+\alias{getSpikeIndex}
+\alias{readAllSpikes}
+\alias{Spike.MMplot}
+\alias{Spike.Sensitivity}
+\alias{Spike.Individual.Sensitivity}
+\alias{Spike.MM.Scatter}
+\alias{Spike.Cy5vsCy3}
+\alias{MeeboSpotTypes}
+
+
 \title{Internal arrayQuality functions}
  
 \description{Internal arrayQuality functions}

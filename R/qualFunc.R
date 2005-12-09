@@ -680,9 +680,10 @@ outputNormData <- function(mraw=NULL, DEBUG = FALSE, val=c("maM", "maA"),...)
     norm.defs <- maDotsMatch(maDotsDefaults(opt, list(norm="p")),formals(args(maNorm)))
 
     if (DEBUG) cat("Using normalization method:  ", norm.defs$norm, "\n")
-    mnorm <- do.call("maNorm", c(list(mraw), norm.defs))
-
-    #mnorm <- maNorm(mraw, )
+    if (DEBUG) print("No background subtraction")
+    tmp <- mraw
+    maRb(tmp) <- maGb(tmp) <- matrix(0,0,0)
+    mnorm <- do.call("maNorm", c(list(tmp), norm.defs))
     write.marray(mnorm, "NormalizedData.xls", val=val)
   }
 

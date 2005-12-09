@@ -72,7 +72,9 @@ readAgilent <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
     h <- strsplit(readLines(f, n = skip), split = sep)
     h <- as.list(unlist(h[[length(h)]]))
     names(h) <- gsub("\"", "", unlist(h))
-    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip + 1,
+##    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip + 1,
+##                quote = quote, ...)
+    dat <- scan(f, quiet = TRUE, what = h, sep = sep, skip = skip,
                 quote = quote, ...)
 
 ##    block <- cbind(block, as.numeric(dat[["Block"]]))
@@ -295,7 +297,7 @@ agQuality <- function(fnames = NULL, path = ".",
         setwd(resdir)
         print("Starting maQualityPlots")
 
-        defs <- list(norm="p")
+        defs <- list(norm="l")
         norm.defs <- maDotsDefaults(opt, defs)     
         
         do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId,
@@ -348,7 +350,7 @@ agQuality <- function(fnames = NULL, path = ".",
      mraw <- read.Agilent(fnames, path)
      colnames(maGf(mraw)) <- fnames
      print("Starting maQualityPlots")
-     defs <- list(norm="p")
+     defs <- list(norm="l")
      norm.defs <- maDotsDefaults(opt, defs)     
      setwd(resdir)
      do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
