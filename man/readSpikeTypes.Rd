@@ -44,7 +44,7 @@ readSpikeTypes(file = "DopingTypeFile2.txt", path = NULL, cy5col = "MassCy5", cy
 
 \author{Agnes Paquet}
 
-\seealso{\code{\link{readSpotTypes}}}
+
 
 \examples{
 datadir <- system.file("Meebo", package="arrayQuality")
