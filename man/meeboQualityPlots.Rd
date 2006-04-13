@@ -51,14 +51,14 @@ their MEEBO sequence id.
 
 \seealso{\code{\link{meeboQuality}}, \code{\link{gpQuality}},
   \code{\link{maQualityPlots}},\code{\link{MeeboSpotTypes}},
-  \code{\link{controlCodeMeebo}}, \code{\link{maGenControls}}}
+  \code{\link{controlCodeMeebo}}}
 
 \examples{
 datadir <- system.file("Meebo", package="arrayQuality")
 if (interactive())
 {
 mraw <- read.GenePix(path=datadir, controlcode=controlCodeMeebo)
-meeboQualityPlots
+meeboQualityPlots(mraw)
 }
 }
 \keyword{hplot}

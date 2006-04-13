@@ -1,6 +1,6 @@
 Package: arrayQuality
-Version: 1.6.3
-Date: 2005-12-06
+Version: 1.6.4
+Date: 2006-4-12
 Title: Assessing array quality on spotted arrays
 Depends: R (>= 2.2.0), marray, limma, convert, hexbin, gridBase, RColorBrewer
 biocViews: Microarray,TwoChannel,QualityControl,Visualization

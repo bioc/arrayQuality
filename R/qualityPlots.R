@@ -54,7 +54,6 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
     ## combined control status and name
 
     Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
-
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
 

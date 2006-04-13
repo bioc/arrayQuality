@@ -51,8 +51,7 @@ qpBoxplotMeebo <- function(mdata, xvar="maA", id="ID", colcode=1,meeboAnnot=MEEB
 
     newdata <- eval(call(xvar, mdata))
     xlim <- range(newdata, na.rm=TRUE)
-    Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
-
+   Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
     y <- y[names(y)!="probes"]

@@ -28,7 +28,7 @@ PRv9mers<-  function(fnames,
                comment.char="", sep="\t", header=TRUE, quote = "\"", name.W="Flags")
   opt <- list(...)
   Args <- maDotsMatch(opt, defs)
-  estpMatrix <- signalMatrix<- NULL
+  estpMatrix <- signalMatrix<- c()
   
   if (DEBUG) print("Getting File Names")
   ## Getting File names
@@ -66,7 +66,7 @@ PRv9mers<-  function(fnames,
       ## Set up arguments
       read.args <- maDotsMatch(Args, formals(args("read.GenePix")))
       read.args$fnames <- f
-      read.args$path <- read.args$name.Rf <- read.args$name.Rb <- NULL
+      read.args$path <- read.args$name.Rf <- read.args$name.Rb <- c()
 
       read.args$path <- path
       read.args <- c(read.args, list(name.Rf=NULL, name.Rb=NULL))

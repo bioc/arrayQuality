@@ -11,6 +11,8 @@
 #####################################################
 
 
+
+
 ###        TO DO  NEXT         ####
 ## 1) check that all call to HsRefenceDB are written properly
 ## 2) check boxplot if reference has Inf values
@@ -516,7 +518,7 @@ globalQuality <- function(fnames = NULL, path = ".",
     organism <- organism[1]
         
     # Prepares results
-    quality <- NULL
+    quality <- c()
     
     # Call to slideQuality for each gpr file
 

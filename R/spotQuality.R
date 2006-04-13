@@ -57,16 +57,16 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
     if (DEBUG) print(skip)
 
     # Read data in       
-    name <- id <- NULL
-    block <- column <- row <- NULL
-    Date <- PMTR <- PMTG <- normMethod <- normCoef <- NULL
-    Gfmedian <- Gfmean <- Gfsd <- NULL
-    Gbmedian <- Gbmean <- Gbsd <- NULL
-    Rfmedian <- Rfmean <- Rfsd <- NULL
-    Rbmedian <- Rbmean <- Rbsd <- NULL
-    Gfsat <- Rfsat <- NULL
-    spotDia <- spotFArea <- spotBArea <- NULL
-    Flags <- NULL
+    name <- id <- c()
+    block <- column <- row <- c()
+    Date <- PMTR <- PMTG <- normMethod <- normCoef <- c()
+    Gfmedian <- Gfmean <- Gfsd <- c()
+    Gbmedian <- Gbmean <- Gbsd <- c()
+    Rfmedian <- Rfmean <- Rfsd <- c()
+    Rbmedian <- Rbmean <- Rbsd <- c()
+    Gfsat <- Rfsat <- c()
+    spotDia <- spotFArea <- spotBArea <- c()
+    Flags <- c()
 
     if (DEBUG) print(paste("Reading", f))
     h <- strsplit(readLines(f, n = skip + 1), split = sep)
@@ -221,8 +221,8 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
         if(DEBUG) print("Starting compBoxplot")
 
         ## Prepares results
-        quality <- NULL
-        tmp <- NULL
+        quality <- c()
+        tmp <- c()
         QCp <- c()
         Dp <- c()
         

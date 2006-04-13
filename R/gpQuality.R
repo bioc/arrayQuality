@@ -45,16 +45,16 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
     if (DEBUG) print(skip)
   
     # Read data in       
-    name <- id <- NULL
-    block <- column <- row <- NULL
-    Date <- PMTR <- PMTG <- normMethod <- normCoef <- NULL
-    Gfmedian <- Gfmean <- Gfsd <- NULL
-    Gbmedian <- Gbmean <- Gbsd <- NULL
-    Rfmedian <- Rfmean <- Rfsd <- NULL
-    Rbmedian <- Rbmean <- Rbsd <- NULL
-    Gfsat <- Rfsat <- NULL
-    spotDia <- spotFArea <- spotBArea <- NULL
-    Flags <- NULL
+    name <- id <- c()
+    block <- column <- row <- c()
+    Date <- PMTR <- PMTG <- normMethod <- normCoef <- c()
+    Gfmedian <- Gfmean <- Gfsd <- c()
+    Gbmedian <- Gbmean <- Gbsd <- c()
+    Rfmedian <- Rfmean <- Rfsd <- c()
+    Rbmedian <- Rbmean <- Rbsd <- c()
+    Gfsat <- Rfsat <- c()
+    spotDia <- spotFArea <- spotBArea <- c()
+    Flags <- c()
     
     tmp <- readLines(f, n = 40)
     if (length(grep("DateTime", tmp)) != 0) 
@@ -112,7 +112,7 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
     Flags <- cbind(Flags,as.numeric(dat[["Flags"]]))
 
     gprData <- list(File = fnames[1], Date = Date, PmtR = PMTR, PmtG = PMTG,
-                    Normalization = normMethod, NormCoefficient = normCoef,
+                    Normalization = normMethod, NormCoefficent = normCoef,
                     Name = name, ID = id,
                     Block = block, Column = column, Row = row,
                     GfMedian = Gfmedian, GfMean = Gfmean, GfSD = Gfsd,
@@ -205,8 +205,8 @@ gpQuality <- function(fnames = NULL, path = ".",
       {
     
         # Prepares results
-        quality <- NULL
-        #tmp <- NULL
+        quality <- c()
+        #tmp <- c()
         QCp <- c()
         Dp <- c()
         

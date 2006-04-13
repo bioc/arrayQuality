@@ -36,7 +36,6 @@ readcontrolCode(file = "SpotTypes.txt", path = NULL, sep = "\t", check.names = F
 
 \author{Jean Yee Hwa Yang, Agnes Paquet}
 
-\seealso{\code{readSpotTypes}}
 
 \keyword{hplot}
 
