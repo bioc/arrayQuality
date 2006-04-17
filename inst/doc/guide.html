@@ -59,10 +59,12 @@ Bioconductor.
 </p>
 <ul>
   <li><b>Automatic installation from Bioconductor</b><br>
+This is the easiest way to install arrayQuality, as other Bioconductor packages required to use arrayQuality should be automatically installed.
 Start R on your computer and make sure you are connected to the
 internet. At the R prompt, type:<br>
-    <font face="courier">library(reposTools)<br>
-install.packages2("arrayQuality")</font> <br>
+    <font face="courier">source("http://www.bioconductor.org/biocLite.R")
+<br>
+biocLite("arrayQuality")</font> <br>
     <br>
 If you are using RGUI (Windows):<br>
 In the R menu, click on "Packages". In the drop-down menu, select
@@ -535,7 +537,7 @@ Version 2 Mouse oligonucleotides.<br>
 <br>
 <font face="courier">
 &gt; library(arrayQuality)<br>
-&gt; datadir &lt;- system.file("data", package="arrayQuality")<br>
+&gt; datadir &lt;- system.file("gprQCData", package="arrayQuality")<br>
 &gt; PRv9mers(fnames="12Mm250.gpr",path=datadir, prname="12Mm")<br>
 </font>
 <br>
@@ -790,9 +792,9 @@ represented figure 4.<br>
 <p class="code" style="font-family: courier new;">&gt;
 library(arrayQuality)</p>
 <p class="code" style="font-family: courier new;">&gt; datadir &lt;-
-system.file("data", package="arrayQuality")</p>
+system.file("gprQCData", package="arrayQuality")</p>
 <p class="code" style="font-family: courier new;">&gt;
-PRvQCHyb(fnames=&#8221;9Mm137.png&#8221;, path=datadir, prname="9Mm")</p>
+PRvQCHyb(fnames=&#8221;9Mm137.gpr&#8221;, path=datadir, prname="9Mm")</p>
 <p class="MsoNormal"><o:p></o:p></p>
 <div style="text-align: center;">
 <o:p></o:p><img src="images/QCHybDiagPlot.png" title=""
@@ -1585,7 +1587,7 @@ measure and normalized data to a file in a directory named "Results":</p>
 <p class="code" style="font-family: courier new;">&gt;
 library(arrayQuality)</p>
 <p class="code" style="font-family: courier new;">&gt; datadir &lt;-
-system.file("data", package="arrayQuality")</p>
+system.file("gprQCData", package="arrayQuality")</p>
 <p class="code" style="text-align: left; font-family: courier new;"
  align="left">&gt; result &lt;-
 gpQuality(<span style="color: black;">fnames = "9Mm137.gpr", path =
