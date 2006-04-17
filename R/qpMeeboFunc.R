@@ -164,9 +164,19 @@ qpDotPlotsMeebo <- function(mdata,  xvar="maA", id="SeqID", colcode=1, nrep=3, p
                 labs <- c(labs,paste(plotnames[k], "(n=",length(row.names(y[[plotnames[k]]])), ") ",sep=""))
               }
           }
-        axis(1)      
-        labs <- c(paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep=""),labs)
-        axis(2, at=1:ylim[2], labels=labs, las=2, cex.axis=0.8)
+        axis(1)
+
+        posSymbol <- as.character(MEEBOset[match(names(exty[["Positive"]]), as.character(MEEBOset[,"SeqID"])),"Symbol"])
+
+        lab=c(paste("EMPTY (n=",length(row.names(y[["Empty"]])), ")", sep=""),
+          posSymbol,
+           paste("Negative (n=",length(row.names(y[["Negative"]])), ") ",sep=""))
+          
+        axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.8)
+        
+
+        #labs <- c(paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep=""),labs)
+        #axis(2, at=1:ylim[2], labels=labs, las=2, cex.axis=0.8)
         box()
 
       } else
@@ -397,7 +407,7 @@ meeboQualityPlots <-  function(mrawObj, headerInfo="",
       ## 12 maM Dot plot
       if(DEBUG) print("start 12")
       if(length(maControls(mraw))!=0)
-        qpDotPlotsMeebo(mraw, xvar="maM", col=colcode, main="Control A", cex.main=0.8, id=seqId)
+        qpDotPlotsMeebo(mraw, xvar="maM", col=colcode, main="Control M", cex.main=0.8, id=seqId)
        #title(main= "Controls A")
 
       if(DEBUG) print("start 13")
