@@ -5,6 +5,7 @@
 ## Spike-ins plots -- Using limma functions
 #################################################
 
+##source("C:/MyDoc/Projects/madman/Rpacks/arrayQuality/R/SpikeIn.R")
 
 ###############################################################
 ## LOAD REQUIRED PACKAGES and OBJECTS
@@ -389,7 +390,7 @@ Spike.Individual.Sensitivity <- function(rawobj,spikeList=NULL, id="SeqID", gnam
         boxplot(negCtlCy3,add=TRUE,col="blue",at=1,axes=FALSE)
         for(j in 1:length(orderCy3))
           {
-            boxplot(log.na(rawobj$R[spikeIndex[[type]][[orderCy3[j]]],],2),add=TRUE,col="green",
+            boxplot(log.na(rawobj$G[spikeIndex[[type]][[orderCy3[j]]],],2),add=TRUE,col="green",
                     at=(j+1),axes=FALSE)
           }
         axis(1,at=1:(length(orderCy3)+1),labels=c("Neg Ctrl",spikeList[[type]][orderCy3,namecol]),las=2)

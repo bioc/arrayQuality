@@ -4,7 +4,7 @@
 ## Author: Agnes Paquet
 ## Date:   06/28/2005
 ##         10/31/2005
-## source("C:/MyDoc/Projects/madman/Rpacks/meeboQuality/R/meeboFunc.R")
+## source("C:/MyDoc/Projects/madman/Rpacks/arrayQuality/R/qpMeeboFunc.R")
 ## Using R 2.1, arrayQuality 1.2.2
 ##       R2.2.0
 ##########################################################
@@ -134,7 +134,7 @@ qpDotPlotsMeebo <- function(mdata,  xvar="maA", id="SeqID", colcode=1, nrep=3, p
             numplots <- numplots+1
             plotnames <- c(plotnames, "Empty")
           }
-        if(("EMPTY" %in% names(y)) & !("Empty" %in% names(exty)))
+        if(("EMPTY" %in% names(y)) & !("EMPTY" %in% names(exty)))
           {
             numplots <- numplots+1
             plotnames <- c(plotnames, "EMPTY")
@@ -166,17 +166,20 @@ qpDotPlotsMeebo <- function(mdata,  xvar="maA", id="SeqID", colcode=1, nrep=3, p
           }
         axis(1)
 
-        posSymbol <- as.character(MEEBOset[match(names(exty[["Positive"]]), as.character(MEEBOset[,"SeqID"])),"Symbol"])
+        #posSymbol <- as.character(MEEBOset[match(names(exty[["Positive"]]), as.character(MEEBOset[,"SeqID"])),"Symbol"])
 
-        lab=c(paste("EMPTY (n=",length(row.names(y[["Empty"]])), ")", sep=""),
-          posSymbol,
-           paste("Negative (n=",length(row.names(y[["Negative"]])), ") ",sep=""))
-          
-        axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.8)
-        
+        ##lab=c(paste("EMPTY (n=",length(row.names(y[["Empty"]])), ")", sep=""),
+#        labs <- c(paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep=""),labs)
 
-        #labs <- c(paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep=""),labs)
-        #axis(2, at=1:ylim[2], labels=labs, las=2, cex.axis=0.8)
+        labstmp <- unlist(lapply(exty,names))
+        ## Replace sequence ids by symbols if necessary
+        labstmp[grep("mSQ", labstmp)] <- 
+          as.character(MEEBOset[match(labstmp[grep("mSQ", labstmp)], as.character(MEEBOset[,"SeqID"])),"Symbol"])
+
+        labsnum <- unlist(lapply(exty, lapply, length))
+        labs <- c(paste(labstmp, " (n=", labsnum, ") ",sep=""), labs)
+      
+        axis(2, at=1:ylim[2], labels=labs, las=2, cex.axis=0.8)
         box()
 
       } else
