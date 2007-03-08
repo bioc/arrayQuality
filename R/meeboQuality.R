@@ -1,6 +1,6 @@
 ##############################################################
 ## Wrapper function for MEEBO QC
-## Date: 10/27/2005
+## Date: 07/03/2006
 ## Author: Agnes
 ##############################################################
 
@@ -10,6 +10,7 @@
 ## 3) Filtering
 ## 4) Plot: Mismatch, tiling, BE, spike-ins
 
+##source("C:/MyDoc/Projects/Rcode/arrayQualityTmp/R/meeboQuality.R")
 ##source("C:/MyDoc/Projects/madman/Rpacks/arrayQuality/R/meeboQuality.R")
 ##meeboQuality(spikeTypeFile="DopingTypeFile2.txt",DEBUG=TRUE, norm="n")
 
@@ -34,11 +35,14 @@ meeboQuality <- function(fnames = NULL, path = ".",
                          normMethod="p",
                          ##FILTER=FALSE,
                          diagnosticPlot=TRUE,
+                         output=TRUE,
                          resdir = ".", 
                          dev = "png",
+                         organism="Mm",
                          DEBUG = FALSE, ...)
   {
     print("Staring meeboQuality")
+    require(MEEBOdata)
     ## Check input arguments
     if (missing(path) | is.null(path))
       path <- "."
@@ -69,8 +73,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
     controlId <- controlId[1]
     if (DEBUG) print(controlId) 
     opt <- list(...)
-    ##if (DEBUG) print(controlMatrix)
-
+ 
     ## Load required R objects
     if(is.null(annot))
       {
@@ -79,12 +82,6 @@ meeboQuality <- function(fnames = NULL, path = ".",
         annot=MEEBOset
       }
 
-    if(!("tilingres" %in% ls(1)))
-      data(MEEBOtiling)
-
-    if(!("MEEBOctrl" %in% ls(1)))
-      data(MEEBOctrl)
-    
     if(DOPING)
       {
         if(DEBUG) print("Parsing Spike Type File")
@@ -93,7 +90,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
         SpikeList <- do.call("readSpikeTypes",spike.args)
         spike.args <- maDotsMatch(maDotsMatch(opt, spike.defs), formals(args("readSpotTypes")))
         MeeboSpikeTypes <- do.call(readSpotTypes,spike.args)
-        if(length(namecol)>2)
+        if(length(namecol)>1)
           namecol=namecol[1]
 
       }
@@ -102,8 +99,9 @@ meeboQuality <- function(fnames = NULL, path = ".",
     if (!is.null(galfile))
       {
         if(DEBUG) print("Reading Galfile ... ")
-        gal.defs <- list(galfile = galfile)        
+        gal.defs <- list(galfile = galfile, path=path, fill=TRUE)        
         gal.args <- maDotsMatch(maDotsMatch(opt, gal.defs), formals(args("readGAL")))
+        gal.args <- maDotsMatch(maDotsDefaults(opt, gal.defs), formals(args("readGAL")))
         gal <- do.call("readGAL", gal.args)
 
         gpr.defs <- list(files=fnames, path=path,source=source,other.columns=other.columns)
@@ -130,8 +128,11 @@ meeboQuality <- function(fnames = NULL, path = ".",
         spot.args <- maDotsMatch(maDotsMatch(opt,spot.defs),formals(args(read.maimages)))     
         controlMatrix <- do.call("readSpotTypes",spot.args)
       }
-    RG$genes$Status <- controlStatus(controlMatrix,RG,verbose=FALSE)
+    RG$genes$Status <- controlStatus(controlMatrix,RG,regexpcol=controlId,verbose=FALSE)
     if(DEBUG) print(table(RG$genes$Status))
+
+    ## Don't forget to set up rownames==ID
+    rownames(RG$R) <- rownames(RG$G) <- RG$genes[,controlId]
 
     ##############################################################
     ## Pre-processing: Bg subtraction, normalization
@@ -178,11 +179,36 @@ meeboQuality <- function(fnames = NULL, path = ".",
       {
         print("Starting meeboQualityPlots")
         qp.defs <-list(mrawObj=RG,controlId=controlId,DEBUG=DEBUG,
-                       dev=dev,norm=normMethod)
+                       dev=dev,norm=normMethod, organism=organism)
         qp.args <- maDotsDefaults(opt, qp.defs)
         do.call("meeboQualityPlots", qp.args)
       }
 
+    ###############################################################
+    ## Write normalized data to file
+
+    if (output)
+      {
+        print("Printing results to file")
+        ##colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
+        ## do.call("outputNormData", c(list(mraw=RG, val=val), norm.defs))
+        tmp <- c()
+        cnames <- c()
+        for(i in 1:ncol(MA$A))
+          {
+            tmp <- cbind(tmp, MA$M[,i],MA$A[,i])
+            cnames <- c(cnames, paste("M",colnames(MA$M)[i],sep="_"),
+                        paste("A", colnames(MA$A)[i],sep="_"))
+          }
+        colnames(tmp) <- cnames
+        write.table(cbind(Block=MA$genes$Block,
+                          Column=MA$genes$Column, Row=MA$genes$Row,
+                          Name=MA$genes$Name, ID=MA$genes$ID,
+                          tmp),file="NormalizedData.xls",
+                    sep="\t",quote=FALSE,row.names=FALSE)
+        rm(cnames,tmp)
+      }
+    
     ##########################################################
     ## Specific individual control plots
     if(meeboSetQC)
@@ -191,10 +217,13 @@ meeboQuality <- function(fnames = NULL, path = ".",
     
         ## Loading controls
         if(DEBUG) print("Loading mismatch control and binding energy info")
+
+        if(!("MEEBOtilingres" %in% ls(1)))
+          data(MEEBOtilingres)
         
         if(!("MEEBOctrl" %in% ls(1)))
-          data(MEEBOset)
-        
+          data(MEEBOctrl)
+                
         for(i in 1:dim(MA)[2])
           {
             if (DEBUG) print(i)
@@ -210,7 +239,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
               do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=plotname), plotdef$dev)),
                                        formals(args(dev))))
             par(mfrow=c(3,4), cex=1.5, cex.axis=0.8, cex.main=1.2,mar=c(2,2,2,2),oma=c(3,3,3,3))
-            qpMisMatchPlot(MA[,i],ctrllist=MEEBOctrl,DEBUG=DEBUG)
+            qpMisMatchPlot(MA[,i],ctrllist=MEEBOctrl,organism=organism,DEBUG=DEBUG)
             title(paste("Mismatch plot for", colnames(MA$A)[i],sep=" "),outer=TRUE,cex=1.2)
             dev.off()
             
@@ -240,7 +269,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
               do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=plotname), plotdef$dev)),
                                        formals(args(dev))))
             par(mfcol=c(3,4), cex=1.3, cex.axis=1, mar=c(3,4,3,2),oma=c(2,2,4,2))
-            qpTiling(RGsub[,i], tilingres=tilingres,DEBUG=DEBUG)
+            qpTiling(RGsub[,i], tilingres=MEEBOtilingres,organism=organism,DEBUG=DEBUG)
             title(paste("Raw signal vs. 3' distance:",colnames(MA$A)[i],sep=" "),
                   cex=2,outer=TRUE)
             dev.off()
@@ -261,7 +290,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
                 ## Cy3 vs Cy5 raw signal
                 if(DEBUG) print("Spike.Cy5vsCy3")
                 spike.defs <- list(rawobj=RGsub[,i],spikesTypes=MeeboSpikeTypes,id=id,annot=annot,
-                                   gnames=RGsub$genes[,"ID"],cy5col=cy5col,cy3col=cy3col)
+                                   gnames=RGsub$genes[,controlId],cy5col=cy5col,cy3col=cy3col)
                 spike.args <- maDotsDefaults(maDotsMatch(opt, spike.defs),formals(args(Spike.Cy5vsCy3)))
 
                 plotname <- paste("Spike.Cy5vsCy3",colnames(MA$A)[i],plotdef$suffix,sep=".")
@@ -279,7 +308,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
                 
                 ## MMplot obserevd vs. expected
                 spike.defs <- list(mval=MA$M[,i],spikeList=SpikeList,id=id,annot=annot,
-                                   gnames=MA$genes[,"ID"],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
+                                   gnames=MA$genes[,controlId],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
                 spike.args <- maDotsMatch(maDotsDefaults(opt,spike.defs),formals(args(Spike.MMplot)))
                 
                 ## Will generate 2 plots/spike type
@@ -319,7 +348,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
                 
                 if(DEBUG) print("Spike Sensitivity")            
                 spike.defs <- list(rawobj=RGsub[,i],spikeList=SpikeList,id=id,annot=annot,ctllist=MEEBOctrl,
-                                   gnames=RGsub$genes[,"ID"],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
+                                   gnames=RGsub$genes[,controlId],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
                 spike.args <- maDotsMatch(maDotsDefaults(opt,spike.defs),formals(args(Spike.Sensitivity)))
                 
                 plotname <- paste("Spike.Sensitivity",colnames(MA$A)[i],plotdef$suffix,sep=".")
@@ -348,7 +377,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
                                            formals(args(dev))))
                 par(mfrow=c(ntypes,2),oma=c(3,3,3,3),cex.lab=1.2,cex.axis=1.2)
                 spike.defs <- list(rawobj=RGsub[,i],spikeList=SpikeList,id=id,annot=annot,ctllist=MEEBOctrl,
-                                   gnames=RGsub$genes[,"ID"],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
+                                   gnames=RGsub$genes[,controlId],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
                 spike.args <- maDotsMatch(maDotsDefaults(opt,spike.defs),
                                           formals(args(Spike.Individual.Sensitivity)))
                 do.call("Spike.Individual.Sensitivity",spike.args)
@@ -356,8 +385,8 @@ meeboQuality <- function(fnames = NULL, path = ".",
                 dev.off()
               }
           }
-    
-    ## Go back to previous directory
+
+     ## Go back to previous directory
     
     if(DEBUG) print("End of meeboQuality")
     setwd(curdir)

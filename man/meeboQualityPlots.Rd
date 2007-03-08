@@ -9,7 +9,9 @@
   slide quality.  
 }
 \usage{
-meeboQualityPlots(mrawObj, headerInfo = "", save = TRUE, dev = "png", col = NULL, badspotfunction = NULL, controlId = c("ID", "Name"), seqId = "SeqID", DEBUG = FALSE, ...)
+meeboQualityPlots(mrawObj, headerInfo = "", save = TRUE, dev = "png",
+col = NULL, badspotfunction = NULL, controlId = c("ID", "Name"), seqId =
+"SeqID", organism = "Mm", DEBUG = FALSE, ...)
 }
 
 \arguments{
@@ -34,6 +36,10 @@ meeboQualityPlots(mrawObj, headerInfo = "", save = TRUE, dev = "png", col = NULL
 
   \item{seqId}{A "character" string naming the column of the MEEBO
     annotation to use to retrieve replicated sequences.}
+
+  \item{organism}{A "character" string naming the organism genome
+    printed on the array, either "Mm" or "Hs". By default, organism is
+    set to "Mm". It is used to retrieve the corresponding Oligo set annotations.}
   
   \item{DEBUG}{If 'TRUE', debug statements are printed.}
   
@@ -54,10 +60,15 @@ their MEEBO sequence id.
   \code{\link{controlCodeMeebo}}}
 
 \examples{
-datadir <- system.file("Meebo", package="arrayQuality")
+
 if (interactive())
 {
-mraw <- read.GenePix(path=datadir, controlcode=controlCodeMeebo)
+require(MEEBO)
+datadir <- system.file("Meebo", package="MEEBO")
+mraw <- read.GenePix(path=datadir)
+maControls(mraw) <- maGenControls(maGnames(mraw),id="ID",controlcode=controlCodeMeebo)
+rownames(maRf(mraw)) <- rownames(maRb(mraw)) <- maGeneTable(mraw)[,"ID"]
+rownames(maGf(mraw)) <- rownames(maGb(mraw)) <- maGeneTable(mraw)[,"ID"]
 meeboQualityPlots(mraw)
 }
 }

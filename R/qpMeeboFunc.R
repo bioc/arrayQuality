@@ -1,48 +1,29 @@
 #########################################################
 ## Set of functions written to assess quality
 ## of MEEBO set arrays
+## Using MEEBO/HEEBO compatible functions
 ## Author: Agnes Paquet
-## Date:   06/28/2005
-##         10/31/2005
+## Date:   07/03/2006
 ## source("C:/MyDoc/Projects/madman/Rpacks/arrayQuality/R/qpMeeboFunc.R")
-## Using R 2.1, arrayQuality 1.2.2
-##       R2.2.0
+## Using R 2.3.1, arrayQuality 1.9.2
 ##########################################################
-
-## 1) Get proper controlCode for MEEBO
-## 2) Modify qpS2N
-## 3) Modify qpDotPlots
-## 4) Wrap MMplot, BE plot and tilingPlots into one
-
-#library(arrayQuality)
-#setwd("C:/MyDoc/Projects/arrayQuality/R/")
-## 1) Get proper controlCode for MEEBO
-#operonControlCode <- controlCode
-#controlCode <- readcontrolCode(file="SpotType.txt", controlId="ID")
-#mraw <- read.GenePix()
-
-##load MEEBOset to get sequence ids
-#load("../data/MEEBOset.RData")
-
 
 ## Set up controlCode for Meebo
 controlCodeMeebo <-
   structure(c("mMC", "mCP", "mCN", "EMPTY", "mCD",
-            "Mouse", "Positive", "Negative", "Empty", "Doping"),
+            "Mouse mMC", "Positive", "Negative", "Empty", "Doping"),
             .Dim = c(5, 2),
             .Dimnames = list(c("1", "2", "3", "4","5"),
               c("Pattern", "Name")))
 
 MeeboSpotTypes <-
-  structure(c("probes","Mouse", "Positive", "Negative", "Empty", "Doping",
+  structure(c("probes","Mouse mMC", "Positive", "Negative", "Empty", "Doping",
               "*","mMC*", "mCP*", "mCN*", "EMPTY*", "mCD*",
             rep("*",6),
             "black","green","red","blue","cyan","yellow"),
             .Dim = c(6, 4),
             .Dimnames = list(c("1", "2", "3", "4","5","6"),
               c("SpotType","ID","Name","Color")))
-
-
 
 ## Boxplot for each type of controls
 
@@ -51,7 +32,7 @@ qpBoxplotMeebo <- function(mdata, xvar="maA", id="ID", colcode=1,meeboAnnot=MEEB
 
     newdata <- eval(call(xvar, mdata))
     xlim <- range(newdata, na.rm=TRUE)
-   Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
+    Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
     y <- y[names(y)!="probes"]
@@ -228,14 +209,16 @@ qpS2Nmeebo <- function(mdata, channel=c("red", "green"), colcode=1, ...)
 
  
 meeboQualityPlots <-  function(mrawObj, headerInfo="",
-                                 save = TRUE,
-                                 dev = "png",  #set default to be png
-                                 col=NULL, badspotfunction=NULL,
-                                 controlId=c("ID", "Name"),
-                                 seqId="SeqID",
-                                 DEBUG=FALSE, ...)
+                               save = TRUE,
+                               dev = "png",  #set default to be png
+                               col=NULL, badspotfunction=NULL,
+                               controlId=c("ID", "Name"),
+                               seqId="SeqID",
+                               organism="Mm",
+                               DEBUG=FALSE, ...)
 {
   require(hexbin)
+  require(MEEBOdata)
   if (DEBUG) print("function starting")
   controlId <- controlId[1]
 
@@ -247,10 +230,13 @@ meeboQualityPlots <-  function(mrawObj, headerInfo="",
   if (setequal(class(mrawObj), "RGList"))
       {
         mrawTmp <- as(mrawObj, "marrayRaw")
+        maControls(mrawTmp) <- mrawObj$genes$Status
+        rownames(maRf(mrawTmp)) <- rownames(maGf(mrawTmp)) <- rownames(mrawObj$R)
+        rownames(maRb(mrawTmp)) <- rownames(maGb(mrawTmp)) <- rownames(mrawObj$R)
         mrawObj <- mrawTmp
         rm(mrawTmp)
       }
-
+  
   if(DEBUG) print(dim(mrawObj))
   for(i in 1:dim(mrawObj)[2])
     {
@@ -396,13 +382,15 @@ meeboQualityPlots <-  function(mrawObj, headerInfo="",
 
       ## 9 & 10  Red and Green Signal to Noise (background corrected)
       if(DEBUG) print("start 9 & 10")
-      qpS2Nmeebo(mraw, channel="red", colcode=colcode)
-      qpS2Nmeebo(mraw, channel="green", colcode=colcode)
+      qpS2Neebo(mraw, channel="red", colcode=colcode, organism=organism, controlId=controlId)
+      qpS2Neebo(mraw, channel="green", colcode=colcode, organism=organism,controlId=controlId)
+      ##qpS2Nmeebo(mraw, channel="red", colcode=colcode)
+      ##qpS2Nmeebo(mraw, channel="green", colcode=colcode)
 
       ## 11 maM Dot plot -- Replaced by controls boxplot
       if(DEBUG) print("start 11")
       if(length(maControls(mnorm))!=0)
-        qpBoxplotMeebo(mraw,xvar="maA", col=colcode, main="Control A", cex.main=0.8, id=controlId)
+        qpBoxplotMeebo(mraw,xvar="maA", col=colcode, main="Control A", cex.main=0.8, id=controlId,meeboAnnot=MEEBOset)
 #        qpDtPlotsMeebo2(mnorm, xvar="maA", col=colcode,
 #                   main="Control normalized M", cex.main=0.8, id=controlId)
 #      title(main= "Controls normalized M")
@@ -410,7 +398,7 @@ meeboQualityPlots <-  function(mrawObj, headerInfo="",
       ## 12 maM Dot plot
       if(DEBUG) print("start 12")
       if(length(maControls(mraw))!=0)
-        qpDotPlotsMeebo(mraw, xvar="maM", col=colcode, main="Control M", cex.main=0.8, id=seqId)
+        qpDotPlotsEEBO(mraw, xvar="maM", col=colcode, main="Control M", cex.main=0.8, id=seqId, meeboAnnot=MEEBOset)
        #title(main= "Controls A")
 
       if(DEBUG) print("start 13")

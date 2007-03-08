@@ -91,7 +91,10 @@ readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
     column <- cbind(column, as.numeric(dat[["Column"]]))
     row <- cbind(row, as.numeric(dat[["Row"]]))
     name <- cbind(name, dat[["Name"]])
-    id <- cbind(id, dat[["ID"]])
+    ## was    id <- cbind(id, dat[["ID"]])
+    ## does not work if identifier not =IS
+    id <- cbind(id, dat[[controlId]])
+    
     Gfmedian <- cbind(Gfmedian, as.numeric(dat[["F532 Median"]]))
     Gfmean <- cbind(Gfmean, as.numeric(dat[["F532 Mean"]]))        
     Gfsd <- cbind(Gfsd, as.numeric(dat[["F532 SD"]]))

@@ -23,17 +23,17 @@ w\:* {behavior:url(#default#VML);}
  <o:DocumentProperties>
   <o:Author>APaquet</o:Author>
   <o:LastAuthor>APaquet</o:LastAuthor>
-  <o:Revision>13</o:Revision>
-  <o:TotalTime>79</o:TotalTime>
+  <o:Revision>17</o:Revision>
+  <o:TotalTime>83</o:TotalTime>
   <o:Created>2005-12-01T18:49:00Z</o:Created>
-  <o:LastSaved>2005-12-09T00:57:00Z</o:LastSaved>
+  <o:LastSaved>2006-06-29T21:26:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
-  <o:Words>1927</o:Words>
-  <o:Characters>10989</o:Characters>
+  <o:Words>1959</o:Words>
+  <o:Characters>11170</o:Characters>
   <o:Company>UCSF</o:Company>
-  <o:Lines>91</o:Lines>
-  <o:Paragraphs>25</o:Paragraphs>
-  <o:CharactersWithSpaces>12891</o:CharactersWithSpaces>
+  <o:Lines>93</o:Lines>
+  <o:Paragraphs>26</o:Paragraphs>
+  <o:CharactersWithSpaces>13103</o:CharactersWithSpaces>
   <o:Version>11.6408</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
@@ -241,7 +241,7 @@ ul
 	mso-bidi-language:#0400;}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="5122"/>
+ <o:shapedefaults v:ext="edit" spidmax="6146"/>
 </xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
   <o:idmap v:ext="edit" data="1"/>
@@ -253,9 +253,9 @@ ul
 <div class=Section1>
 
 <h1 align=center style='text-align:center'>Checking hybridization quality of
-MEEBO set arrays</h1>
+MEEBO/HEEBO set arrays</h1>
 
-<p class=MsoNormal align=center style='text-align:center'>November 28, 2005</p>
+<p class=MsoNormal align=center style='text-align:center'>June 29, 2006</p>
 
 <p class=MsoNormal align=center style='text-align:center'>Agnes Paquet,
 Yuanyuan Xiao, (Jean) Yee Hwa Yang, Andrea Barczak, David Erle</p>
@@ -267,22 +267,23 @@ Yuanyuan Xiao, (Jean) Yee Hwa Yang, Andrea Barczak, David Erle</p>
 <h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]><span
 style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>1.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]>Introduction to MEEBO set quality</h2>
+</span></span></span><![endif]><span dir=LTR>Introduction to MEEBO/HEEBO set
+quality</span></h2>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>This component of arrayQuality aims at checking the overall performance
-of the hybridization, given that the quality of the print-run is satisfactory.
-Please refer to PRv9mers and PRvQCHyb functions in arrayQuality for inspection
-of print-run quality.<span style='mso-spacerun:yes'>   </span>This suite of
-functions are specifically designed for MEEBO arrays, which provide a wide
-panel of control sequences, such as positive and negative controls, and tiled
-controls and doping controls. For more details on MEEBO controls, please refer
-to the section 4 of this guide.</p>
+<p class=MsoNormal>This component of arrayQuality aims at checking the overall
+performance of the hybridization, given that the quality of the print-run is
+satisfactory. Please refer to PRv9mers and PRvQCHyb functions in arrayQuality
+for inspection of print-run quality.<span style='mso-spacerun:yes'>
+</span>This suite of functions are specifically designed for MEEBO/HEEBO
+arrays, which provide a wide panel of control sequences, such as positive and
+negative controls, and tiled controls and doping controls. For more details on
+MEEBO or HEEBO controls, please refer to the section 4 of this guide.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>arrayQuality provides 3 types of quality plots for MEEBO
+<p class=MsoNormal>arrayQuality provides 3 types of quality plots for MEEBO/HEEBO
 arrays:</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
@@ -300,15 +301,15 @@ and compare them to expected results.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>3- Mismatch and tiled controls plots: these plots are
-designed to show the specificity of the MEEBO set and to demonstrate
-amplification bias toward the 3’ end of the transcripts. These plots can be
-used as a MEEBO set quality check rather than hybridization quality assessment.</p>
+<p class=MsoNormal>3- Mismatch and tiled controls plots: these plots are designed
+to show the specificity of the MEEBO set and to demonstrate amplification bias
+toward the 3’ end of the transcripts. These plots can be used as a whole oligo
+set quality check rather than hybridization quality assessment.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal>The Users can choose to generate any of these 3 kinds of
-plots as needed. In any case, doping controls performance and MEEBO set quality
+plots as needed. In any case, doping controls performance and whole set quality
 plots results should be interpreted with care; they will not be informative if
 the hybridization quality is poor.</p>
 
@@ -319,16 +320,18 @@ the hybridization quality is poor.</p>
 <h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]><span
 style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>2.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]>Quick starting guide</h2>
+</span></span></span><![endif]><span dir=LTR>Quick starting guide</span></h2>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal>The function in arrayQuality producing MEEBO quality plots
-is called <i style='mso-bidi-font-style:normal'>meeboQuality()</i>. By default,
-it expects GenePix file format as input, and the identities of the doping
-controls are set to be the mix used at SFGF. However, most arguments can be customized
-to the user’s own data, please refer to other parts of this guide for more
-details.</p>
+is called <i style='mso-bidi-font-style:normal'>meeboQuality()</i>. The
+function producing HEEBO quality plots is called <i>heeboQuality()</i>. By
+default, both expect GenePix file format as input, and the identities of the
+doping controls are set to be the mix used at SFGF. However, most arguments can
+be customized to the user’s own data, please refer to other parts of this guide
+for more details. We will use the MEEBO functions as example is this guide. All
+HEEBO functions work in exactly the same way.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -352,8 +355,8 @@ menu, click on “Display file(s)…”. </p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>If needed, you may have to install other required packages like
-marray, limma, convert, hexbin and RColorBrewer. </p>
+<p class=MsoNormal>If needed, you may have to install other required packages
+like marray, limma, convert, hexbin and RColorBrewer. </p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -371,15 +374,13 @@ the directory, type:</p>
 
 <p class=MsoNormal>6) To generate DIAGNOSTIC PLOT ONLY, type:</p>
 
-<p class=MsoNormal>test &lt;- meeboQuality(diagnosticPlot=TRUE, DOPING=FALSE,
-MeeboSetQC=FALSE)</p>
+<p class=MsoNormal>test &lt;- meeboQuality(diagnosticPlot=TRUE, DOPING=FALSE, meeboSetQC=FALSE)</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal>7) To generate DIAGNOSTIC PLOT and DOPING CONTROLS QC:</p>
 
-<p class=MsoNormal>test &lt;- meeboQuality(diagnosticPlot=TRUE, DOPING=TRUE,
-MeeboSetQC=FALSE)</p>
+<p class=MsoNormal>test &lt;- meeboQuality(diagnosticPlot=TRUE, DOPING=TRUE, meeboSetQC=FALSE)</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -397,9 +398,9 @@ normMethod=”none”)</p>
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]><span
-style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>3.<span
+style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>1.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]>Results</h2>
+</span></span></span><![endif]><span dir=LTR>Results</span></h2>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -415,9 +416,9 @@ about the results can be found in the section 6 of this document.</p>
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]><span
-style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>4.<span
+style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>2.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]>MEEBO arrays controls</h2>
+</span></span></span><![endif]><span dir=LTR>MEEBO arrays controls</span></h2>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -509,18 +510,18 @@ spike-in transcripts.</p>
 
 <p class=MsoNormal>Mouse constitutive exonic oligos: mMC</p>
 
-<p class=MsoNormal>We are including these oligos in the quality plots in order to
-compare the expression level of control probes to the expression level of “real
-genes”.</p>
+<p class=MsoNormal>We are including these oligos in the quality plots in order
+to compare the expression level of control probes to the expression level of
+“real genes”.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]><span
-style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>5.<span
+style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>3.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]>Input files</h2>
+</span></span></span><![endif]><span dir=LTR>Input files</span></h2>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -585,9 +586,8 @@ pass the name of the file in meeboquality input:</p>
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal>A Spike Type File is a tab-delimited text file containing
-the information on the user’s spike-in mixture. An example of the file used at
-SFGF is presented in the figure below. This file MUST contain the following
-columns:</p>
+the information on the user’s spike-in mixture. An example of the file used at SFGF
+is presented in the figure below. This file MUST contain the following columns:</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -663,9 +663,10 @@ cy3col=”MyCy3”, cy5col=”MyCy5”, namecol=”MyName”)</p>
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]><span
-style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>6.<span
+style='mso-fareast-font-family:Arial'><span style='mso-list:Ignore'>4.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]>Quality plots description and examples</h2>
+</span></span></span><![endif]><span dir=LTR>Quality plots description and
+examples</span></h2>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -694,10 +695,10 @@ src="meeboQuality%20guide_files/image024.jpg" v:shapes="_x0000_i1027"><![endif]>
 <h3>QC plots using mismatch controls</h3>
 
 <p class=MsoNormal style='text-align:justify'>Mismatch controls are defined as
-follows: 10 transcripts have been selected as wild-type probes (around 20 replicates
-of each WT), and the sequence of these WT probes have been modified to create
-anchored and distributed mismatch probes.<span style='mso-spacerun:yes'> 
-</span></p>
+follows: 10 transcripts have been selected as wild-type probes (around 20
+replicates of each WT), and the sequence of these WT probes have been modified
+to create anchored and distributed mismatch probes.<span
+style='mso-spacerun:yes'>  </span></p>
 
 <p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
 3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
@@ -789,16 +790,16 @@ Tiling.SLIDENAME.png</p>
 <p class=MsoNormal align=center style='text-align:center'><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
- id="_x0000_i1035" type="#_x0000_t75" style='width:394.5pt;height:315.75pt'
+ id="_x0000_i1030" type="#_x0000_t75" style='width:394.5pt;height:315.75pt'
  o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
  o:borderrightcolor="this">
- <v:imagedata src="meeboQuality%20guide_files/image008.png" o:title="Tiling.RDI108_n"/>
+ <v:imagedata src="meeboQuality%20guide_files/image008.png" o:title="Tiling"/>
  <w:bordertop type="single" width="4"/>
  <w:borderleft type="single" width="4"/>
  <w:borderbottom type="single" width="4"/>
  <w:borderright type="single" width="4"/>
 </v:shape><![endif]--><![if !vml]><img border=0 width=528 height=423
-src="meeboQuality%20guide_files/image013.jpg" v:shapes="_x0000_i1035"><![endif]></p>
+src="meeboQuality%20guide_files/image013.jpg" v:shapes="_x0000_i1030"><![endif]></p>
 
 <p class=MsoNormal style='text-align:justify'><o:p>&nbsp;</o:p></p>
 
@@ -831,7 +832,7 @@ if the corresponding Cy5 mass column is empty.</p>
 <p class=MsoNormal style='text-align:justify'><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
- id="_x0000_i1030" type="#_x0000_t75" style='width:6in;height:6in'
+ id="_x0000_i1031" type="#_x0000_t75" style='width:6in;height:6in'
  o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
  o:borderrightcolor="this">
  <v:imagedata src="meeboQuality%20guide_files/image012.png" o:title="Spike"/>
@@ -840,7 +841,7 @@ if the corresponding Cy5 mass column is empty.</p>
  <w:borderbottom type="single" width="4"/>
  <w:borderright type="single" width="4"/>
 </v:shape><![endif]--><![if !vml]><img border=0 width=578 height=578
-src="meeboQuality%20guide_files/image028.jpg" v:shapes="_x0000_i1030"><![endif]></p>
+src="meeboQuality%20guide_files/image028.jpg" v:shapes="_x0000_i1031"><![endif]></p>
 
 <p class=MsoNormal style='text-align:justify'><o:p>&nbsp;</o:p></p>
 
@@ -864,7 +865,7 @@ into several types in the SpikeTypeFile, a plot is generated for each type.</p>
 <p class=MsoNormal style='text-align:justify'><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
- id="_x0000_i1031" type="#_x0000_t75" style='width:324pt;height:638.25pt'
+ id="_x0000_i1032" type="#_x0000_t75" style='width:324pt;height:638.25pt'
  o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
  o:borderrightcolor="this">
  <v:imagedata src="meeboQuality%20guide_files/image014.png" o:title="Spike"/>
@@ -873,7 +874,7 @@ into several types in the SpikeTypeFile, a plot is generated for each type.</p>
  <w:borderbottom type="single" width="4"/>
  <w:borderright type="single" width="4"/>
 </v:shape><![endif]--><![if !vml]><img border=0 width=434 height=853
-src="meeboQuality%20guide_files/image029.jpg" v:shapes="_x0000_i1031"><![endif]></p>
+src="meeboQuality%20guide_files/image029.jpg" v:shapes="_x0000_i1032"><![endif]></p>
 
 <p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
 3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
@@ -901,7 +902,7 @@ case.</p>
 <p class=MsoNormal style='text-align:justify'><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
- id="_x0000_i1032" type="#_x0000_t75" style='width:303.75pt;height:449.25pt'
+ id="_x0000_i1033" type="#_x0000_t75" style='width:303.75pt;height:449.25pt'
  o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
  o:borderrightcolor="this">
  <v:imagedata src="meeboQuality%20guide_files/image016.png" o:title="Spike"/>
@@ -910,7 +911,7 @@ case.</p>
  <w:borderbottom type="single" width="4"/>
  <w:borderright type="single" width="4"/>
 </v:shape><![endif]--><![if !vml]><img border=0 width=407 height=601
-src="meeboQuality%20guide_files/image030.jpg" v:shapes="_x0000_i1032"><![endif]></p>
+src="meeboQuality%20guide_files/image030.jpg" v:shapes="_x0000_i1033"><![endif]></p>
 
 <p class=MsoNormal style='text-align:justify'><o:p>&nbsp;</o:p></p>
 
@@ -933,7 +934,7 @@ scale.</p>
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
- id="_x0000_i1033" type="#_x0000_t75" style='width:300pt;height:450pt'
+ id="_x0000_i1034" type="#_x0000_t75" style='width:300pt;height:450pt'
  o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
  o:borderrightcolor="this">
  <v:imagedata src="meeboQuality%20guide_files/image018.png" o:title="Spike"/>
@@ -942,7 +943,7 @@ scale.</p>
  <w:borderbottom type="single" width="4"/>
  <w:borderright type="single" width="4"/>
 </v:shape><![endif]--><![if !vml]><img border=0 width=402 height=602
-src="meeboQuality%20guide_files/image031.jpg" v:shapes="_x0000_i1033"><![endif]></p>
+src="meeboQuality%20guide_files/image031.jpg" v:shapes="_x0000_i1034"><![endif]></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -963,25 +964,24 @@ intensity quartiles are provided on each graph as scale indicators.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filename</b>:
-Spike.Sensitivity.Indi.FILENAME.pngThis plot assumes that all spiked-mass are
-on the same mass scale.</p>
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filename</b>: Spike.Sensitivity.Indi.FILENAME.pngThis
+plot assumes that all spiked-mass are on the same mass scale.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
- id="_x0000_i1034" type="#_x0000_t75" style='width:375pt;height:450pt'
+ id="_x0000_i1035" type="#_x0000_t75" style='width:375pt;height:450pt'
  o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
  o:borderrightcolor="this">
- <v:imagedata src="meeboQuality%20guide_files/image003.png" o:title="Spike.Sensitivity"/>
+ <v:imagedata src="meeboQuality%20guide_files/image003.png" o:title="Spike"/>
  <w:bordertop type="single" width="4"/>
  <w:borderleft type="single" width="4"/>
  <w:borderbottom type="single" width="4"/>
  <w:borderright type="single" width="4"/>
 </v:shape><![endif]--><![if !vml]><img border=0 width=502 height=602
-src="meeboQuality%20guide_files/image005.jpg" v:shapes="_x0000_i1034"><![endif]></p>
+src="meeboQuality%20guide_files/image005.jpg" v:shapes="_x0000_i1035"><![endif]></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 

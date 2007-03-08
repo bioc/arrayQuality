@@ -167,8 +167,9 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
 
     # Controls
     if (DEBUG) print("before arrayControls")
+
     Control <- arrayControls(gprData, SFGHControlcode = controlMatrix, id ="ID")
-    numE <- numNeg <- numPos <- numProb <- 0
+        numE <- numNeg <- numPos <- numProb <- 0
     emp <- neg <- pos <- NA
 
     for(i in 1:length(Control))
@@ -231,18 +232,18 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     # Easier to compare later
 
     sortedMeasures <- c("range RF", "range GF",
-                        "- RB mad", "- GB mad",
+                        "\\- RB mad", "\\- GB mad",
                         "Median RS2N", "Median GS2N",
-                        "- Median A for empty ctrl",
-                        "- Median A for neg ctrl",
+                        "\\- Median A for empty ctrl",
+                        "\\- Median A for neg ctrl",
                         "Median A for positive ctrl",
                         "Pos ctl median A - Neg ctl median A",
-                        "- Var replicated spots A values",
-                        "- Mvalues MSE by print-tip",
-                        "- MSE lowess",
-                        "- % flagged spots",
-                        "- Mvalues MMRmad",
-                        "- % spots with Mvalues MMRmad>0.5",
+                        "\\- Var replicated spots A values",
+                        "\\- Mvalues MSE by print-tip",
+                        "\\- MSE lowess",
+                        "\\- % flagged spots",
+                        "\\- Mvalues MMRmad",
+                        "\\- % spots with Mvalues MMRmad>0.5",
                         )
         
 
@@ -527,7 +528,7 @@ globalQuality <- function(fnames = NULL, path = ".",
         if (DEBUG) print("In the loop ")
         f <- fnames[i]
         gp <- do.call(inputsource, args=list(fnames=f, path=path))
-        restmp <- slideQuality(gp)
+        restmp <- slideQuality(gp,...)
         quality <- cbind(quality, restmp[,1])
         meas <- rownames(restmp)
       }

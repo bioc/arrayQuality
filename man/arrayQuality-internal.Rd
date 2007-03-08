@@ -34,6 +34,11 @@
 \alias{Spike.Cy5vsCy3}
 \alias{MeeboSpotTypes}
 
+\alias{qpDotPlotsEEBO}
+\alias{qpS2Neebo}
+\alias{controlCodeHeebo}
+\alias{HeeboSpotTypes}
+
 
 \title{Internal arrayQuality functions}
  

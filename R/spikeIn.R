@@ -2,6 +2,7 @@
 ## Separate control plot functions for MEEBO set
 ## Author: Agnes and Yuanyuan
 ## Date modified: 11/02/2005
+##                06/28/2006
 ## Spike-ins plots -- Using limma functions
 #################################################
 
@@ -337,7 +338,9 @@ Spike.Cy5vsCy3 <- function(rawobj,spikesTypes, id="SeqID",
     legend(axisrange[2]-2.2,axisrange[2]-0.5,"Expected log2 ratios",
            bty="n",cex=0.7)
     legend(axisrange[2]-1,axisrange[2]-1,pch=18,col=colvect,bty="o",
-           as.character(log2(ratioSpiked)))
+            as.character(log2(ratioSpiked)))
+           
+
     abline(0,1,lty=2)
   }
 
@@ -357,13 +360,14 @@ Spike.Cy5vsCy3 <- function(rawobj,spikesTypes, id="SeqID",
 Spike.Individual.Sensitivity <- function(rawobj,spikeList=NULL, id="SeqID", gnames=RG$genes[,"ID"], annot=MEEBOset,cy5col="MassCy5",cy3col="MassCy3",namecol=c("Name","Symbol"),ctllist=MEEBOctrl,DEBUG=FALSE)
   {
     if(DEBUG) print("Starting Spike.Individual.Sensitivity")
-    if(length(namecol)>2)
+    if(length(namecol)>1)
       namecol <- namecol[1]
  #   Aval <- (log.na(rawobj$R,2) + log.na(rawobj$G,2))/2
     
     spikeIndex <- getSpikeIndex(spikeList,id=id,annot=annot,gnames=gnames,namecol=namecol)
-    negCtlCy5 <- log.na(rawobj$R[ctllist[[11]],],2)
-    negCtlCy3 <- log.na(rawobj$G[ctllist[[11]],],2)
+    goodNegCtl <- ctllist[[11]][!is.na(match(ctllist[[11]], rownames(rawobj$R)))]
+    negCtlCy5 <- log.na(rawobj$R[goodNegCtl,],2)
+    negCtlCy3 <- log.na(rawobj$G[goodNegCtl,],2)
     for(type in 1:length(spikeIndex))
       {
         orderCy5 <- sort(as.numeric(spikeList[[type]][,cy5col]),index.return=TRUE)$ix

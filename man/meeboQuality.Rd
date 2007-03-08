@@ -14,7 +14,7 @@ meeboQuality(fnames = NULL, path = ".", galfile = NULL, source
 DOPING = TRUE,meeboSetQC = TRUE, SpotTypeFile = NULL, SpikeTypeFile =
 NULL, cy3col = "CY3.ng._MjDC_V1.7", cy5col = "CY5.ng._MjDC_V1.7", id =
 "SeqID", namecol = c("Symbol", "Name"), annot = NULL, bgMethod = "none", normMethod =
-"p", diagnosticPlot = TRUE, resdir = ".", dev = "png", DEBUG = FALSE,
+"p", diagnosticPlot = TRUE, output = TRUE, resdir = ".", dev = "png", organism = "Mm", DEBUG = FALSE,
 ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -86,7 +86,10 @@ NULL, cy3col = "CY3.ng._MjDC_V1.7", cy5col = "CY5.ng._MjDC_V1.7", id =
   
   \item{diagnosticPlot}{Logical. If 'TRUE', a quality diagnostic plot
     will be generated.}
-  
+
+  \item{output}{Logical. If 'TRUE', normalized M values and A values corresponding to
+    the input GenePix files and additionnal quality measures are printed to a file.}
+
   \item{resdir}{A "character" string representing the directory where
     the results will be saved. By default, this is set to the current
     working directory ("."). }
@@ -94,7 +97,11 @@ NULL, cy3col = "CY3.ng._MjDC_V1.7", cy5col = "CY5.ng._MjDC_V1.7", id =
   \item{dev}{A "character" string naming the graphics device. This will
     take arguments "png", "jpeg" and "ps" only. By default, dev is set
     to "png".}
-  
+
+  \item{organism}{A "character" string naming the organism genome
+    printed on the array, either "Mm" or "Hs". By default, organism is
+    set to "Mm". It is used to retrieve the corresponding Oligo set annotations.}
+
   \item{DEBUG}{If 'TRUE', debug statements are printed.}
   
   \item{\dots}{Additional arguments}
@@ -123,11 +130,12 @@ was added to the hybridization solution.
 \seealso{ \code{\link{meeboQualityPlots}}, \code{\link{gpQuality}}}
 
 \examples{
-datadir <- system.file("Meebo", package="arrayQuality")
 if (interactive())
 {
+require(MEEBOdata)
+datadir <- system.file("Meebo", package="MEEBOdata")
 MA <- meeboQuality(fnames="RDI108_n.gpr",path=datadir,SpikeTypeFile="StanfordDCV1.7complete.txt",cy5col="CY5.ng._MjDC_V1.7",cy3col="CY3.ng._MjDC_V1.7",diagnosticPlot=TRUE,
-DOPING=TRUE, MeeboSetQC=TRUE, namecol="Name", resdir="MeeboQC", DEBUG=TRUE)
+DOPING=TRUE, meeboSetQC=TRUE, namecol="Name", resdir="MeeboQC", DEBUG=TRUE)
 }
 }
 
