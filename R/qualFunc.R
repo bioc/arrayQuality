@@ -243,7 +243,7 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
                         "\\- MSE lowess",
                         "\\- % flagged spots",
                         "\\- Mvalues MMRmad",
-                        "\\- % spots with Mvalues MMRmad>0.5",
+                        "\\- % spots with Mvalues MMRmad>0.5"
                         )
         
 
@@ -255,8 +255,9 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
                    -varRepA,
                    -msePtip, -mseFit,
                    -percentFlag,                                      
-                   -MMRmad, -percentSpotOverMmrLim,
+                   -MMRmad, -percentSpotOverMmrLim 
                    )
+    ## Alice (ar 07): remove "," (typo from before)
     
     numResult <- as.matrix(sortedRes)
     rownames(numResult) <- sortedMeasures

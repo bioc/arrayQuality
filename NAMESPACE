@@ -1,0 +1,13 @@
+##Namespace file for arrayQuality
+
+import("marray")
+import("gridBase")
+import("hexbin")
+
+
+export("readAgilent","readcontrolCode","agQuality","EMSplit", 
+"getSpikeIds", "getSpikeIndex", "gpQuality", "globalQuality", 
+"maQualityPlots", "meeboQuality", "meeboQualityPlots", "PRv9mers", 
+"PRvQCHyb", "qualBoxplot",  "qualityScore", "readGPR","readSpikeTypes", 
+"readSpot",  "slideQuality", "scaleRefTable", "spotQuality")
+
