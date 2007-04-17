@@ -25,7 +25,7 @@
 
 ## returns a list of vector containing info from grp file column
 readGPR <- function (fnames = NULL, path= ".", DEBUG=FALSE, skip = 0,
-                     sep ="\t", quote= "\"",...)
+                     sep ="\t", quote= "\"", controlId="ID",...)
   {
     if (DEBUG) print("Starting readGPR")
     if (DEBUG) print(path)

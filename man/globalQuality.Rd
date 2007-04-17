@@ -11,7 +11,7 @@
 
 \usage{
 globalQuality(fnames = NULL, path = ".", organism = c("Mm", "Hs"),
-output = FALSE, resdir = ".", DEBUG = FALSE, inputsource = "readGPR",...)
+output = FALSE, resdir = ".", DEBUG = FALSE, inputsource = "readGPR", controlId="ID",...)
 }
 
 \arguments{
@@ -40,6 +40,9 @@ output = FALSE, resdir = ".", DEBUG = FALSE, inputsource = "readGPR",...)
     inputsource = "readAgilent" for Agilent format. By default,
     'inputsource' is set to "readGPR".}
   
+  \item{controlId}{Character string. Name of the column of the gpr
+    file used to define controls.}
+
   \item{\dots}{additional arguments}
 }
 

@@ -9,7 +9,7 @@
 
 \usage{
 readGPR(fnames = NULL, path= ".", DEBUG=FALSE, skip = 0, sep ="\t",
-quote="\"", ...)
+quote="\"", controlId="ID",...)
 }
 
 \arguments{
@@ -27,7 +27,10 @@ quote="\"", ...)
 
   \item{quote}{A "character" string defining the type of quote in the
     gpr files.}
-
+  
+  \item{controlId}{Character string. Name of the column of the gpr
+    file used to define controls.}
+  
   \item{\dots}{additional arguments.}
 }
 

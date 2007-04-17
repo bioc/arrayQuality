@@ -505,10 +505,12 @@ globalQuality <- function(fnames = NULL, path = ".",
                           resdir=".",
                           DEBUG = FALSE,
                           inputsource = "readGPR",
+                          controlId="ID",
                           ...)
   {
     # Check input arguments
     if (DEBUG) print("Starting globalQuality")
+    opt <- list()
     
     if (missing(fnames) | is.null(fnames))
       {
@@ -528,10 +530,17 @@ globalQuality <- function(fnames = NULL, path = ".",
       {
         if (DEBUG) print("In the loop ")
         f <- fnames[i]
-        gp <- do.call(inputsource, args=list(fnames=f, path=path))
-        restmp <- slideQuality(gp,...)
+        gp <- do.call(inputsource, args=list(fnames=f, path=path,controlId=controlId))
+        defs <- c(list(gprData = gp), opt)
+        SQ.args <- maDotsMatch(defs, formals(args("slideQuality")))
+        restmp <- do.call("slideQuality", SQ.args)
         quality <- cbind(quality, restmp[,1])
         meas <- rownames(restmp)
+
+        ## Was:
+        ##restmp <- slideQuality(gp,...)
+        ##quality <- cbind(quality, restmp[,1])
+        ##meas <- rownames(restmp)
       }
     
     colnames(quality) <- fnames
@@ -611,7 +620,9 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, organism=c("Mm", "Hs
               {
                 bp <- boxplot(as.numeric(scalref[i,]), at=i,
                               add=TRUE, horizontal=TRUE, axes=FALSE)
-                goodLim[i,1] <- bp$stats[1]  ## pb if more than 1 col
+                ##goodLim[i,1] <- bp$stats[1]  ## pb if more than 1 col
+                ## AP: this was not the min of the distribution
+               goodLim[i,1] <- min(as.numeric(scalref[i,]),na.rm=T)
               }
             else
               {
