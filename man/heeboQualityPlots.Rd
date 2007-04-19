@@ -62,8 +62,8 @@ their HEEBO sequence id.
 \examples{
 if (interactive())
 {
-require(HEEBO)
-datadir <- system.file("Heebo", package="HEEBO")
+require(HEEBOdata)
+datadir <- system.file("Heebo", package="HEEBOdata")
 gal <- readGAL("hoc.gal", path=datadir)
 RG <-
 read.maimages(files=c("63421.gpr"), path=datadir, source="genepix.median",other.columns="Flags")

@@ -63,8 +63,8 @@ their MEEBO sequence id.
 
 if (interactive())
 {
-require(MEEBO)
-datadir <- system.file("Meebo", package="MEEBO")
+require(MEEBOdata)
+datadir <- system.file("Meebo", package="MEEBOdata")
 mraw <- read.GenePix(path=datadir)
 maControls(mraw) <- maGenControls(maGnames(mraw),id="ID",controlcode=controlCodeMeebo)
 rownames(maRf(mraw)) <- rownames(maRb(mraw)) <- maGeneTable(mraw)[,"ID"]
