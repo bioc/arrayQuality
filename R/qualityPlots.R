@@ -53,7 +53,9 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
     #Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata))
     ## combined control status and name
 
-    Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
+    ##Ctl <- cbind(maInfo(maGnames(mdata)), maControls(mdata), row.names=NULL)
+    Ctl <- cbind(Index=c(1:length(maControls(mdata))),maInfo(maGnames(mdata)), maControls(mdata),
+                 row.names=NULL)
     IDindex <- grep(id, colnames(Ctl))  ## Set ID columns
     y <- split(Ctl, Ctl[,ncol(Ctl)])  ## The last column of Ctl is the control status
 
@@ -62,7 +64,8 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
         ## There are control spots
         exty <- lapply(y[names(y) != "probes"], function(x){
           ext <- split(x, x[, IDindex])
-          extid <- lapply(ext, function(xx){as.integer(row.names(xx))})
+          ##extid <- lapply(ext, function(xx){as.integer(row.names(xx))})
+          extid <- lapply(ext,function(xx){as.integer(xx[,"Index"])})
           extid[lapply(extid, length) > nrep]
         })
         exty <- exty[lapply(exty, length) != 0]
@@ -83,8 +86,7 @@ qpDotPlots <- function(mdata,  xvar="maA", id="ID", colcode=1, nrep=3, pch=18, .
         lab <- paste(unlist(lapply(exty, names)), " (n=",unlist(lapply(exty, lapply, length)), ") ", sep="")
         axis(2, at=1:ylim[2], labels=lab, las=2, cex.axis=0.6)
         box()
-
-
+        
       } else
     {
          ## There are NO control spots
