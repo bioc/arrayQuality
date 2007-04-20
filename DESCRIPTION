@@ -6,7 +6,7 @@ Depends: R (>= 2.2.0), marray, limma, convert, hexbin, gridBase, RColorBrewer
 biocViews: Microarray,TwoChannel,QualityControl,Visualization
 Suggests: mclust, MEEBOdata, HEEBOdata
 Author: Agnes Paquet and Jean Yee Hwa Yang <yeehwa@stat.berkeley.edu>
-Maintainer: A. Paquet <paquetagnes@yahoo.com>
+Maintainer: Agnes Paquet <paquetagnes@yahoo.com>
 Description: Functions for performing print-run and array level
         quality assessment.
 License: LGPL
