@@ -747,9 +747,9 @@ readcontrolCode <- function(file = "SpotTypes.txt", path = NULL, sep = "\t", che
 #########################################################
 ## Agnes: 03/23/2008 adding qcScore
 
-qcScore <- function(ScoreMat, reference)
+qcScore <- function(arrayQuality, reference)
   {
     Lowlimit <- apply(reference, 1, range)[1,]
-    res <- apply(sweep(ScoreMat, 2, Lowlimit, "<="), 2, sum)  
+    res <- apply(sweep(arrayQuality, 2, Lowlimit, "<="), 2, sum)  
     return(res)
   }

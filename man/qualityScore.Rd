@@ -26,7 +26,9 @@ NULL)
     set to "Mm". It is used to retrieve the corresponding reference tables.}
 }
 
-\value{A matrix of percentages.}
+
+\value{QualityScore returns a matrix of percentages of qc measures under
+  the lower limit of the reference values.}
 
 \author{Agnes Paquet}
 
