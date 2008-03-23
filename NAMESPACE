@@ -8,7 +8,7 @@ import("hexbin")
 export("readAgilent","readcontrolCode","agQuality","EMSplit", 
        "getSpikeIds", "getSpikeIndex", "gpQuality", "globalQuality", 
        "maQualityPlots", "meeboQuality", "meeboQualityPlots", "heeboQuality",
-       "heeboQualityPlots","PRv9mers", "PRvQCHyb", "qualBoxplot",  "qualityScore",
+       "heeboQualityPlots","PRv9mers", "PRvQCHyb", "qualBoxplot",  "qualityScore","qcScore",
        "readGPR","readSpikeTypes", "readSpot",  "slideQuality", "scaleRefTable",
        "spotQuality","HeeboSpotTypes","MeeboSpotTypes","controlCodeHeebo",
        "controlCodeMeebo")
