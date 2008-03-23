@@ -57,3 +57,5 @@ replicatesAvariance <- function(slide = NULL, id="ID")
     varRepA <- var(repA, na.rm=TRUE)
     return(varRepA)
   }
+
+

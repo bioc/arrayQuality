@@ -205,20 +205,50 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     Replicates <- arrayReplicates(gprData, id = controlId)
 
     if (DEBUG) print(length(Replicates))
-  
-    index <- c()
-    for(r in Replicates){
-      for(i in 1:length(gId)){
-        if (r == gId[i]) index <- c(index,i)
-      }
-    }
 
-    if (length(index) == 0)
-      repA <- NA
-    else 
-      repA <- Amedian[index]
+    ##Old code
+    #index <- c()
+    #for(r in Replicates){
+    #  for(i in 1:length(gId)){
+    #    if (r == gId[i]) index <- c(index,i)
+    #  }
+    #}
+
+       
+    #for(r in Replicates){
+    #  ind <- grep(Replicates[r],gId)
+    #  varvect <- c
+    #}
+    #if (length(index) == 0)
+    #  repA <- NA
+    #else 
+    #  repA <- Amedian[index]
     
-    varRepA <- var(repA, na.rm=TRUE)
+    #varRepA <- var(repA, na.rm=TRUE)
+
+    ##Agnes
+  
+    varvect <- c()
+    for(r in Replicates)
+      {
+        index <- c()
+        for(i in 1:length(gId)){
+          if (r == gId[i]) index <- c(index,i)
+        }
+        if(length(index)>0)
+          varvect <- c(varvect,var(Amedian[index],na.rm=TRUE))
+      }
+
+    if(length(varvect)>0)
+      varRepA <- mean(varvect,na.rm=TRUE)
+    else
+      varRepA <- NA
+
+    ## Agnes: modified Mar 21, 08
+##    varvect <- c()
+##    varvect <- sapply(Replicates,function(x){return(var(Amedian[grep(x,gId)],na.rm=T))})
+##    varRepA <- mean(varvect,na.rm=T)
+    
 
     # Flags
     Flags <- gprData[["Flags"]]
@@ -510,7 +540,7 @@ globalQuality <- function(fnames = NULL, path = ".",
   {
     # Check input arguments
     if (DEBUG) print("Starting globalQuality")
-    opt <- list()
+    opt <- list(...)
     
     if (missing(fnames) | is.null(fnames))
       {
