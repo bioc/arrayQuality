@@ -7,6 +7,7 @@
 ##           09/21/2004
 ##           09/25/2004
 ##           06/27/2005
+##           03/23/2008
 ## source("~/Projects/madman/Rpacks/arrayQuality/R/qualFunc.R")
 #####################################################
 
@@ -743,3 +744,12 @@ readcontrolCode <- function(file = "SpotTypes.txt", path = NULL, sep = "\t", che
     return(controlCode)
   }
 
+#########################################################
+## Agnes: 03/23/2008 adding qcScore
+
+qcScore <- function(ScoreMat, reference)
+  {
+    Lowlimit <- apply(reference, 1, range)[1,]
+    res <- apply(sweep(ScoreMat, 2, Lowlimit, "<="), 2, sum)  
+    return(res)
+  }
