@@ -43,8 +43,6 @@ quote="\"",controlId=c("ProbeName"), ...)
   \code{\link{slideQuality}}, \code{\link{agQuality}}, \code{\link{globalQuality}}
 }
 
-\examples{
-}
 
 \keyword{programming}
 

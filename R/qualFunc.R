@@ -229,21 +229,22 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
 
     ##Agnes
   
-    varvect <- c()
-    for(r in Replicates)
-      {
-        index <- c()
-        for(i in 1:length(gId)){
-          if (r == gId[i]) index <- c(index,i)
-        }
-        if(length(index)>0)
-          varvect <- c(varvect,var(Amedian[index],na.rm=TRUE))
-      }
 
-    if(length(varvect)>0)
-      varRepA <- mean(varvect,na.rm=TRUE)
-    else
-      varRepA <- NA
+    #varvect <- c()
+    #for(r in Replicates)
+    #  {
+    #    index <- c()
+    #    for(i in 1:length(gId)){
+    #      if (r == gId[i]) index <- c(index,i)
+    #    }
+    #    if(length(index)>0)
+    #      varvect <- c(varvect,var(Amedian[index],na.rm=TRUE))
+    #  }
+
+    #if(length(varvect)>0)
+    #  varRepA <- mean(varvect,na.rm=TRUE)
+    # else
+    #  varRepA <- NA
 
     ## Agnes: modified Mar 21, 08
 ##    varvect <- c()
@@ -262,20 +263,36 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
     # We want a list of all numbers, returned as a matrix
     # Easier to compare later
 
-    sortedMeasures <- c("range RF", "range GF",
-                        "\\- RB mad", "\\- GB mad",
-                        "Median RS2N", "Median GS2N",
-                        "\\- Median A for empty ctrl",
-                        "\\- Median A for neg ctrl",
-                        "Median A for positive ctrl",
-                        "Pos ctl median A - Neg ctl median A",
-                        "\\- Var replicated spots A values",
-                        "\\- Mvalues MSE by print-tip",
-                        "\\- MSE lowess",
-                        "\\- % flagged spots",
-                        "\\- Mvalues MMRmad",
-                        "\\- % spots with Mvalues MMRmad>0.5"
-                        )
+    ## AP: modified on 4/07/2008 to match names on paper
+    ## also removed the varRepA values from final results
+    
+    #sortedMeasures <- c("range RF", "range GF",
+    #                    "\\- RB mad", "\\- GB mad",
+    #                    "Median RS2N", "Median GS2N",
+    #                    "\\- Median A for empty ctrl",
+    #                    "\\- Median A for neg ctrl",
+    #                    "Median A for positive ctrl",
+    #                    "Pos ctl median A - Neg ctl median A",
+    #                    "\\- Var replicated spots A values",
+    #                    "\\- Mvalues MSE by print-tip",
+    #                    "\\- MSE lowess",
+    #                    "\\- % flagged spots",
+    #                    "\\- Mvalues MMRmad",
+    #                    "\\- % spots with Mvalues MMRmad>0.5"
+    #                    )
+        
+  sortedMeasures <- c("rangeRf", "rangeGf",
+                      "-madRb", "-madGb",
+                      "medRS2N", "medGS2N",
+                      "-medA_empty",
+                      "-medA_negative",
+                      "medA_positive",
+                      "diffA_pos-neg",
+                      "-msePTip",
+                      "-mseFit",
+                      "-percentFlag",
+                      "-madMMR",
+                      "-extremeMMR")
         
 
     sortedRes <- c(rangeRf, rangeGf,
@@ -283,7 +300,7 @@ slideQuality <- function(gprData=NULL, controlMatrix = controlCode, controlId = 
                    RS2Nmedian, GS2Nmedian,
                    -EmptyMed, -NegativeMed, PositiveMed,
                    difPositiveNegative,
-                   -varRepA,
+                   ##-varRepA,
                    -msePtip, -mseFit,
                    -percentFlag,                                      
                    -MMRmad, -percentSpotOverMmrLim 
@@ -639,7 +656,7 @@ qualBoxplot <- function(arrayQuality=NULL,  reference=NULL, organism=c("Mm", "Hs
         plot(0:(nr+1),0:(nr+1),xlim=lim,type="n", axes=FALSE,ylab="",xlab="", xaxt="n",
              main="Array Quality Control Comparison")
 
-        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.7, las=2)
+        axis(2, at=1:nr, labels=rownames(arrayQuality), cex.axis=0.8, las=2)
         tmp <- c(paste(as.character(round(score)), "(", as.character(round(arrayQuality,1)), ")"), "% (value)")
         axis(4, at=1:(nr+1), labels=, tmp, cex.axis=0.8, las=2)
         axis(1, at=c(lim[1]+0.5, lim[2]-0.5), labels= c("Problematic", "Good"))

@@ -8,7 +8,6 @@
   create a look-up table, which will be used to scale other slides.}
 
 \usage{scaleRefTable(reference=NULL, organism=c("Mm", "Hs"))}
-}
 
 \arguments{
 
@@ -29,6 +28,5 @@
 
 \seealso{\code{\link{gpQuality}}, \code{\link{globalQuality}},
   \code{\link{qualBoxplot}}}
-}
 
 \keyword{programming}

@@ -31,9 +31,9 @@ PRv9mers(fnames, path = ".", dev = "png", DEBUG = FALSE, prargs = NULL, samepr =
   about a print-run.  Components Block, Row and Columns denote the
   column names from the input data representing the print-tip location.
   The component "ncolumns" is an integer representing the number of
-  print-tip columns in the data.  If the arguement is set to NULL,
-  the the following default will be used.  list(Block="Block",
-  Row="Row", Column="Column", ncolumns=4)} 
+  print-tip columns in the data.  If the argument is set to NULL,
+  the the following default will be used:  list(Block="Block",
+  Row="Row", Column="Column", ncolumns=4). 
 }
 \value{
   Files of diagnostic plots and  excel files containings probe IDs of

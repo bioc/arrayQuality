@@ -46,8 +46,6 @@ readSpot(fnames = NULL, path= ".", galfile=NULL,DEBUG=FALSE, skip = 0, sep ="\t"
   \code{\link{slideQuality}}, \code{\link{agQuality}}, \code{\link{globalQuality}}
 }
 
-\examples{
-}
 
 \keyword{programming}
 
