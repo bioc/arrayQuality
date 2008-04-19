@@ -767,6 +767,8 @@ readcontrolCode <- function(file = "SpotTypes.txt", path = NULL, sep = "\t", che
 qcScore <- function(arrayQuality, reference)
   {
     Lowlimit <- apply(reference, 1, range)[1,]
-    res <- apply(sweep(arrayQuality, 2, Lowlimit, "<="), 2, sum)  
+    ##res <- apply(sweep(arrayQuality, 2, Lowlimit, "<="), 2, sum) AP: Gives a warning
+    res <- apply(arrayQuality,2,function(x){sum(x<Lowlimit,na.rm=T)})
     return(res)
   }
+

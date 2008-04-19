@@ -1,0 +1,846 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+  
+  <title>print-run qc</title>
+</head>
+
+
+<body>
+
+<h1 align="center">Spotted arrays print-run quality control</h1>
+
+<p align="center">April 15, 2008</p>
+
+
+<p align="center">Agnes Paquet<sup>1</sup>, Andrea Barczak<sup>1</sup>, (Jean) Yee Hwa
+Yang<sup>2</sup> <br>
+
+
+
+<br>
+
+
+
+1. Department of Medicine, Functional Genomics Core Facility,
+University of California, San Francisco<br>
+
+
+
+paquetagnes@yahoo.com<br>
+
+
+
+2. School of Mathematics and Statistics, University of Sydney, Australia<br>
+
+
+
+<a href="http://arrays.ucsf.edu/analysis/arrayquality.html"><span style="color: rgb(255, 0, 0);"></span></a><br>
+
+
+
+<br>
+
+
+
+</p>
+
+
+
+
+<h2>Content</h2>
+This document describes the various functions provided in arrayQuality
+that can be used to assess the quality of a print, before the slides
+are used for an experiment. These functions are specifically designed
+for random 9mers hybridization and QC hybridization only, which are
+performed in facilities making their own arrays. Users interested in
+assessing quality of any other type of&nbsp; array hybridization
+quality control should refer to the basic user guide, which can be
+accessed from the main online help page.
+<h1>1. Print-run quality control</h1>
+
+
+
+<p>
+When a print-run is completed, it is necessary to verify the quality of
+the resulting arrays. This can be done by using two kinds of
+hybridization to the new slides. The first type of hybridization, which
+we term &ldquo;9mers hyb&rdquo;, uses small oligonucleotides (random 9-mers), which
+will hybridize to each probe. This hybridization will help to determine
+the quality of spot morphology as well as the presence or absence of
+spotted oligonucleotides. The resulting data will be used to create a
+list of all missing spots.<br>
+
+
+
+<br>
+
+
+
+The second type of hybridization, which we will term Quality Control
+Hybridization (QCHyb), uses mRNA from predefined cell lines (e.g. liver
+vs. pool, K562 vs. Human Universal Reference pool from Stratagene).
+These hybridizations can be use as a more quantitative description of
+the slides. The same comparison hybridizations are done for different
+print-run, assessing their reproducibility. QCHybs are also used to
+verify accuracy of GAL files, number of missing spots, binding
+capacity, background signal intensity&hellip;<br>
+
+
+
+<br>
+
+
+
+The arrayQuality package provides specific tools to help assess quality
+of slides for both 9-mers and QC hybridization.<br>
+
+
+
+<br>
+
+
+
+</p>
+
+
+
+<h1>2. 9-mers hybridizations</h1>
+In the package, the graphical function to assess 9mers hybridization
+quality is PRv9mers(). It runs using one single command line script. To
+use it:<br>
+
+
+
+<ul>
+
+  <li>Copy all 9-mers hybridizations gpr files from the SAME print-run
+(same GAL file) to a directory. </li>
+
+  <li>Change R working directory to the one containing your gpr files using the R GUI menu.</li>
+  <li><b>To load arrayQuality:</b><br>
+
+
+
+
+
+
+Type at the R prompt:<br>
+
+
+
+
+
+
+    <font face="courier">library(arrayQuality)</font> <br>
+
+
+
+
+
+
+  </li>
+  <li>To run th function type:<br>
+
+
+
+    <font face="courier">PRv9mers(prname=&rdquo;12Mm&rdquo;).</font> </li>
+</ul>
+The prname argument represents the name of your print-run. For more
+details about other arguments, please refer to the online help file.<br>
+
+
+
+<h2>2.1 Results</h2>
+
+
+
+<font face="courier">PRv9mers()</font> provides the following results:<br>
+
+
+
+<ol>
+
+  <li>Diagnostic plots as image in .png format for each tested slide </li>
+
+  <br>
+
+  <li>An Excel file (typically named 9Mm9mer.xls, where 9Mm is the name
+of your print-run, as passed to prname) containing for each spot on the
+slide:<br>
+
+
+
+    
+    
+    
+    <ul>
+
+      <li>Name and ID of the spot</li>
+
+      <li>The probability of being present or absent (p from EM
+algorithm). If several files are tested together, you will have a
+probability of being present/absent for each file.<br>
+
+
+
+A spot is considered absent if p &lt; 0.5.</li>
+
+      <li>The average probability of being present or absent.</li>
+
+      <li>The raw signal intensity (Signal column) or average raw
+signal intensity if several files are tested together for each spot.</li>
+
+    
+    </ul>
+
+
+
+  </li>
+
+  <li>An Excel file (typically named 9MmMissing.xls, where 9Mm is the
+name of your print-run, as passed to prname) containing information on
+missing probes only:<br>
+
+
+
+    
+    
+    
+    <ul>
+
+      <li>Name and ID of the spot</li>
+
+      <li>The probability of being present or absent (p from EM
+algorithm). If several files are tested together, you will have a
+probability of being present/absent for each file.<br>
+
+
+
+A spot is considered absent if p &lt; 0.5.</li>
+
+      <li>The average probability of being present or absent.</li>
+
+      <li>The raw signal intensity (Signal column) or average raw
+signal intensity if several files are tested together for each spot.</li>
+
+    
+    </ul>
+
+
+
+  </li>
+
+  <br>
+
+  <li>A text file (typically named 9MmQuickList.txt, where 9Mm is the
+name of your print-run, as passed to prname) containing the missing
+probes ids, each on a separate line. This file can be opened in any
+word processing program. </li>
+
+</ol>
+
+
+
+<span style="font-weight: bold;"><br>
+</span>
+<h2>2.2 Description of the diagnostic plots</h2>
+
+
+
+Figure 1 shows an example from a typical 9-mers hybridization. This
+image is divided in 5 panels<br>
+
+
+
+<ol>
+
+  <li>The first column (left) represents boxplots of log intensity, by
+plates (top) and by print-tip group (bottom). In this example, you will
+notice on the boxplot by plates (top left corner) that plates 44 and 48
+have lower intensity and wider range than the others. Both plates
+contain mostly empty controls, as designed by Operon. </li>
+
+  <li>Central plot: spatial plot of intensity. This helps to locate
+missing spots. The color scale reflects the signal intensity, the
+darker the color of the plot, the stronger the signal. Missing spots
+are represented in white. In Figure 3 spatial plot, top right corner
+white spots come from the empty spots. </li>
+
+  <li>Right column: Density plot of the foreground and background log
+intensity.
+    
+    
+    
+    <ol type="a">
+
+      <li>Foreground density plot: it should be composed of 2 peaks. A
+smaller peak in the low intensity region containing missing spots and
+negative control spots, and a higher one representing the rest of the
+spots (probes). The number of present and absent spots, excluding empty
+controls, estimated by EM algorithm is indicated on the graph. </li>
+
+      <li>Background density plot: one peak in the low intensity
+region. If a slide is of good quality, the background peak should not
+overlap too much with the foreground peak corresponding to the bulk of
+the data.</li>
+
+    
+    </ol>
+
+
+
+  </li>
+
+</ol>
+
+
+
+Density plots are used to compare foreground and background peaks,
+using the X-axis scale. They should be clearly separated. The number of
+missing spots should be low. Missing spots ids may be incorporated in
+the analysis later, e.g. by down weighting them in linear models.
+<h2>2.3 Examples</h2>
+
+
+
+This example uses 9-mer hybridization data performed in the Functional
+Genomics Core Facility in UCSF. This print-run was created using Operon
+Version 2 Mouse oligonucleotides.<br>
+
+
+
+<br>
+
+
+
+<font face="courier">
+&gt; library(arrayQuality)<br>
+
+
+
+&gt; datadir &lt;- system.file("gprQCData", package="arrayQuality")<br>
+
+
+
+&gt; PRv9mers(fnames="12Mm250.gpr",path=datadir, prname="12Mm")<br>
+
+
+
+</font>
+<br>
+
+
+
+<br>
+
+
+
+<div align="center">
+<img src="images/9mersDiagnosticPlot.png" alt="Example of 9-mers hybridization diagnostic plot" align="middle">
+<p align="center">Figure 1: Example of diagnostic plot for 9-mers
+hybridization<a name="_Toc72663199"><span style="font-weight: bold;"></span></a></p>
+
+<p style="text-align: left;"><span style="font-weight: bold;"><br>
+
+</span></p>
+
+<h1 style="text-align: left;"><span style="font-weight: bold;">3. Quality Control
+hybridizations</span><o:p style="font-weight: bold;"></o:p></h1>
+
+<div style="text-align: left;">9-mers hybridizations help verify that oligonucleotides have been
+spotted
+properly on the slides. The next print-run quality control step will be:
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span style=""><span style="">1.<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Detect any difference in overall signal intensity
+compared to other print-runs</p>
+
+
+
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span style=""><span style="">a.<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>70-mers oligonucleotides hybridizations</p>
+
+
+
+<p class="MsoNormal" style="margin-left: 1.25in; text-indent: -0.25in;"><span style=""><span style="">b.<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Selection of several test slides to ensure that
+the same
+quantity of material was spotted across the platter, as a print-run
+will
+generate 255 slides using the same well for one probe. QCHybs are
+performed
+using one slide from the beginning of the print, one from the middle,
+one
+from the end (e.g. numbers 20,100 and 255 in the Functional Genomics
+Core
+Facility).</p>
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.75in; text-indent: -0.25in;"><span style=""><span style="">2.<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Check if the GAL file was generated properly, i.e.
+check
+that no error was made with ordering or orientation of the plates
+during the
+print.</p>
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in;"><span style=""><span style="">3.<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Reproducibility:<br>
+
+A good way to verify
+the
+quality of a new print is to hybridize known samples to new slides.
+Then, we
+can compare signal intensity from the new slides to existing data, and
+check
+that there is no loss in signal. Log ratios (M) for known samples
+should be
+similar across print-runs. Example of samples used for QCHybs includes
+Human
+Reference pool, Mouse liver, Mouse lung, with dye swaps.<br>
+
+
+
+<br>
+
+
+
+</p>
+
+
+
+
+
+<p class="MsoNormal">The function in the package which performs the
+quality
+assessment for QCHybs is <span style="font-family: Courier;">PRvQCHyb()</span>. It runs using a single line script. To use it:
+<br>
+
+
+
+</p>
+
+
+
+<ul>
+  <li><span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;"></span></span></span>Copy the QCHybs gpr files from the <b>SAME
+print-run</b>
+(same GAL file) in a directory.<span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;"></span></span></span></li>
+  <li>Change R working directory to the one containing
+your
+gpr files as described in section 1.<span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;"></span></span></span></li>
+  <li><span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;</span></span></span>Type in R:&nbsp;</li>
+</ul>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &gt;<span style="font-family: Courier New,Courier,monospace;"></span><span style="font-family: Courier New,Courier,monospace;" class="codeChar">PRvQCHyb(prname="9Mm")</span><br>
+<p class="MsoNormal">
+where <span class="codeChar">prname</span> is the
+name
+of the print-run. For more details about its arguments, please refer to
+the
+online manual.<br>
+
+
+
+&nbsp; <o:p><br>
+
+
+
+</o:p></p>
+
+
+
+<h2>3.1 Results<o:p>&nbsp;</o:p></h2>
+
+
+
+<p class="MsoNormal"><span style="font-family: Courier;">PRvQCHyb()</span>
+returns a diagnostic plot as an image in .png format for each tested
+slide.<br>
+
+
+
+</p>
+
+
+
+
+
+<p class="MsoNormal">Throughout our document, we will be using the
+color code
+described in Table 1 to highlight control spots.</p>
+
+
+
+
+
+
+
+
+
+
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;" border="1" cellpadding="2" cellspacing="2">
+
+
+
+  <tbody>
+
+
+
+    <tr align="left">
+
+
+
+      <td style="vertical-align: top;">Positive controls<br>
+
+
+
+      </td>
+
+
+
+      <td style="vertical-align: top;">Red<br>
+
+
+
+      </td>
+
+
+
+    </tr>
+
+
+
+    <tr align="left">
+
+
+
+      <td style="vertical-align: top;">Empty controls<br>
+
+
+
+      </td>
+
+
+
+      <td style="vertical-align: top;">Blue<br>
+
+
+
+      </td>
+
+
+
+    </tr>
+
+
+
+    <tr align="left">
+
+
+
+      <td style="vertical-align: top;">Negative controls<br>
+
+
+
+      </td>
+
+
+
+      <td style="vertical-align: top;">Navy Blue<br>
+
+
+
+      </td>
+
+
+
+    </tr>
+
+
+
+    <tr align="left">
+
+
+
+      <td style="vertical-align: top;">Probes<br>
+
+
+
+      </td>
+
+
+
+      <td style="vertical-align: top;">Green<br>
+
+
+
+      </td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td style="vertical-align: top; text-align: left;">Missing spots<br>
+
+
+
+      </td>
+
+
+
+      <td style="vertical-align: top; text-align: left;">White</td>
+
+
+
+    </tr>
+
+
+
+  
+  
+  
+  </tbody>
+</table>
+
+
+
+<p class="MsoCaption" style="text-align: center;" align="center"><o:p></o:p><span style="">Table 1: Color code
+used in arrayQuality<o:p></o:p></span></p>
+
+
+
+
+
+<h3>Restrictions:<br>
+
+
+
+</h3>
+
+
+
+
+
+<p class="MsoNormal">Currently,<span class="codeChar"> PRQCHyb()</span>
+supports Mouse genome (Mm) only.&nbsp;<o:p>&nbsp;</o:p><span style="font-weight: bold;"></span></p>
+<p class="MsoNormal"><span style="font-weight: bold;"></span></p>
+<h2><span style="font-weight: bold;"></span>3.2 Description of the diagnostic plots</h2>
+Figure 2 shows an example of a nice print-run
+QCHyb<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+<ol style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">MA-plot of raw M values. No background
+subtraction is performed. The colored lines represent the loess curves
+for each print-tip group. The red dots highlight&nbsp; any spot with
+corresponding weighted value&nbsp; less than 0. Users can create their
+own weigthing scheme or function. Things to look for in a MA-plot are
+saturation of spots and the trend of loess curves, which is an
+indicator of the amount of normalization to be performed.<br>
+
+
+
+  </li>
+
+</ol>
+
+
+
+<o:p></o:p>
+
+
+<ol start="2" style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">Boxplot of raw M values by print-tip
+group, without background subtraction.</li>
+
+</ol>
+
+
+
+
+
+<ol start="3" style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">Spatial plot of rank of raw M values
+(no background subtraction): Each spot is ranked according to its M
+value. We use a blue to yellow color scale,where blue represents the
+higher rank (1), and yellow represents the lower one. Missing spots are
+represented as white squares.</li>
+
+</ol>
+
+
+
+
+
+<ol start="4" style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">Spatial plot of A values. The color
+indicates the strength of the signal intensity, i.e. the darker the
+color, the stronger the signal. Missing spots are represented in white.</li>
+
+</ol>
+
+
+
+
+
+<ol start="5" style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">Histogram of the signal-to-noise
+log-ratio (SNR) for Cy5 and Cy3 channels. The mean and the variance of
+the signal are printed on top of the histogram. In addition, overlay
+density of SNR stratified by different control types (status) are
+highlighted. Their color schemes are provided in Table 1. The SNR is a
+good indicator for dye problems. The negative controls and empty
+controls density lines should be closer, almost superimposed.</li>
+
+</ol>
+
+
+
+
+
+<ol start="6" style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">Comparison of Mvalues of probes known
+to be differentially expressed from the tested array to average Mvalues
+obtained during previous hybridizations. This plot is aimed at
+verifying the reproducibility of print-runs. The dotted lines are the
+diagonal (no change) and the +2/-2 fold change lines. Each probe is
+represented by a number, and described in the file MmDEGenes.xls. Most
+of the spots should lie between the +2/-2 fold-change regions. If the
+technique was perfect, you should see a straight line on the diagonal.
+If any probe falls off this region (number 29 here), you can look up
+its number in our probe list in MmDEgenes.xls and get more information
+about it.</li>
+
+</ol>
+
+
+
+
+
+
+<ol start="7" style="margin-top: 0in;" type="1">
+
+  <li class="MsoNormal" style="">Dot plot of controls A values, without
+background subtraction. Controls with more than 3 replicates are
+represented on the Y-axis, the color scheme is represented in Table 1.
+Intensity of positive controls should be in the high-intensity region,
+negative and empty controls should be in the lower intensity region.
+Positive controls range and negative/empty controls range should be
+separated. Replicate spots signal should be tight.<br>
+
+
+
+  </li>
+
+</ol>
+
+
+
+
+<h2><br>
+</h2>
+<h2>3.3 Example</h2>
+
+
+
+
+
+<p class="MsoNormal"><o:p></o:p>Data for this example was provided by the
+Functional
+Genomics Core Facility in UCSF. We have tested slide number 137 from
+print-run 9Mm. This print-run uses Operon Version 2 Mouse oligos.
+Results are
+represented figure 2.<o:p>&nbsp;</o:p></p>
+
+
+
+<p class="code" style="font-family: courier new;">&gt;
+library(arrayQuality)</p>
+
+
+
+<p class="code" style="font-family: courier new;">&gt; datadir &lt;-
+system.file("gprQCData", package="arrayQuality")</p>
+
+
+
+<p class="code" style="font-family: courier new;">&gt;
+PRvQCHyb(fnames=&rdquo;9Mm137.gpr&rdquo;, path=datadir, prname="9Mm")</p>
+
+
+
+<p class="MsoNormal"><o:p></o:p></p>
+
+
+
+<div style="text-align: center;">
+<o:p></o:p><img src="images/QCHybDiagPlot.png" title="" alt="Example of QCHyb diagnostic plot" style="width: 800px; height: 500px;"><o:p><br>
+
+
+
+</o:p></div>
+
+
+
+<p class="MsoCaption" style="text-align: center;" align="center">Figure 2:
+Diagnostic plot for print-run Quality Control hybridization</p>
+
+
+
+<o:p></o:p>
+<o:p></o:p><span style="font-weight: bold;"><br>
+
+
+
+</span>
+<h2></h2>
+
+</body>
+</html>

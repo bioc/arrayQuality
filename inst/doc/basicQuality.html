@@ -1,0 +1,3459 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  <meta content="text/html; charset=iso-8859-1">
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  <title>arrayQuality User Manual</title>
+</head>
+
+
+<body>
+
+
+
+
+
+
+<h1 align="center">Quality Control for Spotted Arrays</h1>
+
+
+
+
+
+
+<p align="center">April 15, 2008</p>
+
+
+
+
+
+<p align="center">Agnes Paquet<sup>1</sup>, Andrea Barczak<sup>1</sup>, (Jean) Yee Hwa
+Yang<sup>2</sup> <br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+1. Department of Medicine, Functional Genomics Core Facility,
+University of California, San Francisco<br>
+
+
+
+
+
+
+paquetagnes@yahoo.com<br>
+
+
+
+
+
+
+2. School of Mathematics and Statistics, University of Sydney, Australia<br>
+
+
+
+
+
+
+<a href="http://arrays.ucsf.edu/analysis/arrayquality.html"><span style="color: rgb(255, 0, 0);"></span></a><br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<h1>&nbsp;Content&nbsp;</h1>
+
+
+
+
+
+<span style="font-weight: bold; color: rgb(255, 25, 2);">Hybridization quality control</span><br style="font-weight: bold;">
+
+
+
+
+
+This guide contains instruction on how to install arrayQuality and how
+to generate basic diagnostic plots to assess hybridization quality for
+two-color microarray data. Currently supported platforms are : <br>
+
+
+
+
+
+<ul>
+
+
+
+
+
+  <li>two-color arrays processed using a GenePix scanner (gpr files)</li>
+
+
+
+
+
+  <li>two-color arrays processed using Spot image analysis software (.spot files)</li>
+
+
+
+
+
+  <li>two-color Agilent arrays (qualitative diagnostic plot only)</li>
+
+
+
+
+
+</ul>
+
+
+
+
+
+<span style="font-weight: bold;">
+
+<span style="color: rgb(255, 0, 0);">
+How customize arrayQuality</span>&nbsp;</span><br style="font-weight: bold;">
+
+
+
+
+
+Several default settings of arrayQuality can be modified to better fit
+the user's needs. &nbsp;Advanced users can specify the following:<br>
+
+
+
+
+
+<ul>
+
+
+
+
+
+  <li>Custom set of controls (to best fit the array design)</li>
+
+
+
+
+
+  <li>Custom set of reference arrays for quantitative assessment of hybridization quality</li>
+
+
+
+
+
+  <li>Integration of user defined quality metrics to be used in the comparative boxplot</li>
+
+
+
+
+
+</ul>
+
+
+
+
+
+More details about how to customize your diagnostic
+plots can be found in a separate help file that can be accessed via the
+main help page.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold; color: rgb(255, 0, 0);">Print-run quality</span><br style="font-weight: bold;">
+
+
+
+
+
+ArrayQuality provides two kinds of diagnostic plots for print-run quality
+control: <br>
+
+
+<ul>
+
+
+  <li>A plot specific to 9-mer hybridizations,&nbsp;to assess the performance of the print&nbsp;</li>
+
+
+  <li>A plot specific to&nbsp; QC hybridization, to
+ensure reproducibility of the results between prints.&nbsp;</li>
+
+
+</ul>
+
+
+The complete
+description of these diagnostic plots and instructions on how to
+generate these plots can be found in the Print-Run QC user guide that
+can be accessed from the main help page.<br>
+
+
+&nbsp;<br>
+
+
+
+
+
+<span style="font-weight: bold; color: rgb(255, 0, 0);">MEEBO-HEEBO arrays</span><br style="font-weight: bold;">
+
+
+MEEBO and HEEBO arrays contain specific sets of controls, which can be
+used for quality purposes.&nbsp;ArrayQuality provides specific set of
+diagnostic plots for these arrays. Instructions about how to generate
+and interpret these plots are described in a separate help file that
+can be access from the package main help page. Please refer to this
+manual for more details.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<h1>1. Introduction to arrayQuality</h1>
+
+
+
+
+
+
+<p align="justify">
+ArrayQuality is a R package, available as part of Bioconductor,
+designed to help assessing quality of spotted array experiments at
+several stages of the microarray life cycle. It provides reports
+containing several plots and statistical measures that can help you
+determine if your hybridizations and slides are of good quality. More
+information about Bioconductor is available at <a href="http://www.bioconductor.org">http://www.bioconductor.org</a>. </p>
+
+
+
+
+
+
+<p>This guide provides an introduction to microarray quality and a
+description of the main functionalities of the package. A full
+description of the package is given by the individual function help
+documents available from the R online help system. To access the online
+help, type <font face="courier">help(package=limma)</font> at the R
+prompt or else start the html help system using <font face="courier">help.start()</font>
+or the Windows drop-down help menu.</p>
+
+
+
+
+
+
+<h1>2. Installing arrayQuality</h1>
+
+
+<h2>2.1 Requirements</h2>
+
+
+
+
+
+
+
+
+
+
+<p>
+ArrayQuality is a library for the R project, part of Bioconductor. You
+will need to have R installed on your computer before installing
+arrayQuality. For more information about R, see the R project at <a href="http://www.r-project.org">http://www.r-project.org</a>.
+ArrayQuality can work on different files at the same time, <b>ONLY</b>
+if they are from the <b>SAME print-run</b> (same GAL file). If you
+want to generate quality reports of slides from different print-runs,
+you need to place them in different folders, one for each print-run.<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<h2>2.2 Installing arrayQuality</h2>
+
+
+
+
+
+
+<p>ArrayQuality can be installed from Bioconductor.&nbsp;The version from Bioconductor is
+updated every 6 months.&nbsp;
+</p>
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+  <li><b>Automatic installation from Bioconductor</b><br>
+
+
+
+
+
+This is the easiest way to install arrayQuality, as other Bioconductor
+packages required to use arrayQuality will be automatically
+installed.
+Start R on your computer and make sure you are connected to the
+internet. At the R prompt, type:<br>
+
+
+
+
+
+
+    <font face="courier">source("http://www.bioconductor.org/biocLite.R")
+    <br>
+
+
+
+
+
+
+biocLite("arrayQuality")</font> <br>
+
+
+
+
+
+
+    <br>
+
+
+
+
+
+
+If you are using R GUI (Windows):<br>
+
+
+
+
+
+
+In the R menu, click on "Packages". In the drop-down menu, select
+"Install package(s) from Bioconductor". Then, select arrayQuality in
+the list and click "OK".<br>
+
+
+
+
+
+
+    <br>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+  
+
+
+
+  <li><b>To load arrayQuality:</b><br>
+
+
+
+
+
+
+Type at the R prompt:<br>
+
+
+
+
+
+
+    <font face="courier">library(arrayQuality)</font> <br>
+
+
+
+
+
+
+    <br>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+  <li><b>Manual installation</b><br>
+
+
+
+
+
+
+Download arrayQuality as a .zip file (Windows users) from Bioconductor. Start R on your computer and make sure you are
+connected to the internet.<br>
+
+
+
+
+
+
+In the R console, click on "Packages".<br>
+
+
+
+
+
+
+In the drop-down menu, select "Install package(s) from local zip
+file..."<br>
+
+
+
+
+
+
+Browse to the zip file you would like to install, and click "Open". </li>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<h1>3. Quick starting guide to arrayQuality</h1>
+
+
+
+<p>Here, we will discuss the components of the package&nbsp;aimed at
+verifying the performance of a hybridization, given the good quality of
+the slide, before any
+preprocessing steps or further quality assessment on individual spots
+are performed. If you are interested in the print-run or the
+MEEBO/HEEBO components, please refer to the appropriate help fike for
+these topics.&nbsp;</p>
+
+
+<p>Our package provides two kinds of quality control plots:<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+  <li> A qualitative quality control measurement as a diagnostic plot.
+It is a quick visual way to determine hybridization quality gathering
+information from several statistical tools. </li>
+
+
+  <br>
+
+
+
+
+
+
+  
+
+
+
+  <li>A more quantitative comparison of slide quality as a comparative
+boxplot. We extract some statistical measures from the test slide and
+we compare them against results of &ldquo;good quality&rdquo; slides to assess the
+quality of the hybridization. </li>
+
+
+
+
+
+
+</ul>
+
+
+Diagnostic plots can be generated directly for output of the GenePix
+(.gpr files), Spot (.spot files) and Agilent image processing software
+packages.
+Most arguments can be customized to match your own data: which probes
+are used as controls, which columns of the image processing output file
+are used to define your spot types... You can also specify your own
+collection of good quality slides. More details on how to customize the
+package can be found in a separate user manual that you can access from
+the main help page..
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<h3>3.1 To generate quality plots from image processing output files</h3>
+
+
+
+
+
+
+We provide 3 main functions to generate quality plots:
+<b><font face="courier">gpQuality(), spotQuality() and agQuality()</font></b>.
+We will use gpQuality as an example, but the following can be directly
+applied to spotQuality or agQuality.<br>
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+  <li>Create a directory and move the image processing output files
+(e.g. .gpr files) of the slides of interest to this directory. Make
+sure that all files in the directory come from the SAME print-run (same
+GAL file). </li>
+
+
+  <br>
+
+
+
+
+
+
+  
+
+
+
+  <li>Start R, and change your R working directory to the one you have just
+created. In the R menu, select File, then click on &ldquo;Change dir&hellip;&rdquo;.
+Browse to your directory from the pop-up window, or enter it manually,
+and click OK. To double check that you are in the correct directory: in
+the File menu, click on &ldquo;Display file(s)&hellip;&rdquo;. </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+  <li>To load the package in your R session: type<br>
+
+
+
+
+
+
+    <font face="courier">library(arrayQuality)</font><br>
+
+
+
+
+
+
+    <br>
+
+
+
+
+
+
+If needed, you may have to install other required packages like marray,
+limma, convert and hexbin. </li>
+
+
+
+
+
+
+  
+
+
+  <br>
+
+
+
+
+
+
+  <li>To generate both <b>diagnostic plots and comparative boxplots</b>
+on all files in the directory, type:<br>
+
+
+
+
+
+
+    <font face="courier">result &lt;- gpQuality(organism=&rdquo;Mm&rdquo;)</font> </li>
+
+
+
+
+
+
+  
+
+
+  <br>
+
+
+
+
+
+
+  <li>To generate <b>diagnostic plots</b> only, run:<br>
+
+
+
+
+
+
+    <font face="courier">result &lt;- gpQuality(organism="Mm",
+compBoxplot="FALSE")</font><br>
+
+
+
+
+
+
+In this case, quantitative quality measures will not be calculated and
+the HTML report will not be generated. </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+  <li>To write down your quantitative quality measures and your
+normalized data to a file: set output = TRUE when calling gpQuality:<br>
+
+
+
+
+
+
+    <font face="courier">result &lt;- gpQuality(organism="Mm",
+output=TRUE)</font> </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+  <li>By default, arrayQuality uses print-tip loess normalization. If
+you prefer to use another method, you can specify it in the norm
+argument:<br>
+
+
+
+
+
+
+    <font face="courier">result &lt;- gpQuality(norm="none")</font><br>
+
+
+
+
+
+
+For more details about normalization methods, please refer to marray
+package help. </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+<h3>3.2 To generate quality plots from marrayRaw or RGList objects</h3>
+
+
+
+
+
+
+You can use the function <b><font face="courier">maQualityPlots()</font></b>
+to generate diagnostic plots directly from your R object.
+<ul>
+
+
+
+
+
+
+  <li>To generate diagnostic plots: if rawdata is a marrayRaw or RGList
+object, type in R:<br>
+
+
+
+
+
+
+    <font face="courier">maQualityPlots(rawdata)</font> </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+<h3>3.3 Results</h3>
+
+
+
+
+
+
+gpQuality, spotQuality and agQuality output:<br>
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+  <li>In the working directory:&nbsp;</li>
+
+
+  
+  
+  <ul>
+
+
+    <li>Two plots for each test slide (a diagnostic plot and a comparative
+boxplot)&nbsp;</li>
+
+
+    <li>A&nbsp;HTML quality report </li>
+
+
+  
+  
+  </ul>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+  <li>In the R global environment, the function returns a list of two
+objects:&nbsp;</li>
+
+
+  
+  
+  <ul>
+
+
+    <li>A marrayRaw object describing all tested slides&nbsp;</li>
+
+
+    <li>A quality measures
+matrix: this matrix contains all comparison measures values extracted
+for each test slide. Each column of the matrix represents a different
+slide.</li>
+
+
+  
+  
+  </ul>
+
+
+  <br>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+<h2>4. Introduction to microarray quality</h2>
+
+
+
+
+
+
+<p>
+A microarray experiment is composed of several steps, including
+experimental design, sample preparation, and various statistical
+analyses (figure 1). They are represented in the microarray life cycle
+below. As microarray technology is complex and sensitive, it is
+important to assess the performance of each step before going to the
+next one. In addition, this is also a good way to trace back the cycle
+to understand potential causes for upstream problems.
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<div align="center"><img src="images/lifecycle.png" alt="microarray experiment lifecycle" align="middle">
+<br>
+
+
+
+
+
+
+Figure 1: Microarray experiment life cycle
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+For spotted array experiments, quality controls can be summarized into
+4 steps:<br>
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+  <li>Print quality<br>
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    <ul>
+
+
+
+
+
+
+      <li>9mer hybridization</li>
+
+
+
+
+
+
+      <li>Quality Control hybridization</li>
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    </ul>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+  <li>mRNA quality</li>
+
+
+
+
+
+
+  <li>Array hybridization quality</li>
+
+
+
+
+
+
+  <li>Spot quality</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+Each step must be performed in a sequential order, as represented in
+Figure 2.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<div align="center">
+<img src="images/qualityDiagram.png" alt="Quality control steps for microarray experiment" align="middle">
+<p align="center">Figure 2: Quality Control for spotted arrays
+experiment</p>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+Our package provides graphical tools to look at two of these
+components: print-run quality and array hybridization quality.<br>
+
+
+
+
+
+
+<ol type="A">
+
+
+
+
+
+
+  <li>Print quality<br>
+
+
+
+
+
+
+This component is highly tailored to the Shared Genomics Core Facility
+at UCSF, but the framework can be adapted to other Core facilities or
+laboratories printing their arrays. It is an essential component of a
+printed array experiment, as any print pin, probe or slide surface
+defect will affect the quality of hybridization to the slide, and this
+can&rsquo;t be fixed by statistics. Only prints that did pass the quality
+control check will be used for actual hybridization. </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+  <li>Hybridization quality<br>
+
+
+
+
+
+
+This is a global assessment of the hybridization performance. It helps
+determine for example any problem with the dyes, or uneven
+hybridization. Then, once you have determined that your hybridization
+is good, you can look at each individual spot quality, remove bad
+spots, and perform statistical analysis. </li>
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+  
+</ol>
+
+
+<h1 style="margin-left: 0in; text-indent: 0in;"><a name="_Toc72663205">4.
+General hybridization quality</a><o:p>&nbsp;<br>
+
+
+
+
+
+
+</o:p></h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal">This component is aimed at verifying the
+performance of
+your hybridization, given the good quality of the slide, before any
+preprocessing steps or further quality assessment on individual spots.
+This
+is where you determine if your experiment quality is good enough for you array to
+enter
+your dataset. For example, you will need to remove any hybridization
+with
+very low SNR, or large spatial artifacts.<br>
+
+
+
+
+
+
+<br>
+
+
+Our package provides two kinds of quality control
+plots.
+The first one is a qualitative quality control measurement as a
+diagnostic
+plot. It is a quick visual way to determine hybridization quality
+gathering
+information from several statistical tools. More details on individual
+diagnostic plots can be found in the vignette &ldquo;marrayPlots&rdquo; in
+the package <span style="font-family: courier new;">marray</span>. The
+second
+one is a more quantitative comparison of slide quality. We extract some
+statistical measures from the test slide and we compare them against
+results
+obtained for a collection of slides of &ldquo;good quality&rdquo; to assess
+the quality of the hybridization. This comparison is visualized through
+a
+comparative boxplot. Results are displayed in a HTML report. Figure 5
+shows a
+screen shot of a typical HTML report. Users can click on each image to
+obtain
+a higher resolution plot.<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<p class="MsoNormal">Diagnostic plots can be generated&nbsp; for
+different image processing software format: GenePix format files (.gpr
+files), Spot format files (.spot) and Agilent format files, or from <span style="font-family: courier new,courier,monospace;">marrayRaw</span>
+or <span style="font-family: courier new,courier,monospace;">RGList</span>
+objects. Most arguments can also be customized to match your own data:
+which probes are used as controls, which column of the image processing
+output file is used
+to define your spot types... You can also specify your own collection
+of good quality
+slides using the functions <span class="codeChar" style="font-family: courier new;">globalQuality</span><span style="font-family: courier new;"> </span>and <span class="codeChar" style="font-family: courier new;">qualRefTable</span>. For more
+details about
+these functions, please refer to the specific online help.<o:p><br style="font-family: courier new,courier,monospace;">
+
+
+
+
+
+
+</o:p></p>
+
+
+
+
+
+
+
+
+
+
+<h3>4.1 To generate quality plots from gpr files: <span style="font-family: courier new,courier,monospace;">gpQuality()</span></h3>
+
+
+
+
+
+
+We provide 3 main functions to generate quality plots:
+<b><font face="courier">gpQuality(), spotQuality() and agQuality()</font></b>.
+We will use gpQuality as an example, but the following can be directly
+applied to spotQuality or agQuality.<span style="font-family: courier new,courier,monospace;"> gpQuality()</span>will
+generate both diagnostic plots and comparative boxplots. It uses by
+default spot types from the Functional Genomics Core Facility in UCSF.
+To use your own spot types, please refer to the end of this Section. <span style="color: rgb(255, 0, 0);">[TO BE REMOVED OR NOT]</span><br>
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style=""><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Copy the gpr files from the <b style="">SAME
+print-run</b> (same GAL file) in a directory.</p>
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style=""><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Change R working directory to the one containing
+your
+gpr files as described in Section 3<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;"><span style=""><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>To generate<span style="font-weight: bold;"> both
+diagnostic plots and comparative boxplots</span> on all files in the
+directory, run:<span class="codeChar" style="font-family: courier new;"><br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &gt; result &lt;-
+gpQuality(organism=&rdquo;Mm&rdquo;)<br>
+
+
+
+
+
+
+<span style="font-family: times new roman,times,serif;"><br style="font-family: times new roman,times,serif;">
+
+
+
+
+
+
+</span>&nbsp; </span><span style=""><span style="">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp; -<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>To generate<span style="font-weight: bold;">
+diagnostic
+plots only</span>, run:<br>
+
+
+
+
+
+
+&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<span style="font-family: courier new;">&nbsp; &nbsp;&gt;&nbsp; result &lt;-
+gpQuality(organism="Mm", compBoxplot="FALSE")<br>
+
+
+<span style="font-family: times new roman,times,serif;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;In this case,
+quantitative
+quality measures will not be calculated and the HTML report will <span style="font-weight: bold;">not</span> be generated.</span><br>
+
+
+
+
+
+
+</span></p>
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;">-
+To
+write down your <span style="font-weight: bold;">quantitative quality
+measures and your normalized data to a file</span>: set <span style="font-family: courier new;">output = TRUE</span> when calling <span style="font-family: courier new;">gpQuality</span>:<span style="font-family: courier new;"><br>
+
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&gt; result &lt;- gpQuality(organism="Mm",
+output=TRUE)</span></p>
+
+
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;">This command will create
+two files: <span style="font-weight: bold;">quality.txt</span>, which contains your quality measures, and
+<span style="font-weight: bold;">NormalizedData.xls</span>, which contains your normalized M values.&nbsp;&nbsp;</p>
+
+
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;">If you
+have set
+<span style="font-family: courier new;">compBoxplot =
+FALSE</span>, quantitative quality
+measures are not calculated. Therefore, you will not generate the
+quality.txt
+file.</p>
+
+
+<p class="MsoNormal" style="margin-left: -0.25in; text-indent: 0.5in;"><br>
+
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>4.2 To generate quality plots from <span style="font-family: courier new,courier,monospace;">marrayRaw/RGList</span>
+objects: <span style="font-family: courier new,courier,monospace;">maQualityPlots</span></h3>
+
+
+
+
+
+
+<span style="font-family: courier new,courier,monospace;"><span style="font-family: times new roman,times,serif;">This function can be
+use to obtain quality plots for data generated with other image
+processing software, like Spot for example. </span>maQualityPlots()</span>
+will generate diagnostic plots only. It uses the spot types defined
+when creating the R object. To learn more about how to read data into a
+<span style="font-family: courier new,courier,monospace;">marrayRaw</span>
+or a <span style="font-family: courier new,courier,monospace;">RGList<span style="font-family: times new roman,times,serif;"> </span></span>object,
+please refer to <span style="font-weight: bold; font-family: courier new,courier,monospace;">marray
+</span>or <span style="font-family: courier new,courier,monospace; font-weight: bold;">limma</span><span style="font-weight: bold;"> </span>packages Vignettes.<br>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style=""><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; </span></span></span>To
+generate diagnostic plots: if <span style="font-family: courier new,courier,monospace;">rawdata </span>is
+your <span style="font-family: courier new,courier,monospace;">marrayRaw/RGList</span>
+object, type:<br>
+
+
+<span style="font-family: courier new,courier,monospace;">&gt;
+maQualityPlots(rawdata)&nbsp;</span></p>
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style="font-family: courier new,courier,monospace;"></span></p>
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style="font-family: courier new,courier,monospace;"></span><br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<h3>4.3 Results</h3>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal"><o:p></o:p><span class="codeChar" style="font-family: courier new;">gpQuality()</span> outputs<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+  <li>In the working directory:<span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;"></span></span></span></li>
+
+
+  
+  
+  <ul>
+
+
+    <li><span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;
+      </span></span></span>two plots for each test slide (a diagnostic plot
+and a
+comparative boxplot)</li>
+
+
+    <li><span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;"></span></span></span>a HTML quality report<br>
+
+
+    </li>
+
+
+  
+  
+  </ul>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+  <li>In the R global environment, the function returns a list of two
+objects:<span style="font-family: Wingdings;"><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;
+    </span></span></span></li>
+
+
+  
+  
+  <ul>
+
+
+    <li>A
+marrayRaw
+object describing all tested slides</li>
+
+
+    <li>A&nbsp;quality
+measures matrix: this matrix contains all comparison measures values
+extracted for each test slide. Each column of the matrix represents a
+different slide.<br>
+
+
+
+
+
+
+    </li>
+
+
+  
+  
+  </ul>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ul style="margin-left: 40px;">
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 3pt;">For each slide, you will
+find
+on the report how many of your slide&rsquo;s results are below the
+recommended range. If you want to specify a directory to store the
+results,
+you can do it by modifying the argument <span class="codeChar" style="font-family: courier new,courier,monospace;">resdir</span><span style="font-family: courier new,courier,monospace;"> </span>accordingly.
+For
+more details about <span class="codeChar" style="font-family: courier new;">gpQuality</span> arguments, please
+refer to
+the online help for this function.<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 3pt;"><br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 3pt; text-align: center;"><img src="images/htmlReport.png" alt="Example of gpQuality HTML report" style="width: 600px; height: 445px;"><br>
+
+
+
+
+
+
+Figure 5: Example of
+HTML report generated by gpQuality<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<span style="font-family: courier new,courier,monospace;"><br>
+
+
+maQualityPlots()</span>
+outputs:
+<ul>
+
+
+
+
+
+
+  <li>In the working directory:<span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;"></span></span></span></li>
+
+
+  
+  
+  <ul>
+
+
+    <li><span style=""><span style=""><span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;</span></span></span>one diagnostic plot for each test slide <br>
+
+
+    </li>
+
+
+  
+  
+  </ul>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+<h3>4.4 Restrictions</h3>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal"><o:p></o:p><span style="font-family: courier new;">gpQuality</span>
+calls two key functions, <span style="font-family: courier new;">maQualityPlots
+</span>and <span style="font-family: courier new;">qualBoxplot</span>.
+<span style="font-family: courier new;">qualBoxplot</span> supports
+Mouse (Mm) and
+Human (Hs) genomes only. To generate quality plots for other genomes,
+you
+need to set <span style="font-family: courier new;">gpQuality </span>argument
+<span style="font-family: courier new;">compBoxplot = FALSE</span>. In
+this
+case, only the diagnostic plots will be generated.<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<h3><br>
+
+
+</h3>
+
+
+<h3>4.5 <b style="">Description of the diagnostic plots:<o:p></o:p></b></h3>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal">Figure 6 represents an example of a good
+hybridization
+diagnostic plot.</p>
+
+
+
+
+
+
+
+
+
+
+<ol style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">MA-plot of raw M. No background
+subtraction is performed. The colored lines represent the loess curves
+for each print-tip group. The red dots highlight&nbsp; any spot with
+corresponding weighted value&nbsp; less than 0. Users can create their
+own weigthing scheme or function. Things to look for in a MA-plot are
+saturation of spots and the trend of loess curves, which is an
+indicator of the amount of normalization to be performed.</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="2" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">MA-plot of normalized data density. By
+default, print-tip loess normalization is used. Instead of the typical
+MA-plot, we have used the package "<span style="font-family: courier new;">hexbin</span>" to highlight density
+of dots on the MA-plot. A light yellow color indicates a high density
+of dots, whereas blue color represents a lower density. This plot gives
+you information on the bulk of your data intensity (low/high signal)</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="3" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">Spatial plot of rank of raw M values
+(no background subtraction): Each spot is ranked according to its M
+value. We use a blue to yellow color scale,where blue represents the
+higher rank (1), and yellow represents the lower one. Missing spots are
+represented as white squares. This is a quick way to visually detect
+uneven hybridization and missing spots.</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="4" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">Spatial plot of normalized M values
+ranks. By default, print-tip loess normalization is used. Each spot is
+ranked according to its M value. We use a blue to yellow color
+scale,where blue represents the higher rank (1), and yellow represents
+the lower one. Missing spots are represented as white squares. In
+addition, flagged spots are higllighted by a black square. This type of
+graphical representation helps verify that normalization removed any
+spatial effects.</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="5" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">Spatial plot of raw A values. The
+color indicates the strength of the signal intensity, i.e. the darker
+the color, the stronger the signal. Missing spots are represented in
+white.</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="6" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">Histogram of the signal-to-noise
+log-ratio (SNR) for Cy5 and Cy3 channels. The mean and the variance of
+the signal are printed on top of the histogram. In addition, overlay
+density of SNR stratified by different control types (status) are
+highlighted. Their color schemes are provided in Table 1. The SNR is a
+good indicator for dye problems. The negative and empty controls
+density lines should be closer, almost superimposed.</li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="7" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">Dot plot of controls normalized M
+values. Controls with more than 3 replicates are represented on the
+Y-axis, the color scheme is represented in Table 1. Controls M values
+should be tight. and close to 0.<br>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+<ol start="8" style="margin-top: 0in;" type="1">
+
+
+
+
+
+
+  <li class="MsoNormal" style="">Dot plot of controls A values, without
+background subtraction. Controls with more than 3 replicates are
+represented on the Y-axis, the color scheme is represented in Table 1.
+Intensity of positive controls should be in the high-intensity region,
+negative and empty controls should be in the lower intensity region.
+Positive controls range and negative/empty controls range should be
+separated. <br>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<h3>4.6 Description of the comparative boxplot:</h3>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal">Figure 7 shows an example of a comparative boxplot.</p>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal">We have chosen a wide range of measures to
+quantify the
+quality of a typical hybridization: single channel measures (range of
+foreground signal, MAD of background, signal to noise ratio&hellip;), two
+channel measures (median A values for each type of controls, amount of
+normalization needed&hellip;), percentage of flagged spots... Some measures
+have been negated such that the quality scale had an increasing trend
+from
+problematic to good quality. <br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+<p class="MsoNormal">For each measure, we have represented the
+following on
+the graph :<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Boxplot of the reference slides values.</p>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>1<sup>st</sup> and 3<sup>rd</sup> quantiles before
+scaling for each boxplot.</p>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="margin-left: 0.5in; text-indent: -0.25in;"><span style="font-family: &quot;Times New Roman&quot;;"><span style="">-<span style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-stretch: normal; font-size-adjust: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span>Y-axis on the right : for each measure, we have
+printed
+2 values. The first one is the percentage of reference slides measures
+under
+your slide&rsquo;s result. The second one is your slide value for this
+measure before scaling.<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; &nbsp; -&nbsp;&nbsp;&nbsp; We have scaled all the
+results
+to be able to compare them on the same graph. &nbsp;
+<br>
+
+
+<br>
+
+
+&nbsp;&nbsp;&nbsp; &nbsp; -&nbsp;&nbsp; The red dots are the test slide
+scaled values<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+&nbsp;<br>
+
+
+
+
+
+
+The 15 measures we have selected are presented in the table below. <br>
+
+
+
+
+<p class="MsoNormal"><span style="font-size: 10pt;">Unless otherwise specified: <o:p></o:p></span></p>
+
+
+
+
+<font size="+1"><span class="" style="font-size: 10pt;">Cy5fg<sub>median</sub> corresponds to the
+"F635 Median" column of the gpr file. <o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;">Cy3fg<sub>median</sub> corresponds to the
+"F532 Median" column of the gpr file. <o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;">Cy5fg<sub>mean</sub> corresponds to the "F635
+Mean" column of the gpr file. <o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;">Cy3fg<sub>mean</sub> corresponds to the "F532
+Mean" column of the gpr file. <o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;">Cy5bg corresponds to the "B635 Median"
+column of the gpr file. <o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;">Cy3bg corresponds to the "B532 Median"
+column of the gpr file.<o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;">M =&nbsp;log<sub>2</sub>(Cy5fg<sub>median</sub>) -
+log<sub>2</sub>(Cy3fg<sub>median</sub>)<o:p></o:p></span><span class="">
+
+</span><br class="">
+
+
+<span class="" style="font-size: 10pt;"><span class="">A = [log</span><sub class="">2</sub><span class="">(Cy5fg</span><sub class="">median</sub><span class="">) + log</span><sub class="">2</sub><span class="">(Cy3fg</span><sub class="">
+median</sub><span class="">)] / 2.</span><o:p></o:p></span></font>
+
+<p class="MsoNormal"><span style="font-size: 10pt;">&nbsp;<o:p></o:p></span></p>
+
+
+
+
+<table style="border: medium none ; border-collapse: collapse; height: 722px; width: 733.6px;" border="1" cellpadding="0" cellspacing="0">
+
+
+
+ <tbody>
+
+
+    <tr style="height: 28.35pt;">
+
+
+
+  <td style="border: 0.5pt solid windowtext; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;">&nbsp;<span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: solid solid solid none; border-color: windowtext windowtext windowtext -moz-use-text-color; border-width: 0.5pt 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; text-align: center; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b style=""><span style="font-size: 10pt;">Name<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: solid solid solid none; border-color: windowtext windowtext windowtext -moz-use-text-color; border-width: 0.5pt 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; text-align: center; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b style=""><span style="font-size: 10pt;">Descriptions<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: solid solid solid none; border-color: windowtext windowtext windowtext -moz-use-text-color; border-width: 0.5pt 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; text-align: center; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b style=""><span style="font-size: 10pt;">Details<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b><span style="font-size: 10pt;">1<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b><span style="font-size: 10pt;">rangeRf</span></b><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Range of Cy5
+  foreground.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;" lang="SV">max(log<sub>2</sub> Cy5fg<sub>median</sub> &shy;)&shy;
+  &shy;&ndash; min(log<sub>2</sub> Cy5fg<sub>median</sub>) .<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">2<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b><span style="font-size: 10pt;">rangeGf</span></b><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Range of Cy3
+  foreground.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;" lang="SV">max(log<sub>2</sub> Cy3fg<sub>median</sub> &shy;)&shy;
+  &shy;&ndash; min(log<sub>2</sub> Cy3fg<sub>median</sub>).<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">3<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;">madRb</span></b><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">MAD of Cy5
+  background.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">-mad(log<sub>2</sub> Cy5bg).<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 27.7pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 27.7pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">4<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 27.7pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;" lang="DA">madGb</span></b><b><span style="font-size: 10pt;"><o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 27.7pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">MAD of Cy3 background.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 27.7pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">-mad(log<sub>2</sub> Cy3bg) .<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">5<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b><span style="font-size: 10pt;">medRS2N<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Median signal to
+  noise log-ratio for Cy5.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">median(RS2N) with RS2N = log2(Cy5fg<sub>mean</sub> /Cy5bg ).<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">6<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b><span style="font-size: 10pt;">medGS2N<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Median signal to
+  noise log-ratio for Cy3.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">median(GS2N) with GS2N = log2(Cy3fg<sub>mean</sub> / Cy3bg ).<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">7<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;">medA_empty <o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Median A values
+  of empty control.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">-<span style=""></span> median A[<span style="font-style: italic;">empty</span>] where &ldquo;<i style="">empty</i>&rdquo;
+  refers to the set of control probes labeled "empty".<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">8<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;">medA_negative<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Median A values
+  of negative control.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">-<span style=""></span> median A[<span style="font-style: italic;">negative</span>] where &ldquo;<i style="">negative</i>&rdquo;
+  refers to the set of control probes labeled "negative".<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">9<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><b><span style="font-size: 10pt;">medA_positive <o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">Median A values
+  of positive control.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;"><span style=""></span>- median A[<span style="font-style: italic;">positive</span>] where &ldquo;<i style="">positive</i>&rdquo;
+  refers to the set of control probes labeled "positive".<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">10<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><b style=""><span style="font-size: 10pt;">diffA_pos-neg<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">Difference
+  between A values for positive and negative controls. </span><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;"><span style=""></span><o:p></o:p></span><span style="font-size: 10pt;">median A[<span style="font-style: italic;">positive</span>] -&nbsp;</span><span style="font-size: 10pt;">median A[<span style="font-style: italic;">negative</span>]</span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">11<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;">msePTip</span></b><span style="font-size: 10pt;">:<b><o:p></o:p></b></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">MSE of M values
+  by print-tip group, no background subtraction.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="font-size: 10pt;">&nbsp;MSE = mean squared error<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">12<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;">mseFit<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">MSE of lowess
+  curve<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style=""><span style="background: rgb(255, 255, 255) none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt;">fit = lowess(A, M)&nbsp;<br>
+
+
+
+  mseFit = MSE(fit$y) (as defined in measure 11)</span><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">13<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;<b style="">percent</b></span><b><span style="font-size: 10pt;">Flag<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">Determine the percentage of spots with flag
+  less than 0.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">Flag is the information from the &ldquo;Flags&rdquo;
+  column of the gpr file.<span style="">&nbsp; </span><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">14<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;" lang="SV">&ndash;</span><b><span style="font-size: 10pt;">madMMR<o:p></o:p></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">Log-ratio of M values calculated using
+  mean and median.<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">-[log2(Cy5fg<sub>mean</sub> / Cy3fg<sub>mean</sub>)
+  - log2(Cy5fg<sub>median</sub> / Cy3fg<sub>median</sub>)] <o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+ <tr style="height: 28.35pt;">
+
+
+
+  <td style="border-style: none solid solid; border-color: -moz-use-text-color windowtext windowtext; border-width: medium 0.5pt 0.5pt; padding: 0in 5.4pt; height: 28.35pt; width: 37px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><span style="font-size: 10pt;">15<o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 106px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal" style="margin-bottom: 12pt;"><b style=""><span style="font-size: 10pt;">&ndash;extreme<span style="">MMR<o:p></o:p></span></span></b></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 230px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">Percentage of
+  spots with abs[MMR] &gt; 0.5</span><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 0.5pt 0.5pt medium; padding: 0in 5.4pt; height: 28.35pt; width: 298px;" valign="top">
+  
+      
+      
+      <p class="MsoNormal"><span style="font-size: 10pt;">MMR as defined in measure 14.<span style="">&nbsp; </span><o:p></o:p></span></p>
+
+
+
+  </td>
+
+
+
+ </tr>
+
+
+
+  
+  
+  </tbody>
+</table>
+
+
+
+
+<p class="MsoNormal"><span style="font-size: 10pt;">&nbsp;</span><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+
+
+
+<h3>4.7 Example</h3>
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal">Data for this example was provided by the
+Functional
+Genomics Core Facility in UCSF. We have tested slide number "137" from
+print-run "9Mm". This array was fabricated using Operon Version 2 Mouse
+oligos and the hybridization measures differential gene expression in
+two RNA
+samples, Mouse Liver and Mouse Reference Pool. Results are represented
+Figure
+5 and Figure 6.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+
+
+
+
+<p class="code" style="font-family: times new roman,times,serif;"><o:p></o:p>To
+generate
+diagnostic plots, comparative boxplots, HTML report and to write your
+quality
+measure and normalized data to a file in a directory named "Results":</p>
+
+
+
+
+
+
+<p class="code" style="font-family: courier new;">&gt;
+library(arrayQuality)</p>
+
+
+
+
+
+
+<p class="code" style="font-family: courier new;">&gt; datadir &lt;-
+system.file("gprQCData", package="arrayQuality")</p>
+
+
+
+
+
+
+<p class="code" style="text-align: left; font-family: courier new;" align="left">&gt; result &lt;-
+gpQuality(<span style="color: black;">fnames = "9Mm137.gpr", path =
+datadir,<o:p></o:p>organism = &rdquo;Mm&rdquo;, output = TRUE, resdir =
+"Results")<o:p></o:p></span></p>
+
+
+
+
+
+
+<p class="MsoNormal"><o:p></o:p></p>
+
+
+
+
+
+
+<p class="MsoNormal"><o:p><br>
+
+
+
+
+
+
+</o:p></p>
+
+
+
+
+
+
+<div style="text-align: center;">
+<img src="images/genHybDiagPlot.png" title="" alt="Example of general hybridization diagnostic plot" style="width: 576px; height: 432px;"><o:p><br>
+
+
+
+
+
+
+&nbsp;<br>
+
+
+
+
+
+
+</o:p>Figure 6: General hybridization quality diagnostic plot<br>
+
+
+
+
+
+
+<div style="text-align: left;">
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<div style="text-align: center;">
+<img src="images/comparativeBoxplot.png" title="" alt="General hybridization quality: comparative boxplot" style="width: 500px; height: 375px;"><br>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+<p class="MsoCaption" style="text-align: center;" align="center">Figure
+7:
+Comparative boxplot</p>
+
+
+
+
+
+
+<p class="MsoNormal"><o:p></o:p></p>
+
+
+<br>
+
+
+</body>
+</html>
