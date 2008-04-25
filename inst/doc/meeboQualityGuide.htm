@@ -1,0 +1,943 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./meeboQualityGuide_files/filelist.xml">
+<link rel=Edit-Time-Data href="./meeboQualityGuide_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>Checking hybridization quality of MEEBO set arrays</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>APaquet</o:Author>
+  <o:LastAuthor> </o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>83</o:TotalTime>
+  <o:Created>2008-04-25T00:30:00Z</o:Created>
+  <o:LastSaved>2008-04-25T00:30:00Z</o:LastSaved>
+  <o:Pages>8</o:Pages>
+  <o:Words>1911</o:Words>
+  <o:Characters>10895</o:Characters>
+  <o:Company>UCSF</o:Company>
+  <o:Lines>90</o:Lines>
+  <o:Paragraphs>21</o:Paragraphs>
+  <o:CharactersWithSpaces>13379</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:DrawingGridHorizontalSpacing>6 pt</w:DrawingGridHorizontalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>2</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:Compatibility>
+   <w:SelectEntireFieldWithStartOrEnd/>
+   <w:UseWord2002TableStyleRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+p.MSOACETATE
+	{mso-style-noshow:yes;}
+li.MSOACETATE
+	{mso-style-noshow:yes;}
+div.MSOACETATE
+	{mso-style-noshow:yes;}
+ /* Font Definitions */
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:1627421319 -2147483648 8 0 66047 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-update:auto;
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-indent:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	mso-list:l0 level1 lfo2;
+	tab-stops:list .5in;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+h3
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:13.0pt;
+	font-family:Arial;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.0in right 6.0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.0in right 6.0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.MsoBodyTextIndent, li.MsoBodyTextIndent, div.MsoBodyTextIndent
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.25in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p.msoacetate, li.msoacetate, div.msoacetate
+	{mso-style-name:msoacetate;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	font-family:Tahoma;
+	mso-fareast-font-family:"Times New Roman";}
+ /* Page Definitions */
+@page
+	{mso-footnote-separator:url("./meeboQualityGuide_files/header.htm") fs;
+	mso-footnote-continuation-separator:url("./meeboQualityGuide_files/header.htm") fcs;
+	mso-endnote-separator:url("./meeboQualityGuide_files/header.htm") es;
+	mso-endnote-continuation-separator:url("./meeboQualityGuide_files/header.htm") ecs;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-even-header:url("./meeboQualityGuide_files/header.htm") eh1;
+	mso-even-footer:url("./meeboQualityGuide_files/header.htm") ef1;
+	mso-footer:url("./meeboQualityGuide_files/header.htm") f1;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:857045861;
+	mso-list-type:hybrid;
+	mso-list-template-ids:603774830 766048534 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l0:level1
+	{mso-level-style-link:"Heading 2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1039"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">  </w:LatentStyles>
+</xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1 align=center style='text-align:center'>Checking hybridization quality of
+MEEBO/HEEBO set arrays</h1>
+
+<p class=MsoNormal align=center style='text-align:center'>June 29, 2006</p>
+
+<p class=MsoNormal align=center style='text-align:center'>Agnes Paquet, Yuanyuan
+Xiao, (Jean) Yee Hwa Yang, Andrea Barczak, David Erle</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><![endif]>Introduction to MEEBO/HEEBO set quality</h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>This component of arrayQuality aims at checking the overall
+performance of the hybridization, given that the quality of the print-run is
+satisfactory. Please refer to PRv9mers and PRvQCHyb functions in arrayQuality
+for inspection of print-run quality. This suite of functions are specifically
+designed for MEEBO/HEEBO arrays, which provide a wide panel of control
+sequences, such as positive and negative controls, and tiled controls and
+doping controls. For more details on MEEBO or HEEBO controls, please refer to
+the section 4 of this guide.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>arrayQuality provides 3 types of quality plots for
+MEEBO/HEEBO arrays:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>1- A diagnostic plot that includes several statistics and
+exploratory plots and provides a quick graphic insight on the quality of the
+array. This plot is very similar to the other diagnostic plots that can be
+generated using arrayQuality.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>2- Doping controls quality check: these plots show the
+performance of the doping controls that were added to the hybridization mix,
+and compare them to expected results.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>3- Mismatch and tiled controls plots: these plots are
+designed to show the specificity of the MEEBO set and to demonstrate
+amplification bias toward the 3’ end of the transcripts. These plots can be
+used as a whole oligo set quality check rather than hybridization quality
+assessment.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Users can choose to generate any of these 3 kinds of
+plots as needed. In any case, doping controls performance and whole set quality
+plots results should be interpreted with care; they will not be informative if
+the hybridization quality is poor.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><![endif]>Quick starting guide</h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The function in arrayQuality producing MEEBO quality plots
+is called <i style='mso-bidi-font-style:normal'>meeboQuality()</i>. The
+function producing HEEBO quality plots is called <i>heeboQuality()</i>. By
+default, both expect GenePix file format as input, and the identities of the
+doping controls are set to be the mix used at SFGF. However, most arguments can
+be customized to the user’s own data, please refer to other parts of this guide
+for more details. We will use the MEEBO functions as example is this guide. All
+HEEBO functions work in exactly the same way.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>1) Create a directory and move the image processing output
+files (e.g. .gpr files) of the slides of interest to this directory. Make sure
+that all files in the directory come from the SAME print-run (same GAL file).</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>2) Start R, and change R working directory to the one you
+have just created. In the R menu, select File, then click on “Change dir…”.
+Browse to your directory from the pop-up window, or enter it manually, and
+click OK. To double check that you are in the correct directory: in the File
+menu, click on “Display file(s)…”. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>3) To load the package in your R session: type:</p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>library(arrayQuality)<o:p></o:p></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>If needed, you may have to install other required packages
+like marray, limma, convert, hexbin and RColorBrewer. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>4) Place your SpikeTypeFile in the same directory as your
+image processing output files.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>5) To generate all 3 kinds of quality plots for all files in
+the directory, type:</p>
+
+<p class=MsoNormal>test &lt;- meeboQuality()</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>6) To generate DIAGNOSTIC PLOT ONLY, type:</p>
+
+<p class=MsoNormal>test &lt;- meeboQuality(diagnosticPlot=TRUE, DOPING=FALSE,
+meeboSetQC=FALSE)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>7) To generate DIAGNOSTIC PLOT and DOPING CONTROLS QC:</p>
+
+<p class=MsoNormal>test &lt;- meeboQuality(diagnosticPlot=TRUE, DOPING=TRUE,
+meeboSetQC=FALSE)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>8) By default, meeboQuality uses no background subtraction
+and print-tip loess normalization. If you would like to change these defaults,
+you can modify the arguments bgMethod and normMethod to any method implemented
+in limma. For example, if you would like to perform background subtraction and
+no normalization:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>test &lt;- meeboQuality(bgMethod=”subtract”,
+normMethod=”none”)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><![endif]>Results</h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>meeboQuality will output several plots in the working
+directory and a MAList object representing all tested slides<span
+style="mso-spacerun: yes">  </span>using specified background subtraction and
+normalization in the R working environment. Note if no normalization method is specified
+by the user, the MAList object output contains raw data. More details about the
+results can be found in the section 6 of this document.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><![endif]>MEEBO arrays controls</h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The MEEBO set integrates a large collection of control
+features corresponding to both endogenous mouse/human transcripts as well as a
+diverse array of over 200 spiked doping control RNAs. These features can be
+used to examine in detail the performance of any given hybridization based on
+criteria such as, sensitivity, specificity, dynamic range, and linearity of the
+hybridization. In addition, the control features are also helpful in<span
+style="mso-spacerun: yes">  </span>detecting various possible hybridization or
+labeling biases. This section describes the properties and designs of these
+control features that are used to generate the quality plots in the package. For
+more details, please refer to MEEBO documentation:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><a href="http://alizadehlab.stanford.edu/">http://alizadehlab.stanford.edu/</a></p>
+
+<p class=MsoNormal><a href="http://www.arrays.ucsf.edu/meebo.html">http://www.arrays.ucsf.edu/meebo.html</a></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Doping controls: oligo ids mCD </p>
+
+<p class=MsoNormal>They correspond to probes that recognize spike-in transcript
+from <i style='mso-bidi-font-style:normal'>Methanococcus</i> and <i
+style='mso-bidi-font-style:normal'>B.</i> <i style='mso-bidi-font-style:normal'>subtilis</i>
+(Stanford) and from commercial suppliers (Affymetrix, Ambion and Stratagene). </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Mismatch controls: mCM</p>
+
+<p class=MsoNormal>Anchored and distributed mismatched versions of 5 selected
+spike-in transcripts and 5 of the positive control mouse genes. Probes that
+perfectly match their targeted sequences are called Perfect Matches (PM), and
+probes that contain deliberate point mutations are called Mismatches (MM). </p>
+
+<p class=MsoNormal>Each PM probe is replicated between 8 to 23 times on the
+array.<span style="mso-spacerun: yes">  </span>For each PM, the corresponding
+MMs have the following features: </p>
+
+<p class=MsoNormal>1) different numbers of mismatches: 1, 3, …, 63; </p>
+
+<p class=MsoNormal>2) different directions: anchored at the extremities and
+distributed.</p>
+
+<p class=MsoBodyTextIndent style='margin-left:0in'>3) each MM is replicated 3
+times</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Negative controls: mCN</p>
+
+<p class=MsoNormal>Randomized 70mers, selected not to recognize mouse
+transcripts.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Positive controls: mCP</p>
+
+<p class=MsoNormal>The MEEBO set includes several kinds of positive controls:</p>
+
+<p class=MsoNormal>- Ubiquitin C probe as a corner placed PMT aid, assuming
+that sector widths are 28 or 29 spots (192 replicates) </p>
+
+<p class=MsoNormal>- Normalization genes: 10 mouse “housekeeping” genes, 20
+copies of each, based on Vandesompele et al., Genome Biol. 2002
+3(7):RESEARCH0034. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>They are all gathered under Positive controls in the
+diagnostic plots at the moment.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Tiling controls, mCT</p>
+
+<p class=MsoNormal>Series of probes designed to recognize sequences at varying
+distances from the 3’ end (used to assess 3’ bias): 11 mouse genes and selected
+spike-in transcripts.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Mouse constitutive exonic oligos: mMC</p>
+
+<p class=MsoNormal>We are including these oligos in the quality plots in order
+to compare the expression level of control probes to the expression level of
+“real genes”.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><![endif]>Input files</h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Spot Type File</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>A spot Type File is a tab-delimited text file, which is used
+to identify different types of spots on your array. By default, meeboQuality
+will use the spot types described in the figure below. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:3in;
+ height:220.5pt' o:bordertopcolor="this" o:borderleftcolor="this"
+ o:borderbottomcolor="this" o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image001.jpg" o:title="MeeboSpotTypes"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=290 height=296
+src="./meeboQualityGuide_files/image002.gif" v:shapes="_x0000_i1025"><![endif]></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>If you would like to use your own spot types, please follow the
+recommendations in limma’s User’s Guide to create the file. Then, copy your
+file, say “MySpotTypeFile.txt” to the SAME DIRECTORY as your gpr files, and
+pass the name of the file in meeboquality input:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>test &lt;- meeboQuality(SpotTypesFile=”MySpotTypes.txt”)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Spike Type File<o:p></o:p></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>A Spike Type File is a tab-delimited text file containing
+the information on the user’s spike-in mixture. An example of the file used at
+SFGF is presented in the figure below. This file MUST contain the following
+columns:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>1) SeqID</p>
+
+<p class=MsoNormal>This column contains the MEEBO sequence identifier for each
+probe. It is used to retrieve replicates of each doping control. This column
+can be replaced by the MEEBO Probe_Name, but not any of the other MEEBO set
+annotations (e.g. MEEBO id or probe description) because they might not be
+unique among replicated probes on the array. The identifier used to retrieve
+replicates MUST be passed as argument in meeboQuality; it is set to “SeqID” by
+default.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>2) Type</p>
+
+<p class=MsoNormal>This column is used to group doping controls by manufacturer
+or transcripts. By default, the doping controls used at UCSF or SFGF will be
+split into Ambion, Stratagene and MJ.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>3) MassCY3 and MassCY5</p>
+
+<p class=MsoNormal>These 2 columns should contain the mass of each doping
+control added to the hybridization mixture; the “MassCY3” column should contain
+the mass of oligo labeled with Cy3; “MassCY5” the mass of oligo labeled with
+Cy5. Numbers should be provided using the SAME UNIT; they will be used as
+provided to generate the quality plots and compute the expected ratios. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The name of both columns should be passed as argument in
+meeboQuality. By default, they are set to the SFGF doping mixture version 1.7. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>4) Name </p>
+
+<p class=MsoNormal>If you would like to use a different naming for the graph labels,
+you can specify your own names of symbols in the file and pass the column name
+as arguments. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1026" type="#_x0000_t75" style='width:6in;height:200.25pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image003.jpg" o:title="SpikeTypeFile"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=578 height=269
+src="./meeboQualityGuide_files/image004.gif" v:shapes="_x0000_i1026"><![endif]></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>You can also add any other columns as needed in your
+experiment. To use your own Spike Type File, copy your file in the working
+directory containing your image processing output files (gpr). Then pass the
+necessary arguments to meeboQuality:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>test &lt;- meeboQuality(SpikeTypeFile=”MySpikeTypeFile.txt”,
+cy3col=”MyCy3”, cy5col=”MyCy5”, namecol=”MyName”)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2 style='margin-left:0in;text-indent:0in'><![if !supportLists]>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><![endif]>Quality plots description and examples</h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3>Diagnostic plot</h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Filename= diagPlot.SLIDENAME.png</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1027" type="#_x0000_t75" style='width:6in;height:324pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image005.png" o:title="diagPlot"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=578 height=434
+src="./meeboQualityGuide_files/image006.gif" v:shapes="_x0000_i1027"><![endif]></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3>QC plots using mismatch controls</h3>
+
+<p class=MsoNormal style='text-align:justify'>Mismatch controls are defined as
+follows: 10 transcripts have been selected as wild-type probes (around 20
+replicates of each WT), and the sequence of these WT probes have been modified
+to create anchored and distributed mismatch probes.<span style="mso-spacerun:
+yes">  </span></p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Signal intensity vs. binding energy <o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal>Boxplot of normalized raw signal intensity for all MisMatch
+controls and associated wild-type oligos, binned by Binding Energy. </p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filename</b>:
+BindingEnergy.SLIDENAME.png</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Raw signal intensity</b>:
+Rf + Gf (background corrected as specified)</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filtering</b>: lowly
+expressed controls are removed from the plot. The median raw intensity of the
+wild-type controls should be &gt; than the 75 percentile of the intensity for the
+whole array for a set of mismatch probes to be included.</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Normalization</b>:
+the normalized raw intensity for each mismatch oligo is obtained by dividing
+the raw intensity by the median raw intensity of the associated wild-type
+probes.</p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1028" type="#_x0000_t75" style='width:6in;height:324pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image007.png" o:title="BindingEnergy"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=576 height=432
+src="./meeboQualityGuide_files/image008.gif" v:shapes="_x0000_i1028"><![endif]></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Signal intensity vs. percentage of mismatch<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal style='text-align:justify'>Scatter plot of the log intensity
+vs. percentage of mismatched bases for each of the 10 transcripts with mismatch
+probes, . </p>
+
+<p class=MsoNormal style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'>Filename</b>: Mismatch.SLIDENAME.png</p>
+
+<p class=MsoNormal style='text-align:justify'>Anchored and distributed mismatch
+controls are represented separately, and the loess line for both types is
+overlaid on top of the scatter plot.</p>
+
+<p class=MsoNormal style='text-align:justify'>Each plot also includes the
+boxplot of log intensity for the associated WT probes and the boxplot of log
+intensity for negative controls. The right axis represents the percentiles of A
+values for the array in question, and the 50<sup>th</sup>, 75<sup>th</sup> and
+90<sup>th</sup> percentiles of A values are highlighted in red.</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1029" type="#_x0000_t75" style='width:420pt;height:315pt'>
+ <v:imagedata src="./meeboQualityGuide_files/image009.png" o:title="Mismatch"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=560 height=420
+src="./meeboQualityGuide_files/image010.gif" v:shapes="_x0000_i1029"><![endif]></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Signal intensity vs. 3’ distance<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal>For each of the 11 tiling controls, scatter plot of the raw
+log-intensity vs. 3’ distance, for both channels.</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filename</b>:
+Tiling.SLIDENAME.png</p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1030" type="#_x0000_t75" style='width:394.5pt;height:315.75pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image011.png" o:title="Tiling"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=528 height=423
+src="./meeboQualityGuide_files/image012.gif" v:shapes="_x0000_i1030"><![endif]></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><span
+style='font-size:16.0pt;mso-bidi-font-size:12.0pt'>QC plots using doping
+controls<o:p></o:p></span></b></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Cy5 raw signal intensity vs. Cy3 raw signal intensity (log2 scale)<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal style='text-align:justify'>Scatter plot of raw Cy5 signal
+intensity over the raw Cy3 signal intensity (background correction is performed
+if requested) for all spiked doping-controls, colored by expected ratio. </p>
+
+<p class=MsoNormal style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'>Filename</b>: Spike.Cy5vsCy3.SLIDENAME.png</p>
+
+<p class=MsoNormal style='text-align:justify'>A doping control will not be used
+if the corresponding Cy5 mass column is empty.</p>
+
+<p class=MsoNormal style='text-align:justify'>No filtering is performed.</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1031" type="#_x0000_t75" style='width:6in;height:6in'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image013.png" o:title="Spike"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=578 height=578
+src="./meeboQualityGuide_files/image014.gif" v:shapes="_x0000_i1031"><![endif]></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Scatter plot of observed log-ratios<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal style='text-align:justify'>For each spiked doping-control,
+plot the observed log-ratios of each replicate and overlay the expected
+log-ratio on top. </p>
+
+<p class=MsoNormal style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'>Filename</b>: Spike.MM.Scatter.SLIDENAME.png</p>
+
+<p class=MsoNormal style='text-align:justify'>If doping controls are separated
+into several types in the SpikeTypeFile, a plot is generated for each type.</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1032" type="#_x0000_t75" style='width:324pt;height:638.25pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image015.png" o:title="Spike"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=434 height=853
+src="./meeboQualityGuide_files/image016.gif" v:shapes="_x0000_i1032"><![endif]></p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>&nbsp;<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Observed ratio vs. expected ratio<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal style='text-align:justify'>For each type of doping controls,
+plot the observed log-ratio vs. the expected values for each probe (letters)
+and the median observed log-ratios vs expected ratio. Log-ratios are extracted
+after background correction and normalization.</p>
+
+<p class=MsoNormal style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'>Filename</b>: Spike.MMplot.SLIDENAME.png</p>
+
+<p class=MsoNormal style='text-align:justify'>If there are more than 16 spiked
+doping control in one type (usually for MJs), only 1 color will be used and the
+median of replicated probes will not be printed. No legend on the left in this
+case.</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1033" type="#_x0000_t75" style='width:303.75pt;height:449.25pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image017.png" o:title="Spike"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=407 height=601
+src="./meeboQualityGuide_files/image018.gif" v:shapes="_x0000_i1033"><![endif]></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b style='mso-bidi-font-weight:normal'><i
+style='mso-bidi-font-style:normal'><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt'>Sensitivity<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal>For each type of doping controls, boxplot of the raw signal
+intensity vs. spiked mass, both in log2 scale, for each channel. </p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filename</b>:
+Spike.Sensitivity.FILENAME.png</p>
+
+<p class=MsoNormal>This plot assumes that all spiked-mass are on the same mass
+scale.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1034" type="#_x0000_t75" style='width:300pt;height:450pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image019.png" o:title="Spike"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=402 height=602
+src="./meeboQualityGuide_files/image020.gif" v:shapes="_x0000_i1034"><![endif]></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='margin-top:12.0pt;margin-right:0in;margin-bottom:
+3.0pt;margin-left:0in;text-align:justify'><b><i><span style='font-size:14.0pt;
+mso-bidi-font-size:12.0pt'>Sensitivity of each individual spike<o:p></o:p></span></i></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Boxplot of raw signal intensity (log2 scale) for each doping
+controls, ordered by increasing mass. Doping controls are separated by spike types.
+A boxplot of negative controls log2 signal intensity and signal intensity
+quartiles are provided on each graph as scale indicators.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Filename</b>:
+Spike.Sensitivity.Indi.FILENAME.pngThis plot assumes that all spiked-mass are
+on the same mass scale.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1035" type="#_x0000_t75" style='width:375pt;height:450pt'
+ o:bordertopcolor="this" o:borderleftcolor="this" o:borderbottomcolor="this"
+ o:borderrightcolor="this">
+ <v:imagedata src="./meeboQualityGuide_files/image021.png" o:title="Spike"/>
+ <w:bordertop type="single" width="4"/>
+ <w:borderleft type="single" width="4"/>
+ <w:borderbottom type="single" width="4"/>
+ <w:borderright type="single" width="4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=502 height=602
+src="./meeboQualityGuide_files/image022.gif" v:shapes="_x0000_i1035"><![endif]></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
