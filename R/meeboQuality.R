@@ -126,7 +126,7 @@ meeboQuality <- function(fnames = NULL, path = ".",
       {
         spot.defs <- list(file=SpotTypeFile)
         spot.args <- maDotsMatch(maDotsMatch(opt,spot.defs),formals(args(read.maimages)))     
-        controlMatrix <- do.call("readSpotTypes",spot.args)
+        controlMatrix <- do.call(readSpotTypes,spot.args)
       }
     RG$genes$Status <- controlStatus(controlMatrix,RG,regexpcol=controlId,verbose=FALSE)
     if(DEBUG) print(table(RG$genes$Status))
