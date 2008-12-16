@@ -68,7 +68,7 @@ PRvQCHyb<-  function(fnames,
       #read.args$path <- NULL
       read.args$path <- path
       if(DEBUG) cat("Reading", read.args$file, "...\n")
-      bgraw <- do.call("read.GenePix", read.args)
+      bgraw <- do.call(read.GenePix, read.args)
       GInfo <- maGeneTable(bgraw)
       mraw <- bgraw; mraw@maGb <- mraw@maRb <- matrix(0,0,0)
 

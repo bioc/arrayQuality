@@ -581,7 +581,7 @@ globalQuality <- function(fnames = NULL, path = ".",
         gp <- do.call(inputsource, args=list(fnames=f, path=path,controlId=controlId))
         defs <- c(list(gprData = gp), opt)
         SQ.args <- maDotsMatch(defs, formals(args("slideQuality")))
-        restmp <- do.call("slideQuality", SQ.args)
+        restmp <- do.call(slideQuality, SQ.args)
         quality <- cbind(quality, restmp[,1])
         meas <- rownames(restmp)
 
@@ -746,7 +746,7 @@ outputNormData <- function(mraw=NULL, DEBUG = FALSE, val=c("maM", "maA"),...)
     if (DEBUG) print("No background subtraction")
     tmp <- mraw
     maRb(tmp) <- maGb(tmp) <- matrix(0,0,0)
-    mnorm <- do.call("maNorm", c(list(tmp), norm.defs))
+    mnorm <- do.call(maNorm, c(list(tmp), norm.defs))
     write.marray(mnorm, "NormalizedData.xls", val=val)
   }
 

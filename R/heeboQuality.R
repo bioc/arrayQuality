@@ -77,7 +77,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
         if(DEBUG) print("Parsing Spike Type File")
         spike.defs <- list(file=SpikeTypeFile,path=path,cy5col=cy5col,cy3col=cy3col)
         spike.args <- maDotsMatch(maDotsMatch(opt, spike.defs), formals(args("readSpikeTypes")))
-        SpikeList <- do.call("readSpikeTypes",spike.args)
+        SpikeList <- do.call(readSpikeTypes,spike.args)
         spike.args <- maDotsMatch(maDotsMatch(opt, spike.defs), formals(args("readSpotTypes")))
         HeeboSpikeTypes <- do.call(readSpotTypes,spike.args)
         if(length(namecol)>1)
@@ -92,12 +92,12 @@ heeboQuality <- function(fnames = NULL, path = ".",
         gal.defs <- list(galfile = galfile, path=path, fill=TRUE)        
         gal.args <- maDotsMatch(maDotsMatch(opt, gal.defs), formals(args("readGAL")))
         gal.args <- maDotsMatch(maDotsDefaults(opt, gal.defs), formals(args("readGAL")))
-        gal <- do.call("readGAL", gal.args)
+        gal <- do.call(readGAL, gal.args)
 
         gpr.defs <- list(files=fnames, path=path,source=source,other.columns=other.columns)
         gpr.args <- maDotsMatch(maDotsMatch(opt,gpr.defs),formals(args(read.maimages)))
         
-        RG <- do.call("read.maimages",gpr.args)
+        RG <- do.call(read.maimages,gpr.args)
         RG$genes <- gal
         RG$printer <- getLayout(RG$genes)
       }
@@ -106,7 +106,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
         if (DEBUG) print("Reading .gpr ...")
         gpr.defs <- list(files=fnames, path=path,source=source,other.columns=other.columns)
         gpr.args <- maDotsMatch(maDotsMatch(opt,gpr.defs),formals(args(read.maimages)))     
-        RG <- do.call("read.maimages",gpr.args)
+        RG <- do.call(read.maimages,gpr.args)
         RG$printer <- getLayout(RG$genes)
       }
 
@@ -116,7 +116,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
       {
         spot.defs <- list(file=SpotTypeFile)
         spot.args <- maDotsMatch(maDotsMatch(opt,spot.defs),formals(args(read.maimages)))     
-        controlMatrix <- do.call("readSpotTypes",spot.args)
+        controlMatrix <- do.call(readSpotTypes,spot.args)
       }
     RG$genes$Status <- controlStatus(controlMatrix,RG,regexpcol=controlId, verbose=FALSE)
     if(DEBUG) print(table(RG$genes$Status))
@@ -130,13 +130,13 @@ heeboQuality <- function(fnames = NULL, path = ".",
     ## Bg subtraction
     bg.defs <- list(method=bgMethod, RG=RG)
     bg.args <- maDotsMatch(maDotsMatch(opt,bg.defs),formals(args(backgroundCorrect)))
-    RGsub <- do.call("backgroundCorrect",bg.args)
+    RGsub <- do.call(backgroundCorrect,bg.args)
     rownames(RGsub$R) <- rownames(RGsub$G) <- RG$genes[,controlId]
 
     ## Normalization
     norm.defs <- list(method=normMethod, object=RGsub)
     norm.args <- maDotsMatch(opt,norm.defs)
-    MA <- do.call("normalizeWithinArrays",norm.args)
+    MA <- do.call(normalizeWithinArrays,norm.args)
     ## need to set up rownames for MA$M and MA$A
     rownames(MA$A) <- rownames(MA$M) <- RG$genes[,controlId]
     
@@ -171,7 +171,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
         qp.defs <-list(mrawObj=RG,controlId=controlId,DEBUG=DEBUG,
                        dev=dev,norm=normMethod, organism=organism)
         qp.args <- maDotsDefaults(opt, qp.defs)
-        do.call("heeboQualityPlots", qp.args)
+        do.call(heeboQualityPlots, qp.args)
       }
 
     ###############################################################
@@ -293,7 +293,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
                 
                 if(DEBUG) print(names(spike.args))
                 par(mar=c(5,5,5,5))
-                do.call("Spike.Cy5vsCy3",spike.args)
+                do.call(Spike.Cy5vsCy3,spike.args)
                 dev.off()
                 
                 ## MMplot obserevd vs. expected
@@ -314,7 +314,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
                   do.call(dev, maDotsMatch(maDotsDefaults(opt, c(list(file=plotname), plotdef$dev)),
                                            formals(args(dev))))
                 par(mfrow=c(ntypes,2),cex.main=2,cex.lab=1.5,oma=c(7,3,3,3))
-                do.call("Spike.MMplot",spike.args)
+                do.call(Spike.MMplot,spike.args)
                 title(paste("Observed and expected ratios for",colnames(MA$A)[i],sep=" "),cex=2.5,outer=TRUE)
                 dev.off()
                 
@@ -330,7 +330,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
                                            formals(args(dev))))
                 par(mfrow=c(ntypes,1),oma=c(1,3,3,3),mar=c(7,3,3,3))
                 spike.args <-  maDotsMatch(maDotsDefaults(opt,spike.defs),formals(args(Spike.MM.Scatter)))
-                do.call("Spike.MM.Scatter",spike.args)
+                do.call(Spike.MM.Scatter,spike.args)
                 title(paste("Observed and expected ratios for",colnames(MA$A)[i],sep=" "),cex=2.5,outer=TRUE)
                 dev.off()
                 
@@ -350,7 +350,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
                                            formals(args(dev))))
                 
                 par(mfrow=c(ntypes,2),oma=c(3,3,3,3),cex.lab=1.2,cex.axis=1.2)
-                do.call("Spike.Sensitivity",spike.args)
+                do.call(Spike.Sensitivity,spike.args)
                 title(paste("Sensitivity", colnames(MA$A)[i],sep=" "),outer=TRUE,cex=2.5)
                 dev.off()
                 
@@ -370,7 +370,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
                                    gnames=RGsub$genes[,controlId],namecol=namecol,cy5col=cy5col,cy3col=cy3col)
                 spike.args <- maDotsMatch(maDotsDefaults(opt,spike.defs),
                                           formals(args(Spike.Individual.Sensitivity)))
-                do.call("Spike.Individual.Sensitivity",spike.args)
+                do.call(Spike.Individual.Sensitivity,spike.args)
                 title(paste("Sensitivity", colnames(MA$A)[i],sep=" "),outer=TRUE,cex=2.5)
                 dev.off()
               }

@@ -229,7 +229,7 @@ heeboQualityPlots <-  function(mrawObj, headerInfo="",
       if (DEBUG) print("Re-evaluate Weight")
       if(missing(badspotfunction)||is.null(badspotfunction))
         {
-          tmp <- do.call("gpFlagWt", list(mraw@maW))
+          tmp <- do.call(gpFlagWt, list(mraw@maW))
           mraw@maW <- tmp 
         }
       else
@@ -267,7 +267,7 @@ heeboQualityPlots <-  function(mrawObj, headerInfo="",
 
       if (DEBUG) cat("Using normalization method:  ", norm.defs$norm, "\n")
 
-      mnorm <- do.call("maNorm", c(list(nbgraw), norm.defs))
+      mnorm <- do.call(maNorm, c(list(nbgraw), norm.defs))
 
       ## Set up output name
       if (DEBUG) print("Name the output file")

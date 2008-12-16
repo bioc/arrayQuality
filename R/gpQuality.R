@@ -318,7 +318,7 @@ gpQuality <- function(fnames = NULL, path = ".",
         defs <- list(norm="p")
         norm.defs <- maDotsDefaults(opt, defs)     
         
-        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
+        do.call(maQualityPlots, c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                     norm.defs))
         
         #get diagnostic plots names
@@ -346,7 +346,7 @@ gpQuality <- function(fnames = NULL, path = ".",
             print("Printing results to file")
             write.table(quality, "quality.txt",sep="\t", col.names=NA)
             #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-            do.call("outputNormData", c(list(mraw=mraw), norm.defs, val=val))
+            do.call(outputNormData, c(list(mraw=mraw), norm.defs, val=val))
           }
 
         setwd(curdir)
@@ -382,14 +382,14 @@ gpQuality <- function(fnames = NULL, path = ".",
      norm.defs <- maDotsDefaults(opt, defs)     
      
      setwd(resdir)
-     do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
+     do.call(maQualityPlots, c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                  norm.defs))
 
      if (output)
        {
          print("Printing results to file")
          #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-         do.call("outputNormData", c(list(mraw=mraw, val=val), norm.defs))
+         do.call(outputNormData, c(list(mraw=mraw, val=val), norm.defs))
        }
 
      setwd(curdir)

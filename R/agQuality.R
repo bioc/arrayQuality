@@ -300,7 +300,7 @@ agQuality <- function(fnames = NULL, path = ".",
         defs <- list(norm="l")
         norm.defs <- maDotsDefaults(opt, defs)     
         
-        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId,
+        do.call(maQualityPlots, c(list(mrawObj=mraw, controlId=controlId,
                                          DEBUG=DEBUG, dev=dev),
                                     norm.defs))
                 
@@ -328,7 +328,7 @@ agQuality <- function(fnames = NULL, path = ".",
           {
             print("Printing results to file")
             write.table(quality, "quality.txt",sep="\t", col.names=NA)
-            do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))            
+            do.call(outputNormData, c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))            
           }
 
         setwd(curdir)
@@ -353,7 +353,7 @@ agQuality <- function(fnames = NULL, path = ".",
      defs <- list(norm="l")
      norm.defs <- maDotsDefaults(opt, defs)     
      setwd(resdir)
-     do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
+     do.call(maQualityPlots, c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                  norm.defs))
 
      print("agQuality done")
@@ -361,7 +361,7 @@ agQuality <- function(fnames = NULL, path = ".",
      if (output)
        {
          print("Printing results to file")
-         do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
+         do.call(outputNormData, c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
        }
 
      setwd(curdir)

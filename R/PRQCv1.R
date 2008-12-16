@@ -72,7 +72,7 @@ PRv9mers<-  function(fnames,
       read.args <- c(read.args, list(name.Rf=NULL, name.Rb=NULL))
       
       if(DEBUG) cat("Reading", read.args$fnames, "...\n")
-      mraw <- do.call("read.GenePix", read.args) 
+      mraw <- do.call(read.GenePix, read.args) 
       GInfo <- maGeneTable(mraw)
 
       ###################

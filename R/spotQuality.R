@@ -40,7 +40,7 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
                                      formals(read.Galfile))
     if (DEBUG) print("Calling read.Galfile")
     #read.Galfile.defs <- maDotsDefaults(opt, defs)
-    galdata <- do.call("read.Galfile", read.Galfile.defs)
+    galdata <- do.call(read.Galfile, read.Galfile.defs)
     
     #galdata <- read.Galfile(galf)
 
@@ -79,7 +79,7 @@ readSpot <- function (fnames = NULL, path= ".", galfile = NULL, DEBUG=FALSE, ski
     scan.args <- maDotsMatch(maDotsMatch(opt, scan.defs),
                              formals(args("scan")))
     
-    dat <- do.call("scan", scan.args[-grep("nmax", names(scan.args))])
+    dat <- do.call(scan, scan.args[-grep("nmax", names(scan.args))])
     gc <- as.numeric(dat[["grid.r"]])
     gr <- as.numeric(dat[["grid.c"]])
     numcol <- max(gc)
@@ -244,7 +244,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
           }
         
         read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, list(galfile=galf)), formals(read.Galfile))
-        galdata <- do.call("read.Galfile", read.Galfile.defs)
+        galdata <- do.call(read.Galfile, read.Galfile.defs)
  
         #galdata <- read.Galfile(galf, path=path)
         
@@ -326,7 +326,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
         defs <- list(norm="p")
         norm.defs <- maDotsDefaults(opt, defs)     
 
-        do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
+        do.call(maQualityPlots, c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                     norm.defs))
         
         #get diagnostic plots names
@@ -354,7 +354,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
             print("Printing results to file")
             write.table(quality, "quality.txt",sep="\t", col.names=NA)
             #colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-            do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
+            do.call(outputNormData, c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
           }
 
         setwd(curdir)
@@ -383,7 +383,7 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
             cat("No specific galfile names, reading in ", galf, " from ", path,  "directory. \n")
         }
         read.Galfile.defs <- maDotsMatch(maDotsDefaults(opt, list(galfile=galf)), formals(read.Galfile))
-        galdata <- do.call("read.Galfile", read.Galfile.defs)
+        galdata <- do.call(read.Galfile, read.Galfile.defs)
       
       #galdata <- read.Galfile(galf, path=path)
       
@@ -404,14 +404,14 @@ spotQuality <- function(fnames = NULL, path = ".", galfile = NULL,
       norm.defs <- maDotsDefaults(opt, defs)     
 
       setwd(resdir)
-      do.call("maQualityPlots", c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
+      do.call(maQualityPlots, c(list(mrawObj=mraw, controlId=controlId, DEBUG=DEBUG, dev=dev),
                                   norm.defs))
       
       if (output)
         {
           print("Printing results to file")
          # colnames(mraw@maGnames@maInfo) <- c("Name", "ID")
-          do.call("outputNormData", c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
+          do.call(outputNormData, c(list(mraw=mraw, val=c("maM", "maA")), norm.defs))
         }
 
       setwd(curdir)
