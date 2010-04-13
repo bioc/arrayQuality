@@ -21,9 +21,6 @@ PRv9mers<-  function(fnames,
                     ...) 
 {
   ## Setting defaults
-  require(marray)
-  require(limma)
-  
   defs <- list(fill = TRUE, name.Gf="F532 Median", name.Gb="B532 Median", check.names=FALSE, as.is=TRUE,
                comment.char="", sep="\t", header=TRUE, quote = "\"", name.W="Flags")
   opt <- list(...)

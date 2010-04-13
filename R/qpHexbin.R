@@ -14,7 +14,6 @@ qpHexbin <- function (mdata, main = "", ...)
   frame()
   ## Set up grid viewports that correspond to the
   ## current traditional figure region
-  require(gridBase)
   vps <- baseViewports()
   pushViewport(vps$inner, vps$figure)
   pushViewport(viewport(gp=gpar(cex=0.6)))
@@ -51,7 +50,6 @@ qpHexbin <- function (mdata, main = "", ...)
        ylim = yrange, main = main)
   ## set up grid viewports that correspond to the current
   ## traditional plot region
-  require(gridBase)
   vps <- baseViewports()
   print("2")
   pushViewport(vps$inner, vps$figure, vps$plot)

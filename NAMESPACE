@@ -1,8 +1,30 @@
 ##Namespace file for arrayQuality
 
+import("methods")
 import("marray")
-import("gridBase")
-import("hexbin")
+
+importFrom("hexbin", "BTY", "hexbin")
+
+importFrom("graphics", "abline", "axis", "box", "coplot", "frame",
+           "hist", "layout", "legend", "mtext", "panel.smooth", "par",
+           "plot", "title")
+
+importFrom("grDevices", "dev.off", "rainbow")
+
+importFrom("grid", "gpar", "pushViewport", "upViewport", "viewport")
+
+importFrom("gridBase", "baseViewports")
+
+importFrom("limma", "backgroundCorrect", "controlStatus", "getLayout",
+           "normalizeWithinArrays", "read.maimages", "readGAL",
+           "readGPRHeader", "readSpotTypes")
+
+importFrom("RColorBrewer", "brewer.pal")
+
+importFrom("stats", "density", "IQR", "lm", "lowess", "mad", "median",
+           "quantile", "sd", "var")
+
+importFrom("utils", "data", "write.table")
 
 
 export("readAgilent","readcontrolCode","agQuality","EMSplit", 

@@ -141,7 +141,6 @@ qpHexbin <- function (mdata, main = "", ...)
   frame()
   ## Set up grid viewports that correspond to the
   ## current traditional figure region
-  require(gridBase)
   vps <- baseViewports()
   pushViewport(vps$inner, vps$figure)
   pushViewport(viewport(gp=gpar(cex=0.6)))
@@ -271,7 +270,6 @@ maQualityPlots <-  function(mrawObj, headerInfo="",
                             controlId=c("ID", "Name"),
                             DEBUG=FALSE, ...)
 {
-  require(hexbin)
   if (DEBUG) print("function starting")
   controlId <- controlId[1]
 

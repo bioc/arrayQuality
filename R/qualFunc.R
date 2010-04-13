@@ -753,7 +753,6 @@ outputNormData <- function(mraw=NULL, DEBUG = FALSE, val=c("maM", "maA"),...)
 
 readcontrolCode <- function(file = "SpotTypes.txt", path = NULL, sep = "\t", check.names = FALSE, controlId=c("ID", "Name"), ...) 
   {
-    require(limma)
     controlId <- controlId[1]
     spotTypes <- readSpotTypes(file=file, path=path, sep=sep, check.names=check.names, ...)
     controlCode <- spotTypes[, c(grep(controlId, colnames(spotTypes)), 1)]

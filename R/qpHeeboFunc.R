@@ -198,7 +198,6 @@ heeboQualityPlots <-  function(mrawObj, headerInfo="",
                                organism="Hs",
                                DEBUG=FALSE, ...)
 {
-  require(hexbin)
   require(HEEBOdata)
   
   if (DEBUG) print("function starting")

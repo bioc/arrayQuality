@@ -22,9 +22,6 @@ PRvQCHyb<-  function(fnames,
 {
   
   ## Setting defaults
-  require(marray)
-  require(limma)
-
   print("Starting PRvQCHyb")
   
   defs <- list(fill = TRUE, quote = "\"", check.names=FALSE, as.is=TRUE,

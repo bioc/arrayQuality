@@ -217,7 +217,6 @@ meeboQualityPlots <-  function(mrawObj, headerInfo="",
                                organism="Mm",
                                DEBUG=FALSE, ...)
 {
-  require(hexbin)
   require(MEEBOdata)
   if (DEBUG) print("function starting")
   controlId <- controlId[1]
