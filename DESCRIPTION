@@ -1,5 +1,5 @@
 Package: arrayQuality
-Version: 1.27.0
+Version: 1.28.0
 Date: 2010-04-13
 Title: Assessing array quality on spotted arrays
 Depends: R (>= 2.2.0)
