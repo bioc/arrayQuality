@@ -310,8 +310,7 @@ meeboQualityPlots <-  function(mrawObj, headerInfo="",
                         ##"postscript" = list(dev=list(paper="special", width=32.0, height=24.0, bg="white"), suffix="ps"),
                         "postscript" = list(dev=list( bg="white"), suffix="ps"),
                         "png" =  list(dev=list(width=1600, height=1200, bg="white"), suffix="png"),
-                        list(dev=list(width=1600, height=1200,bg="white"), suffix="png"),
-                        )
+                        list(dev=list(width=1600, height=1200,bg="white"), suffix="png"))
       if(!is.element(dev, c("bmp", "jpeg","png","postscript")))
               {
         print("Format error, format will be set to PNG")

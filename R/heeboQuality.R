@@ -147,8 +147,7 @@ heeboQuality <- function(fnames = NULL, path = ".",
                       "jpeg" = list(dev=list(quality=100, width=800, height=600, bg="white"), suffix="jpeg"),
                       "postscript" = list(dev=list( bg="white"), suffix="ps"),
                       "png" =  list(dev=list(width=800, height=600, bg="white"), suffix="png"),
-                      list(dev=list(width=800, height=600,bg="white"), suffix="png"),
-                    )
+                      list(dev=list(width=800, height=600,bg="white"), suffix="png"))
     
     if(!is.element(dev, c("bmp", "jpeg","png","postscript")))
       {

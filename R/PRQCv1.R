@@ -100,8 +100,7 @@ PRv9mers<-  function(fnames,
                         "jpg" =  list(dev=list(quality=100, width=1200, height=1000, bg="white"), suffix="jpeg"),
                         "postscript" = list(dev=list(paper="special", width=12, height=10, bg="white"), suffix="ps"),
                         "png" =  list(dev=list(width=1200, height=1000, bg="white"), suffix="png"),
-                        list(dev=list(width=1200, height=1000,bg="white"), suffix="png"),
-                    )
+                        list(dev=list(width=1200, height=1000,bg="white"), suffix="png"))
       if(!is.element(dev, c("bmp", "jpeg","png","postscript","jpg")))
         print("Format error, format will be set to PNG")
 
